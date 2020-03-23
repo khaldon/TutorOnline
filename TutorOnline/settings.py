@@ -39,7 +39,9 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'django.contrib.sites',
     'users',
+    'core',
     'crispy_forms',
+    'django_countries',
     # all auth apps
     'allauth',
     'allauth.account',
