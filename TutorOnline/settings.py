@@ -37,6 +37,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'django.contrib.sites',
     'users',
     'crispy_forms',
     # all auth apps
@@ -147,3 +148,5 @@ CRISPY_TEMPLATE_PACK = 'bootstrap4'
 LOGIN_URL = '/'
 LOGOUT_REDIRECT_URL = '/'
 LOGIN_REDIRECT_URL = '/'
+
+AUTH_USER_MODEL = 'users.User'

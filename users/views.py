@@ -3,7 +3,7 @@ from .forms import UserCreation
 from django.urls import  reverse_lazy
 from django.views import generic
 from django.contrib.auth import authenticate,login
-from customuser.models import user_type, User
+from .models import user_type, User
 
 # Create your views here.
 
