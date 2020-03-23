@@ -1,0 +1,18 @@
+<html>
+    <head>
+        {% include "css.html" %}
+        {% include "js.html" %}
+        <title>
+            {% block title %}{% endblock title %}
+        </title>
+    </head>
+    <body>
+        {% include "navbar.html" %}
+
+        {% block content %}
+          
+        {% endblock content %}
+
+        {% include "footer.html" %}
+    </body>
+</html>
