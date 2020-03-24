@@ -1,0 +1,48 @@
+{% include 'css.html' %}
+
+
+<style media="screen">
+  .grid{
+    height:100%;
+  }
+  body{
+    background-color:#f2f2f2;
+  }
+</style>
+
+<div class="ui three column center aligned middle aligned grid">
+  <div class="ui column">
+    <h2 class="ui teal header">Create a new account</h2>
+    <form class="ui form"  method="post">
+      {% csrf_token %}
+      <div class="ui stacked segment">
+        <div class="field">
+          <div class="ui left icon input">
+            <i class="user icon"></i>
+            <input type="email" placeholder="Username">
+          </div>
+        </div>
+        <div class="field">
+          <div class="ui left icon input">
+            <i class="mail icon"></i>
+            <input type="email" placeholder="Email">
+          </div>
+        </div>
+        <div class="field">
+          <div class="ui left icon input">
+            <i class="lock icon"></i>
+            <input type="password" placeholder="Password">
+          </div>
+        </div>
+        <div class="field">
+          <div class="ui left icon input">
+            <i class="lock icon"></i>
+            <input type="password" placeholder="Confirm password">
+          </div>
+        </div>
+        <button type="button" class="ui teal button fluid" name="button">Sign up</button>
+      </div>
+    </form>
+    <div class="ui message"> Have account already ? <a href="{% url 'users:login' %}">Login</a></div>
+  </div>
+</div>
