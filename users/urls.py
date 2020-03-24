@@ -1,8 +1,8 @@
 from django.urls import path,reverse_lazy
-from .views import login
 from django.contrib.auth import views as auth_views
 from django.contrib.auth.decorators import login_required
 from .views import SignUpView,StudentSignUpView,TeacherSignUpView
+from .forms import CustomAuthForm
 
 app_name = 'users'
 
@@ -10,7 +10,7 @@ urlpatterns = [
     path('accounts/signup/',SignUpView.as_view(),name='signup'),
     path('accounts/signup/student/',StudentSignUpView.as_view(),name='student_signup'),
     path('accounts/signup/teacher/',TeacherSignUpView.as_view(),name='teacher_signup'),
-    path('login/', auth_views.LoginView.as_view(), name='login'),
+    path('login/', auth_views.LoginView.as_view(authentication_form=CustomAuthForm),name='login',),
     path('logout/',auth_views.LogoutView.as_view(),name='logout'),
     path('password-change/',login_required(auth_views.PasswordChangeView.as_view(success_url=reverse_lazy('users:password_change_done'))),name='password_change'),
     path('password-change/done/',login_required(auth_views.PasswordChangeDoneView.as_view()),name='password_change_done'),
