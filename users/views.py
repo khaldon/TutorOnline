@@ -1,31 +1,43 @@
 from django.shortcuts import render,redirect
-from .forms import UserCreation
 from django.urls import  reverse_lazy
 from django.views import generic
 from django.contrib.auth import authenticate,login
-from .models import user_type, User
+from .models import User
+from django.views.generic import CreateView,TemplateView
+from .forms import StudentSignUpForm,TeacherSignUpForm
 
 # Create your views here.
 
-def signup(request):
-    if (request.method == 'POST'):
-        email = request.POST.get('email')
-        password = request.POST.get('password')
-        st = request.POST.get('student')
-        te = request.POST.get('teacher')
-        user = User.objects.create_user(
-            email=email,
-        )
-        user.set_password(password)
-        user.save()
-        usert = None
-        if st:
-            usert = user_type(user=user,is_student=True)
-        elif te:
-            usert = user_type(user=user,is_teach=True)
-        usert.save()
-        return redirect('home')
-    return render(request, 'users/registration/signup.html')
+class SignUpView(TemplateView):
+    template_name = 'users/registration/signup.html'
+
+class StudentSignUpView(CreateView):
+    model = User
+    form_class = StudentSignUpForm
+    template_name = 'users/registration/signup_form.html'
+
+    def get_context_data(self, **kwargs):
+        kwargs['user_type'] = 'student'
+        return super().get_context_data(**kwargs)
+
+    def form_valid(self, form):
+        user = form.save()
+        login(self.request, user)
+        return redirect('core:shome')
+
+class TeacherSignUpView(CreateView):
+    model = User
+    form_class = TeacherSignUpForm
+    template_name = 'users/registration/signup_form.html'
+
+    def get_context_data(self, **kwargs):
+        kwargs['user_type'] = 'teacher'
+        return super().get_context_data(**kwargs)
+
+    def form_valid(self, form):
+        user = form.save()
+        login(self.request, user)
+        return redirect('core:thome')
 
 def login(request):
     if (request.method == 'POST'):

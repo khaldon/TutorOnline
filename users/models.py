@@ -1,5 +1,5 @@
 from django.db import models
-from django.contrib.auth.models import AbstractBaseUser, BaseUserManager, PermissionsMixin
+from django.contrib.auth.models import AbstractBaseUser, BaseUserManager, PermissionsMixin,AbstractUser
 from django.utils import timezone
 from django.contrib.auth.models import User
 from django_countries.fields import CountryField
@@ -7,6 +7,7 @@ from django.conf import settings
 from django.db.models.signals import post_save
 from django.dispatch import receiver
 from django.conf import settings
+from django.utils.translation import ugettext_lazy as _
 
 # Create your models here.
 
@@ -16,61 +17,49 @@ GENDER_CHOICES = [
 ]
 
 class UserManager(BaseUserManager):
-    def _create_user(self, email, password, is_staff, is_superuser, **extra_fields):
+    def create_user(self, email, password, **extra_fields):
         if not email:
-            raise ValueError('Users must have an email address')
-        now = timezone.now()
+            raise ValueError(_('The Email must be set'))
         email = self.normalize_email(email)
-        user = self.model(
-            email=email,
-            is_staff=is_staff,
-            is_active=True,
-            is_superuser=is_superuser,
-            last_login=now,
-            **extra_fields
-        )
+        user = self.model(email=email, **extra_fields)
         user.set_password(password)
-        user.save(using=self._db)
+        user.save()
         return user
-
-    def create_user(self, email=None, password=None, **extra_fields):
-        return self._create_user(email, password, False, False, **extra_fields)
 
     def create_superuser(self, email, password, **extra_fields):
-        user = self._create_user(email, password, True, True, **extra_fields)
-        user.save(using=self._db)
-        return user
+        extra_fields.setdefault('is_staff', True)
+        extra_fields.setdefault('is_superuser', True)
+        extra_fields.setdefault('is_active', True)
+        if extra_fields.get('is_staff') is not True:
+            raise ValueError(_('Superuser must have is_staff=True.'))
+        if extra_fields.get('is_superuser') is not True:
+            raise ValueError(_('Superuser must have is_superuser=True.'))
+        return self.create_user(email, password, **extra_fields)
 
-class User(AbstractBaseUser,PermissionsMixin):
-    email = models.EmailField(max_length=254, unique=True)
-    name = models.CharField(max_length=254, null=True, blank=True)
-    is_staff = models.BooleanField(default=False)
-    is_superuser = models.BooleanField(default=False)
-    is_active = models.BooleanField(default=True)
-    last_login = models.DateTimeField(null=True, blank=True)
-
+class User(AbstractUser): 
+    email =  models.EmailField(_('email_address'), unique=True, name='email')
+    username =  models.CharField(_('username'), unique=True, max_length=128)
+    USERNAME_FIELD = 'email'
+    REQUIRED_FIELDS = ['username']
+    is_student = models.BooleanField(default=False)
+    is_teacher = models.BooleanField(default=False)
     objects = UserManager()
 
-    USERNAME_FIELD = 'email'
-    EMAIL_FIELD = 'email'
-    REQUIRED_FIELDS = []
-
-    def get_absolute_url(self):
-        return "/users/%i/" % (self.pk)
-
-    def get_email(self):
+    def __str__(self):
         return self.email
 
-class user_type(models.Model):
-    is_teacher = models.BooleanField(default=False)
-    is_student = models.BooleanField(default=False)
-    user = models.OneToOneField(User, on_delete=models.CASCADE)
+class StudentInterests(models.Model):
+    name = models.CharField(max_length=50)
 
     def __str__(self):
-        if self.is_student == True:
-            return User.get_email(self.user) + " - is_student"
-        else:
-            return User.get_email(self.user) + " - is_teacher"
+        return self.name
+
+class Student(models.Model):
+    user = models.OneToOneField(User,on_delete=models.CASCADE, primary_key=True)
+    interests = models.ManyToManyField(StudentInterests,related_name='interested_students')
+
+    def __str__(self):
+        return self.user.username
 
 class Profile(models.Model):
     user = models.OneToOneField(User, related_name='profile', on_delete=models.CASCADE)
@@ -80,12 +69,6 @@ class Profile(models.Model):
     country = CountryField()
     city = models.CharField(max_length=255,null=True,blank=True)
     bio = models.CharField(max_length=300)
-
-class StudentInterests(models.Model):
-    name = models.CharField(max_length=50)
-
-    def __str__(self):
-        return self.name
 
 class StudentProfile(models.Model):
     profile = models.ForeignKey(Profile, on_delete=models.CASCADE)

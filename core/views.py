@@ -1,5 +1,4 @@
 from django.shortcuts import render,redirect
-from users.models import user_type
 
 # Create your views here.
 
