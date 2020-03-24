@@ -72,8 +72,22 @@
       <h1 class="ui inverted header">
         TutorOnline
       </h1>
-      <h2>You can learn anything at home</h2>
-      <a class="ui huge primary button" href="{% url 'users:signup' %}">Create an account <i class="right arrow icon"></i></a>
+      <h2>Create an account</h2>
+      <div class="ui black inverted segment  ">
+        <div class="ui two column very relaxed grid ">
+          <div class="column">
+            <a class="ui huge primary button" href="{% url 'users:signup' %}">As Teacher</a>
+          </div>
+          <div class="column">
+            <a class="ui huge primary button" href="{% url 'users:signup' %}">As Student</a>
+          </div>
+        </div>
+        <div class="ui black inverted segment vertical  divider">
+          OR
+        </div>
+      </div>
+
+
     </div>
   </div>
   <div class="ui vertical stripe segment">
