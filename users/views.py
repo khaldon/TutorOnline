@@ -25,7 +25,7 @@ def signup(request):
             usert = user_type(user=user,is_teach=True)
         usert.save()
         return redirect('home')
-    return render(request, 'registration/signup.html')
+    return render(request, 'users/registration/signup.html')
 
 def login(request):
     if (request.method == 'POST'):
@@ -43,4 +43,4 @@ def login(request):
             # Invalid email or password. Handle as you wish
             return redirect('home')
 
-    return render(request, 'home.html')
+    return render(request, 'users/registration/login.html')
