@@ -3,6 +3,11 @@ from users.models import user_type
 
 # Create your views here.
 
+
+
+def home(request):
+    return render(request, 'home.html')
+
 def shome(request):
     if request.user.is_authenticated and user_type.objects.get(user=request.user).is_student:
         return render(request,'student_home.html')
