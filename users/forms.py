@@ -9,15 +9,15 @@ class TeacherSignUpForm(UserCreationForm):
     username = forms.CharField(label='',widget=forms.TextInput(attrs={'placeholder': 'Username'}))
     password1 = forms.CharField(label='',widget=forms.PasswordInput(attrs={'placeholder': 'Password'}))
     password2 = forms.CharField(label='',widget=forms.PasswordInput(attrs={'placeholder': 'Confirm your password'}))
-    
+    teachermajors = forms.ModelChoiceField(queryset=TeacherMajors.objects.all(),required=True)
+
     class Meta(UserCreationForm.Meta):
         model = User
-        fields = ('username','email',)
+        fields = ('username','email','teachermajors')
 
     def save(self, commit=True):
         user = super().save(commit=False)
         user.is_teacher = True
-
         if commit:
             user.save()
         return user
