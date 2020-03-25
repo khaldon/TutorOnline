@@ -36,6 +36,18 @@ class UserManager(BaseUserManager):
             raise ValueError(_('Superuser must have is_superuser=True.'))
         return self.create_user(email, password, **extra_fields)
 
+class StudentInterests(models.Model):
+    name = models.CharField(max_length=50)
+
+    def __str__(self):
+        return self.name
+
+class TeacherMajors(models.Model):
+    name = models.CharField(max_length=50)
+
+    def __str__(self):
+        return self.name
+
 class User(AbstractUser): 
     email =  models.EmailField(_('email_address'), unique=True, name='email')
     username =  models.CharField(_('username'), unique=True, max_length=128)
@@ -43,20 +55,15 @@ class User(AbstractUser):
     REQUIRED_FIELDS = ['username']
     is_student = models.BooleanField(default=False)
     is_teacher = models.BooleanField(default=False)
+    studentinterests = models.ManyToManyField(StudentInterests,related_name='interested_students')
+    teachermajors = models.OneToOneField(TeacherMajors,related_name='teacher_majors',on_delete=models.CASCADE,null=True)
     objects = UserManager()
 
     def __str__(self):
         return self.email
 
-class StudentInterests(models.Model):
-    name = models.CharField(max_length=50)
-
-    def __str__(self):
-        return self.name
-
 class Student(models.Model):
     user = models.OneToOneField(User,on_delete=models.CASCADE, primary_key=True)
-    interests = models.ManyToManyField(StudentInterests,related_name='interested_students')
 
     def __str__(self):
         return self.user.username

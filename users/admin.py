@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import User,StudentInterests
+from .models import User,StudentInterests,TeacherMajors
 from django.contrib.auth.admin import UserAdmin
 from .forms import UserCreationForm,UserChangeForm
 
@@ -37,3 +37,4 @@ class UserAdmin(UserAdmin):
 
 admin.site.register(User,UserAdmin)
 admin.site.register(StudentInterests)
+admin.site.register(TeacherMajors)

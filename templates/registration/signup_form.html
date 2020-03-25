@@ -54,10 +54,9 @@
             </div>
             <i class="dropdown icon"></i>
             <div class="menu">
-              <div class="item" data-value="science">Science</div>
-              <div class="item" data-value="history">History</div>
-              <div class="item" data-value="biology">Biology</div>
-              <div class="item" data-value="geography">Geography</div>
+              {% for major in form.teachermajors.field.queryset %}
+              <div class="item" data-value="{{ major.name }}">{{ major.name }}</div>
+              {% endfor %}
             </div>
           </div>
         </div>
@@ -66,9 +65,9 @@
         {% if user_type == 'student' %}
         <div class="field">
           <select multiple="" name="interests" class="ui fluid normal dropdown">
-            <option value="">Interests</option>
-            <option value="languages">Languages</option>
-            <option value="history">History</option>
+            {% for interest in form.studentinterests.field.queryset %}
+            <option value="{{ interest.name }}">{{ interest.name }}</option>
+            {% endfor %}
           </select>
         </div>
     
@@ -80,9 +79,9 @@
           Or SIGN UP 
         </div>
         <div class="field" style="margin-top: 12px;">
-          <a href=""><i class="big blue facebook icon"></i></a>
-          <a href=""><i class="big teal twitter icon"></i></a>
-          <a href=""><i class="big red google icon"></i></a>
+          <a href="/accounts/facebook/login"><i class="big blue facebook icon"></i></a>
+          <a href="/accounts/github/login"><i class="big teal github icon"></i></a>
+          <a href="/accounts/google/login"><i class="big red google icon"></i></a>
         </div>
       </div>
     </form>
