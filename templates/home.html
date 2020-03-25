@@ -64,7 +64,6 @@
         </a>
         <div class="right item">
           <a class="ui inverted button" href="{% url 'users:login' %}">Log in</a>
-          <a class="ui inverted button" href="{% url 'users:signup' %}">Sign Up</a>
         </div>
       </div>
     </div>
@@ -76,10 +75,10 @@
       <div class="ui black inverted segment  ">
         <div class="ui two column very relaxed grid ">
           <div class="column">
-            <a class="ui huge primary button" href="{% url 'users:signup' %}">As Teacher</a>
+            <a class="ui huge primary button" href="{% url 'users:teacher_signup' %}" class="btn btn-teacher btn-lg" role="button">I'm a teacher</a>
           </div>
           <div class="column">
-            <a class="ui huge primary button" href="{% url 'users:signup' %}">As Student</a>
+            <a class="ui huge primary button" href="{% url 'users:student_signup' %}" class="btn btn-student btn-lg" role="button">I'm a student</a>
           </div>
         </div>
         <div class="ui black inverted segment vertical  divider">
