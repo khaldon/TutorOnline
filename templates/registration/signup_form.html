@@ -1,14 +1,15 @@
 {% include 'css.html' %}
-
+{% include "js.html" %}
 
 <style media="screen">
-  .grid{
+  body > .grid{
     height:100%;
   }
   body{
     background-color:#f2f2f2;
   }
 </style>
+
 
 <div class="ui three column center aligned middle aligned grid">
   <div class="ui column">
@@ -40,9 +41,57 @@
             {{ form.password2 }}
           </div>
         </div>
+        
+        {% if user_type == 'teacher' %}
+        <div class="field">
+          <div class="ui dropdown selection">
+            <input type="hidden" name="gender">
+            <div class="default text">
+              <div class="ui left icon dropdown">
+                <i class="briefcase icon"></i>
+                your major
+              </div>
+            </div>
+            <i class="dropdown icon"></i>
+            <div class="menu">
+              <div class="item" data-value="science">Science</div>
+              <div class="item" data-value="history">History</div>
+              <div class="item" data-value="biology">Biology</div>
+              <div class="item" data-value="geography">Geography</div>
+            </div>
+          </div>
+        </div>
+        {% endif %}
+        
+        {% if user_type == 'student' %}
+        <div class="field">
+          <select multiple="" name="interests" class="ui fluid normal dropdown">
+            <option value="">Interests</option>
+            <option value="languages">Languages</option>
+            <option value="history">History</option>
+          </select>
+        </div>
+    
+        {% endif %}
+          
+          
         <button type="submit" class="ui teal button fluid" name="button">Sign up</button>
+        <div class="ui horizontal divider">
+          Or SIGN UP 
+        </div>
+        <div class="field" style="margin-top: 12px;">
+          <a href=""><i class="big blue facebook icon"></i></a>
+          <a href=""><i class="big teal twitter icon"></i></a>
+          <a href=""><i class="big red google icon"></i></a>
+        </div>
       </div>
     </form>
     <div class="ui message"> Have account already ? <a href="{% url 'users:login' %}">Login</a></div>
   </div>
 </div>
+<script>
+  $('.ui.dropdown')
+    .dropdown();
+</script>
+
+{% include "footer.html" %}
