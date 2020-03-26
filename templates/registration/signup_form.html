@@ -42,7 +42,7 @@
           </div>
         </div>
         
-        {% if user_type == 'teacher' %}
+        <!-- {% if user_type == 'teacher' %}
         <div class="field">
           <div class="ui dropdown selection">
             <input type="hidden" name="gender">
@@ -60,9 +60,9 @@
             </div>
           </div>
         </div>
-        {% endif %}
+        {% endif %} -->
         
-        {% if user_type == 'student' %}
+        <!-- {% if user_type == 'student' %}
         <div class="field">
           <select multiple="" name="interests" class="ui fluid normal dropdown">
             {% for interest in form.studentinterests.field.queryset %}
@@ -71,7 +71,7 @@
           </select>
         </div>
         {% endif %}
-          
+           -->
           
         <button type="submit" class="ui teal button fluid" name="button">Sign up</button>
         <div class="ui horizontal divider">

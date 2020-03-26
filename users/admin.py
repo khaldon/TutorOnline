@@ -5,6 +5,13 @@ from .forms import UserCreationForm,UserChangeForm
 
 # Register your models here.
 
+
+
+# class TeacherInline(admin.StackedInline):
+#     model = TeacherMajors
+#     can_delete = False 
+
+
 class CustomUserAdmin(UserAdmin):
     add_form = UserCreationForm
     form = UserChangeForm
