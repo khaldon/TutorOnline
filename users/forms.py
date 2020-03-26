@@ -1,20 +1,30 @@
 from django import forms
 from django.contrib.auth.forms import UserCreationForm, UserChangeForm
-from .models import User,Student,StudentInterests,TeacherMajors
+from .models import CustomUser,Student,StudentInterests,TeacherMajors
 from django.contrib.auth.forms import AuthenticationForm
 from django.forms.widgets import PasswordInput, TextInput
+from django.conf import settings
+
+User = settings.AUTH_USER_MODEL
 
 class TeacherSignUpForm(UserCreationForm):
-    email = forms.CharField(label='',widget=forms.TextInput(attrs={'placeholder': 'Email'}))
-    username = forms.CharField(label='',widget=forms.TextInput(attrs={'placeholder': 'Username'}))
-    password1 = forms.CharField(label='',widget=forms.PasswordInput(attrs={'placeholder': 'Password'}))
-    password2 = forms.CharField(label='',widget=forms.PasswordInput(attrs={'placeholder': 'Confirm your password'}))
-    teachermajors = forms.ModelChoiceField(queryset=TeacherMajors.objects.all(),required=True)
+    # email = forms.CharField(label='',widget=forms.TextInput(attrs={'placeholder': 'Email'}))
+    # username = forms.CharField(label='',widget=forms.TextInput(attrs={'placeholder': 'Username'}))
+    # password1 = forms.CharField(label='',widget=forms.PasswordInput(attrs={'placeholder': 'Password'}))
+    # password2 = forms.CharField(label='',widget=forms.PasswordInput(attrs={'placeholder': 'Confirm your password'}))
+    # teachermajors = forms.ModelChoiceField(queryset=TeacherMajors.objects.all())
 
     class Meta(UserCreationForm.Meta):
-        model = User
+        model = CustomUser
         fields = ('username','email','teachermajors')
-
+    
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.fields['password1'].widget.attrs.update({'placeholder':'Password'})
+        self.fields['password2'].widget.attrs.update({'placeholder':'Confirm Password'})
+        self.fields['username'].widget.attrs.update({'placeholder':'username'})
+        self.fields['email'].widget.attrs.update({'placeholder':'email'})
+    
     def save(self, commit=True):
         user = super().save(commit=False)
         user.is_teacher = True
@@ -22,11 +32,11 @@ class TeacherSignUpForm(UserCreationForm):
             user.save()
         return user
 
+
+    
+
+
 class StudentSignUpForm(UserCreationForm):
-    email = forms.CharField(label='',widget=forms.TextInput(attrs={'placeholder': 'Email'}))
-    username = forms.CharField(label='',widget=forms.TextInput(attrs={'placeholder': 'Username'}))
-    password1 = forms.CharField(label='',widget=forms.PasswordInput(attrs={'placeholder': 'Password'}))
-    password2 = forms.CharField(label='',widget=forms.PasswordInput(attrs={'placeholder': 'Confirm your password'}))
     studentinterests = forms.ModelMultipleChoiceField(
         queryset=StudentInterests.objects.all(),
         widget=forms.CheckboxSelectMultiple,
@@ -34,7 +44,7 @@ class StudentSignUpForm(UserCreationForm):
     )
 
     class Meta(UserCreationForm.Meta):
-        model = User
+        model = CustomUser
         fields = ('username','email','studentinterests',)
 
     def save(self, commit=True):
@@ -48,7 +58,7 @@ class StudentSignUpForm(UserCreationForm):
 class CustomUserCreationForm(UserCreationForm):
     
     class Meta:
-        model = User
+        model = CustomUser
         fields = ('email', 'username' )
 
     def __init__(self, *args, **kwargs):
@@ -59,7 +69,7 @@ class CustomUserCreationForm(UserCreationForm):
 class CustomUserChangeForm(UserChangeForm):
 
     class Meta:
-        model = User
+        model = CustomUser
         fields = ('email',)
 
 class CustomAuthForm(AuthenticationForm):

@@ -1,13 +1,14 @@
 from django.db import models
 from django.contrib.auth.models import AbstractBaseUser, BaseUserManager, PermissionsMixin,AbstractUser
 from django.utils import timezone
-from django.contrib.auth.models import User
 from django_countries.fields import CountryField
 from django.conf import settings
 from django.db.models.signals import post_save
 from django.dispatch import receiver
 from django.conf import settings
 from django.utils.translation import ugettext_lazy as _
+
+User = settings.AUTH_USER_MODEL
 
 # Create your models here.
 
@@ -48,7 +49,7 @@ class TeacherMajors(models.Model):
     def __str__(self):
         return self.name
 
-class User(AbstractUser): 
+class CustomUser(AbstractUser): 
     email =  models.EmailField(_('email_address'), unique=True, name='email')
     username =  models.CharField(_('username'), unique=True, max_length=128)
     USERNAME_FIELD = 'email'
@@ -112,6 +113,9 @@ class Subject(models.Model):
 
     def __str__(self):
         return self.name
+
+
+
 
 class TeacherProfile(models.Model):
     profile = models.ForeignKey(Profile, on_delete=models.CASCADE)

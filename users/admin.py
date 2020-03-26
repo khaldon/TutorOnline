@@ -1,14 +1,14 @@
 from django.contrib import admin
-from .models import User,StudentInterests,TeacherMajors
+from .models import CustomUser,StudentInterests,TeacherMajors
 from django.contrib.auth.admin import UserAdmin
 from .forms import UserCreationForm,UserChangeForm
 
 # Register your models here.
 
-class UserAdmin(UserAdmin):
+class CustomUserAdmin(UserAdmin):
     add_form = UserCreationForm
     form = UserChangeForm
-    model = User
+    model = CustomUser
     list_display = ('email', 'is_staff', 'is_active', 'username','get_country',)
     list_filter = ('email', 'is_staff', 'is_active',)
     fieldsets = (
@@ -33,8 +33,8 @@ class UserAdmin(UserAdmin):
     def get_inline_instances(self, request, obj=None):
         if not obj:
             return list()
-        return super(UserAdmin, self).get_inline_instances(request, obj)
+        return super(CustomUserAdmin, self).get_inline_instances(request, obj)
 
-admin.site.register(User,UserAdmin)
+admin.site.register(CustomUser,CustomUserAdmin)
 admin.site.register(StudentInterests)
 admin.site.register(TeacherMajors)

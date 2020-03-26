@@ -15,7 +15,7 @@
   <div class="ui column">
     <h2 class="ui teal header">Create a new account as {{ user_type }}</h2>
     <form class="ui form"  method="post">
-      {% csrf_token %}
+      {% csrf_token %}  
       <div class="ui stacked segment">
         <div class="field">
           <div class="ui left icon input">
@@ -32,13 +32,13 @@
         <div class="field">
           <div class="ui left icon input">
             <i class="lock icon"></i>
-            {{ form.password1 }}
+            {{form.password1}}
           </div>
         </div>
         <div class="field">
           <div class="ui left icon input">
             <i class="lock icon"></i>
-            {{ form.password2 }}
+            {{form.password2}}
           </div>
         </div>
         
@@ -70,7 +70,6 @@
             {% endfor %}
           </select>
         </div>
-    
         {% endif %}
           
           
@@ -80,12 +79,17 @@
         </div>
         <div class="field" style="margin-top: 12px;">
           <a href="/accounts/facebook/login"><i class="big blue facebook icon"></i></a>
-          <a href="/accounts/github/login"><i class="big teal github icon"></i></a>
+          <a href="/accounts/github/login"><i class="big black github icon"></i></a>
           <a href="/accounts/google/login"><i class="big red google icon"></i></a>
         </div>
       </div>
+    
     </form>
     <div class="ui message"> Have account already ? <a href="{% url 'users:login' %}">Login</a></div>
+    {% for f in form  %}
+      {{f.errors}}
+    {% endfor %}
+  
   </div>
 </div>
 <script>

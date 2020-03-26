@@ -2,9 +2,9 @@ from django.shortcuts import render,redirect
 from django.urls import  reverse_lazy
 from django.views import generic
 from django.contrib.auth import authenticate
-from .models import User
+from .models import CustomUser
 from django.views.generic import CreateView,TemplateView
-from .forms import StudentSignUpForm,TeacherSignUpForm
+from .forms import StudentSignUpForm,TeacherSignUpForm, CustomUserCreationForm
 from django.contrib.auth import login as auth_login
 
 # Create your views here.
@@ -13,7 +13,7 @@ class SignUpView(TemplateView):
     template_name = 'registration/signup.html'
 
 class StudentSignUpView(CreateView):
-    model = User
+    model = CustomUser
     form_class = StudentSignUpForm
     template_name = 'registration/signup_form.html'
 
@@ -27,7 +27,7 @@ class StudentSignUpView(CreateView):
         return redirect('core:shome')
 
 class TeacherSignUpView(CreateView):
-    model = User
+    model = CustomUserCreationForm
     form_class = TeacherSignUpForm
     template_name = 'registration/signup_form.html'
 
@@ -39,4 +39,5 @@ class TeacherSignUpView(CreateView):
         user = form.save()
         auth_login(self.request,user,backend='django.contrib.auth.backends.ModelBacked')
         return redirect('core:thome')
+    
         
