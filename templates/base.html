@@ -7,9 +7,13 @@
         </title>
     </head>
     <body>
-        {% block content %}
-          
-        {% endblock content %}
+        {% include "navbar.html" %}
+
+        <div class="ui grid" style="height: 100%;">
+            {% block teacher %}{% endblock teacher %}
+            {% block student %}{% endblock student %}
+            {% block content %}{% endblock content %}
+        </div>
 
         {% include "footer.html" %}
     </body>

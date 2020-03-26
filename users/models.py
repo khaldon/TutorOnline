@@ -54,10 +54,6 @@ class CustomUser(AbstractUser):
     username =  models.CharField(_('username'), unique=True, max_length=128)
     USERNAME_FIELD = 'email'
     REQUIRED_FIELDS = ['username']
-    is_student = models.BooleanField(default=False)
-    is_teacher = models.BooleanField(default=False)
-    studentinterests = models.ManyToManyField(StudentInterests,related_name='interested_students')
-    teachermajors = models.OneToOneField(TeacherMajors,related_name='teacher_majors',on_delete=models.CASCADE,null=True)
     objects = UserManager()
 
     def __str__(self):

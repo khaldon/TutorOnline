@@ -8,15 +8,9 @@ from django.conf import settings
 User = settings.AUTH_USER_MODEL
 
 class TeacherSignUpForm(UserCreationForm):
-    # email = forms.CharField(label='',widget=forms.TextInput(attrs={'placeholder': 'Email'}))
-    # username = forms.CharField(label='',widget=forms.TextInput(attrs={'placeholder': 'Username'}))
-    # password1 = forms.CharField(label='',widget=forms.PasswordInput(attrs={'placeholder': 'Password'}))
-    # password2 = forms.CharField(label='',widget=forms.PasswordInput(attrs={'placeholder': 'Confirm your password'}))
-    # teachermajors = forms.ModelChoiceField(queryset=TeacherMajors.objects.all())
-
     class Meta(UserCreationForm.Meta):
         model = CustomUser
-        fields = ('username','email','teachermajors')
+        fields = ('username','email')
     
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
@@ -33,9 +27,6 @@ class TeacherSignUpForm(UserCreationForm):
         return user
 
 
-    
-
-
 class StudentSignUpForm(UserCreationForm):
     studentinterests = forms.ModelMultipleChoiceField(
         queryset=StudentInterests.objects.all(),
@@ -45,7 +36,7 @@ class StudentSignUpForm(UserCreationForm):
 
     class Meta(UserCreationForm.Meta):
         model = CustomUser
-        fields = ('username','email','studentinterests',)
+        fields = ('username','email')
 
     def save(self, commit=True):
         user = super().save(commit=False)
