@@ -45,19 +45,16 @@ INSTALLED_APPS = [
     # all auth apps
     'allauth',
     'allauth.account',
-    'allauth.socialaccount',
-    'allauth.socialaccount.providers.google',
-    'allauth.socialaccount.providers.github',
-    'allauth.socialaccount.providers.facebook',
+    'social_django',
 ]
 
 SITE_ID = 2
 
 AUTHENTICATION_BACKENDS = (
-    # Default backend -- used to login by username in Django admin
-    "django.contrib.auth.backends.ModelBackend",
-    # `allauth` specific authentication methods, such as login by e-mail
-    "allauth.account.auth_backends.AuthenticationBackend",
+    'social_core.backends.github.GithubOAuth2',
+    'social_core.backends.twitter.GoogleOAuth',
+    'social_core.backends.facebook.FacebookOAuth2',
+    'django.contrib.auth.backends.ModelBackend',
 )
 
 MIDDLEWARE = [
@@ -68,6 +65,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'social_django.middleware.SocialAuthExceptionMiddleware',
 ]
 
 ROOT_URLCONF = 'TutorOnline.urls'
@@ -155,3 +153,12 @@ LOGOUT_REDIRECT_URL = '/'
 LOGIN_REDIRECT_URL = '/'
 
 AUTH_USER_MODEL = 'users.CustomUser'
+
+SOCIAL_AUTH_GITHUB_KEY = 'SOCIAL_AUTH_GITHUB_KEY'
+SOCIAL_AUTH_GITHUB_SECRET = 'SOCIAL_AUTH_GITHUB_SECRET'
+
+SOCIAL_AUTH_GOOGLE_KEY = 'SOCIAL_AUTH_GOOGLE_KEY'
+SOCIAL_AUTH_GOOGLE_SECRET = 'SOCIAL_AUTH_GOOGLE_SECRET'
+
+SOCIAL_AUTH_FACEBOOK_KEY = 'SOCIAL_AUTH_FACEBOOK_KEY'
+SOCIAL_AUTH_FACEBOOK_SECRET = 'SOCIAL_AUTH_FACEBOOK_SECRET'

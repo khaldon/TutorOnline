@@ -1,4 +1,4 @@
-from django.urls import path,reverse_lazy
+from django.urls import path,include,reverse_lazy
 from django.contrib.auth import views as auth_views
 from django.contrib.auth.decorators import login_required
 from .views import SignUpView,StudentSignUpView,TeacherSignUpView
@@ -18,4 +18,5 @@ urlpatterns = [
     path('password-reset/done/',auth_views.PasswordResetDoneView.as_view(),name='password_reset_done'),
     path('reset/<uidb64>/<token>/',auth_views.PasswordResetConfirmView.as_view(success_url = reverse_lazy('users:password_reset_complete')),name='password_reset_confirm'),
     path('reset/done/',auth_views.PasswordResetCompleteView.as_view(),name='password_reset_complete'),
+    path('oauth/',include('social_django.urls',namespace='social')),
 ]
