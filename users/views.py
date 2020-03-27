@@ -4,8 +4,10 @@ from django.views import generic
 from django.contrib.auth import authenticate
 from .models import CustomUser
 from django.views.generic import CreateView,TemplateView
-from .forms import StudentSignUpForm,TeacherSignUpForm, CustomUserCreationForm
+from .forms import StudentSignUpForm,TeacherSignUpForm, CustomUserCreationForm,UserEditForm,StudentProfileForm,TeacherProfileForm
 from django.contrib.auth import login as auth_login
+from django.contrib.auth.decorators import login_required
+from django.contrib import messages 
 
 # Create your views here.
 
@@ -40,4 +42,31 @@ class TeacherSignUpView(CreateView):
         auth_login(self.request,user,backend='django.contrib.auth.backends.ModelBacked')
         return redirect('core:thome')
     
-        
+@login_required
+def profile(request):
+    if request.method == 'POST':
+        if request.user.is_student:
+            user_form = UserEditForm(request.POST, instance=request.user)
+            profile_form = StudentProfileForm(request.POST,request.FILES, instance=request.user.profile)
+        else:
+            user_form = UserEditForm(request.POST, instance=request.user)
+            profile_form = TeacherProfileForm(request.POST,request.FILES, instance=request.user.profile)
+        if user_form.is_valid() and profile_form.is_valid():
+            user_form.save()
+            profile_form.save()
+            messages.success(request, 'Your profile was successfully updated')
+        else:
+            messages.error(request, 'Please correct that errors in your profile form.')
+    else:
+        user_form = UserEditForm(instance=request.user)
+        profile_form = StudentProfileForm(instance=request.user.profile)
+    return render(request, 'users/profile.html', {
+        'user_form':user_form,
+        'profile_form':profile_form
+    })
+
+
+
+
+
+    
