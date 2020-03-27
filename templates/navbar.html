@@ -2,15 +2,21 @@
 <div class="ui top fixed menu">
     <a class="item">Features</a>
     <a class="item">Testimonials</a>
-    <div class="right menu">
-        <div class="ui simple dropdown item">
+    <div class="right menu"  style="margin-right: 10px;">    
+        <div class="ui top right pointing dropdown link item borderless " >
+            {% if user.is_authenticated %}
             <img class="ui avatar image" src="{% static 'blocked.png' %}">
-            <span>Username</span>
+            <span>{{user.username}}</span>
             <i class="dropdown icon"></i>
             <div class="menu">
                 <a class="item">My profile</a>
-                <a href="#" class="item">Logout</a>
+                <a href="{% url 'users:logout' %}" class="item">Logout</a>
             </div>
+            {% endif %}
         </div>
     </div>
 </div>  
+
+<script>
+    $('.ui.dropdown').dropdown();
+</script>

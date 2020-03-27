@@ -8,8 +8,8 @@
     </head>
     <body>
         {% include "navbar.html" %}
-
         <div class="ui grid" style="height: 100%;">
+            {% block profile %}{% endblock profile %}
             {% block teacher %}{% endblock teacher %}
             {% block student %}{% endblock student %}
             {% block content %}{% endblock content %}
