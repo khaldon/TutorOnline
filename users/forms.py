@@ -46,6 +46,11 @@ class StudentSignUpForm(UserCreationForm):
             user.save()
         return user
 
+class UserEditForm(forms.ModelForm):
+    class Meta:
+        model = CustomUser
+        fields = ('username','email')
+
 class TeacherProfileForm(forms.ModelForm):
     class Meta:
         model = Profile
