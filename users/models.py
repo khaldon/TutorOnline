@@ -83,19 +83,28 @@ class Subject(models.Model):
         return self.name
 
 class Profile(models.Model):
-    user = models.OneToOneField(User, related_name='profile', on_delete=models.CASCADE)
+    # common fields
+    user = models.OneToOneField(User,related_name='profile',on_delete=models.CASCADE)
     birth_date = models.DateField(verbose_name='birth_date',blank=True,null=True)
     gender = models.CharField(max_length=10,choices=GENDER_CHOICES)
     slug = models.SlugField(max_length=255,unique=True,null=True,blank=True)
     country = CountryField()
     city = models.CharField(max_length=255,null=True,blank=True)
     bio = models.CharField(max_length=300)
-    interests = models.ManyToManyField(StudentInterests,blank=True)
     image = models.ImageField(verbose_name='userimages',upload_to='user_images',null=True,blank=True)
+    # student fields
+    interests = models.ManyToManyField(StudentInterests,blank=True)
+    # teacher fields
     course = models.ManyToManyField(Course,blank=True)
     rating = models.FloatField(default=0)
     students = models.ManyToManyField(User,related_name='students')
     subjects = models.ManyToManyField(Subject)
+
+    def get_student(self):
+        return self.user.is_student == True
+
+    def get_teacher(self):
+        return self.user.is_teacher == True
 
     def get_picture(self):
         default_picture = settings.STATIC_URL + 'img/default_picture.png'

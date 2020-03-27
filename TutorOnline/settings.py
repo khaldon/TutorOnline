@@ -46,6 +46,9 @@ INSTALLED_APPS = [
     # all auth apps
     'allauth',
     'allauth.account',
+    # bootstrap datepicker
+    'bootstrap_datepicker_plus',
+    'bootstrap4',
 ]
 
 SITE_ID = 2
