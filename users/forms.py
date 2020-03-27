@@ -1,9 +1,10 @@
 from django import forms
 from django.contrib.auth.forms import UserCreationForm, UserChangeForm
-from .models import CustomUser,Student,StudentInterests,TeacherMajors
+from .models import CustomUser,StudentInterests,TeacherMajors,Profile
 from django.contrib.auth.forms import AuthenticationForm
 from django.forms.widgets import PasswordInput, TextInput
 from django.conf import settings
+from bootstrap_datepicker_plus import DatePickerInput
 
 User = settings.AUTH_USER_MODEL
 
@@ -26,7 +27,6 @@ class TeacherSignUpForm(UserCreationForm):
             user.save()
         return user
 
-
 class StudentSignUpForm(UserCreationForm):
     studentinterests = forms.ModelMultipleChoiceField(
         queryset=StudentInterests.objects.all(),
@@ -45,6 +45,38 @@ class StudentSignUpForm(UserCreationForm):
         if commit:
             user.save()
         return user
+
+class TeacherProfileForm(forms.ModelForm):
+    class Meta:
+        model = Profile
+        fields = ('birth_date','gender','country','city','bio','image','course','subjects')
+        widgets = {
+            'birth_date':DatePickerInput(format='%m/%d/%Y')
+        }
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.fields['birth_date'].help_text = 'Pick your birth date.'
+        self.fields['country'].help_text = 'Pick your country from the list.'
+        self.fields['city'].help_text = 'Provide your city.'
+        self.fields['bio'].help_text = 'Tell people about your teacher career and everything related to that.'        
+        self.fields['subjects'].help_text = 'Provide your subjects.'        
+
+class StudentProfileForm(forms.ModelForm):
+    class Meta:
+        model = Profile
+        fields = ('birth_date','gender','country','city','bio','image','interests')
+        widgets = {
+            'birth_date':DatePickerInput(format='%m/%d/%Y')
+        }
+    
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.fields['birth_date'].help_text = 'Pick your birth date.'
+        self.fields['country'].help_text = 'Pick your country from the list.'
+        self.fields['city'].help_text = 'Provide your city.'
+        self.fields['bio'].help_text = 'Tell people what you want to archive here.'        
+        self.fields['interests'].help_text = 'Provide your interests.'       
 
 class CustomUserCreationForm(UserCreationForm):
     

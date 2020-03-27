@@ -1,4 +1,4 @@
-from django.urls import path,reverse_lazy
+from django.urls import path,include,reverse_lazy
 from django.contrib.auth import views as auth_views
 from django.contrib.auth.decorators import login_required
 from .views import SignUpView,StudentSignUpView,TeacherSignUpView

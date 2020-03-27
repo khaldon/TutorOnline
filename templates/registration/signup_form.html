@@ -78,9 +78,9 @@
           Or SIGN UP 
         </div>
         <div class="field" style="margin-top: 12px;">
-          <a href="/accounts/facebook/login"><i class="big blue facebook icon"></i></a>
-          <a href="/accounts/github/login"><i class="big black github icon"></i></a>
-          <a href="/accounts/google/login"><i class="big red google icon"></i></a>
+          <a href="{% url 'social:begin' 'facebook' %}"><i class="big blue facebook icon"></i></a>
+          <a href="{% url 'social:begin' 'github' %}"><i class="big black github icon"></i></a>
+          <a href="{% url 'social:begin' 'google' %}"><i class="big red google icon"></i></a>
         </div>
       </div>
     

@@ -52,42 +52,14 @@ class TeacherMajors(models.Model):
 class CustomUser(AbstractUser): 
     email =  models.EmailField(_('email_address'), unique=True, name='email')
     username =  models.CharField(_('username'), unique=True, max_length=128)
+    is_student = models.BooleanField(default=False)
+    is_teacher = models.BooleanField(default=False)
     USERNAME_FIELD = 'email'
     REQUIRED_FIELDS = ['username']
     objects = UserManager()
 
     def __str__(self):
         return self.email
-
-class Student(models.Model):
-    user = models.OneToOneField(User,on_delete=models.CASCADE, primary_key=True)
-
-    def __str__(self):
-        return self.user.username
-
-class Profile(models.Model):
-    user = models.OneToOneField(User, related_name='profile', on_delete=models.CASCADE)
-    birth_date = models.DateField(verbose_name='student_birth_date',blank=True,null=True)
-    gender = models.CharField(max_length=10,choices=GENDER_CHOICES)
-    slug = models.SlugField(max_length=255,unique=True,null=True,blank=True)
-    country = CountryField()
-    city = models.CharField(max_length=255,null=True,blank=True)
-    bio = models.CharField(max_length=300)
-
-class StudentProfile(models.Model):
-    profile = models.ForeignKey(Profile, on_delete=models.CASCADE)
-    image = models.ImageField(verbose_name='student_image',upload_to='student_images',null=True,blank=True)
-    interests = models.ManyToManyField(StudentInterests,blank=True)
-
-    def get_picture(self):
-        default_picture = settings.STATIC_URL + 'img/default_picture.png'
-        if self.image:
-            return self.image.url
-        else:
-            return default_picture
-
-    def __str__(self):
-        return self.user.email
 
 class University(models.Model):
     name = models.CharField(max_length=200)
@@ -110,16 +82,29 @@ class Subject(models.Model):
     def __str__(self):
         return self.name
 
-
-
-
-class TeacherProfile(models.Model):
-    profile = models.ForeignKey(Profile, on_delete=models.CASCADE)
-    image = models.ImageField(verbose_name='teacher_image',upload_to='teacher_images',null=True,blank=True)
+class Profile(models.Model):
+    # common fields
+    user = models.OneToOneField(User,related_name='profile',on_delete=models.CASCADE)
+    birth_date = models.DateField(verbose_name='birth_date',blank=True,null=True)
+    gender = models.CharField(max_length=10,choices=GENDER_CHOICES)
+    slug = models.SlugField(max_length=255,unique=True,null=True,blank=True)
+    country = CountryField()
+    city = models.CharField(max_length=255,null=True,blank=True)
+    bio = models.CharField(max_length=300)
+    image = models.ImageField(verbose_name='userimages',upload_to='user_images',null=True,blank=True)
+    # student fields
+    interests = models.ManyToManyField(StudentInterests,blank=True)
+    # teacher fields
     course = models.ManyToManyField(Course,blank=True)
     rating = models.FloatField(default=0)
     students = models.ManyToManyField(User,related_name='students')
     subjects = models.ManyToManyField(Subject)
+
+    def get_student(self):
+        return self.user.is_student == True
+
+    def get_teacher(self):
+        return self.user.is_teacher == True
 
     def get_picture(self):
         default_picture = settings.STATIC_URL + 'img/default_picture.png'
@@ -130,7 +115,7 @@ class TeacherProfile(models.Model):
 
     def __str__(self):
         return self.user.email
-    
+
 @receiver(post_save, sender=User)
 def create_user_profile(sender, instance, created, **kwargs):
     if created:
@@ -139,21 +124,3 @@ def create_user_profile(sender, instance, created, **kwargs):
 @receiver(post_save, sender=User)
 def save_user_profile(sender, instance, **kwargs):
     instance.profile.save()
-
-# @receiver(post_save, sender=User)
-# def create_student_profile(sender, instance, created, **kwargs):
-#     if created:
-#         StudentProfile.objects.create(user=instance)
-
-# @receiver(post_save, sender=User)
-# def create_teacher_profile(sender, instance, created, **kwargs):
-#     if created:
-#         TeacherProfile.objects.create(user=instance)
-
-# @receiver(post_save, sender=User)
-# def save_student_profile(sender, instance, **kwargs):
-#     instance.studentprofile.save()
-
-# @receiver(post_save, sender=User)
-# def save_teacher_profile(sender, instance, **kwargs):
-#     instance.teacherprofile.save()
