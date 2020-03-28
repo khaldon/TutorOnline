@@ -24,7 +24,7 @@ class TeacherSignUpForm(UserCreationForm):
         self.fields['password2'].widget.attrs.update({'placeholder':'Confirm Password'})
         self.fields['username'].widget.attrs.update({'placeholder':'username'})
         self.fields['email'].widget.attrs.update({'placeholder':'email'})
-    
+   
     def save(self, commit=True):
         user = super().save(commit=False)
         user.is_teacher = True
@@ -62,11 +62,9 @@ class TeacherProfileForm(forms.ModelForm):
         }
 
     def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
-        self.fields['country'].help_text = 'Pick your country from the list.'
-        self.fields['city'].help_text = 'Provide your city.'
-        self.fields['bio'].help_text = 'Tell people about your teacher career and everything related to that.'        
-        self.fields['birth_date'].widget.attrs.update({'autocomplete':'off'})   
+        super().__init__(*args, **kwargs)       
+        self.fields['birth_date'].widget.attrs.update({'autocomplete':'off','type':'date'})   
+
 
     
 
@@ -83,11 +81,8 @@ class StudentProfileForm(forms.ModelForm):
 
     
     def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
-        self.fields['country'].help_text = 'Pick your country from the list.'
-        self.fields['city'].help_text = 'Provide your city.'
-        self.fields['bio'].help_text = 'Tell people what you want to archive here.'        
-        self.fields['birth_date'].widget.attrs.update({'autocomplete':'off'})   
+        super().__init__(*args, **kwargs)    
+        self.fields['birth_date'].widget.attrs.update({'autocomplete':'off','type':'date'})   
 
 class CustomUserCreationForm(UserCreationForm):
     
