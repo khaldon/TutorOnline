@@ -36,6 +36,7 @@ class TeacherSignUpView(CreateView):
     form_class = TeacherSignUpForm
     template_name = 'registration/signup_form.html'
 
+
     def get_context_data(self, **kwargs):
         kwargs['user_type'] = 'teacher'
         return super().get_context_data(**kwargs)
@@ -62,7 +63,11 @@ def profile(request):
             messages.error(request, 'Please correct that errors in your profile form.')
     else:
         user_form = UserEditForm(instance=request.user)
-        profile_form = StudentProfileForm(instance=request.user.profile)
+        if request.user.is_student:
+            profile_form = StudentProfileForm(instance=request.user.profile)
+        else:
+            profile_form = TeacherProfileForm(instance=request.user.profile)
+
     return render(request, 'users/profile.html', {
         'user_form':user_form,
         'profile_form':profile_form
