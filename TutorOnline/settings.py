@@ -157,7 +157,7 @@ CRISPY_TEMPLATE_PACK = 'bootstrap4'
 
 LOGIN_URL = 'users:login'
 LOGOUT_REDIRECT_URL = '/'
-LOGIN_REDIRECT_URL = 'core:dashboard'
+LOGIN_REDIRECT_URL = 'core:home'
 
 AUTH_USER_MODEL = 'users.CustomUser'
 
@@ -169,3 +169,10 @@ SOCIAL_AUTH_GOOGLE_SECRET = 'SOCIAL_AUTH_GOOGLE_SECRET'
 
 SOCIAL_AUTH_FACEBOOK_KEY = 'SOCIAL_AUTH_FACEBOOK_KEY'
 SOCIAL_AUTH_FACEBOOK_SECRET = 'SOCIAL_AUTH_FACEBOOK_SECRET'
+
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_USE_TLS = True
+EMAIL_PORT = 587
+EMAIL_HOST_USER = 'djangoecommercegithub@gmail.com'
+EMAIL_HOST_PASSWORD = 'djangoecommerce'
