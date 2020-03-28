@@ -1,6 +1,116 @@
 {% extends "base.html" %}
-{% block profile %}
 
+    {% block profile %} 
+    <form method="POST" class="ui form customForm">
+        {% csrf_token %}
+        <div class="ui grid" style="margin-top: 60px;">    
+            <div class="sixteen wide column">
+                {% if messages %}
+                {% for message in messages  %}
+                <div class="ui {% if message.tags == 'success' %} green {% else %} red message {% endif %}">{{message}}</div>
+                {% endfor %}
+            {% endif %}
+            </div>
+            <div class="four wide column">
+                <div class="ui card">
+                    <div class="image">
+                        <img src="{{user.profile.get_picture}}">
+                        {{profile_form.image}}
+                    </div>
+                </div>
+             </div>
+             <div class="eight wide column right floated">     
+                <h4 class="ui dividing teal header">Personal Information</h4>
+                <div class="field">
+                    <label>Username</label>
+                    {{user_form.username}}
+                </div>
+                <div class="field">
+                    <label>Email</label>
+                    {{user_form.email}}
+                </div>
+                <div class="two fields">
+                    <div class="ten wide field">
+                        <label>Country</label>
+                        <select name="country" class="ui dropdown" id="select">
+                            {% for item in profile_form.country %}
+                                 <option value="{{item.pk}}">{{item}}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <div class="six wide field">
+                        <label>City</label>
+                        {{profile_form.city}}
+                    </div>
+                </div>
+                <div class="two fields">
+                    <div class="six field">
+                        <label >Gender</label>
+                        {{profile_form.gender}}
+                    </div>
+                    <div class="ten field">
+                        <label>Birthday</label>
+                        <div class="ui calendar" id="standard_calendar">
+                            <div class="ui input left icon">
+                                <i class="calendar icon"></i>
+                                {{profile_form.birth_date}}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                {% if user_type == student %}
+                <div class="field">
+                    <label>Interests</label>
+                    <select multiple="" name="interests" class="ui fluid normal dropdown">
+                        {% for item in profile_form.interests %}
+                             <option value="{{item.pk}}">{{item}}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                {% else %}
+                <div class="two fields">
+                    <div class="eight field">
+                        <label>Subjects</label>
+                        {{profile_form.subjects}}
+                    </div>
+                    <div class="eight field">
+                        <label>Course</label>
+                        {{profile_form.course}}
+                    </div>
+                </div>
+                {% endif %}
+                <div class="field">
+                    <label >Bio</label>
+                    {{profile_form.bio}}
+                </div>
+                <button class="ui teal button">Update</button>
+             </div>
+       
+        </div>
+    </form>
+    <div class="ui grid" >
+    <div class="four column row" style="margin-top: 30px;">
+        <div class="eight wide column right floated ">
+            <h4 class="ui dividing teal header">Changing Password</h4>
+            <a href="{% url 'users:password_change' %}" class="ui teal button">Change your password</a>
+        </div>
+     </div>
+     </div>
+    <form class="ui form" >
+        <div class="ui grid" >
+        <div class="eight column row" style="margin-top: 30px;" >
+            <div class="eight wide column right floated">
+                <h4 class="ui dividing red header">Delete Account</h4>
+                <button class="ui red button">Delete Account</button>
+            </div>
+        </div> 
+    </div>
+    </form>
 
-
-{% endblock profile %}
+ <script>
+    $('#select').dropdown();
+    $('#standard_calendar').calendar();
+    $('.ui.normal.dropdown').dropdown({maxSelections: 3});
+ </script>
+    {% endblock profile %}

@@ -5,8 +5,14 @@ from django.contrib.auth.forms import AuthenticationForm
 from django.forms.widgets import PasswordInput, TextInput
 from django.conf import settings
 from bootstrap_datepicker_plus import DatePickerInput
-
+from django.forms.widgets import ClearableFileInput
 User = settings.AUTH_USER_MODEL
+
+
+
+class CustomClearableFileInput(ClearableFileInput):
+    template_name = 'users/custom_clear_file_input.html'
+
 
 class TeacherSignUpForm(UserCreationForm):
     class Meta(UserCreationForm.Meta):
@@ -30,7 +36,6 @@ class TeacherSignUpForm(UserCreationForm):
 class StudentSignUpForm(UserCreationForm):
     studentinterests = forms.ModelMultipleChoiceField(
         queryset=StudentInterests.objects.all(),
-        widget=forms.CheckboxSelectMultiple,
         required=True
     )
 
@@ -56,32 +61,34 @@ class TeacherProfileForm(forms.ModelForm):
         model = Profile
         fields = ('birth_date','gender','country','city','bio','image','course','subjects')
         widgets = {
-            'birth_date':DatePickerInput(format='%m/%d/%Y')
+            'image':CustomClearableFileInput(),
         }
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        self.fields['birth_date'].help_text = 'Pick your birth date.'
         self.fields['country'].help_text = 'Pick your country from the list.'
         self.fields['city'].help_text = 'Provide your city.'
         self.fields['bio'].help_text = 'Tell people about your teacher career and everything related to that.'        
-        self.fields['subjects'].help_text = 'Provide your subjects.'        
+        self.fields['subjects'].help_text = 'Provide your subjects.'    
+        self.fields['birth_date'].widget.attrs.update({'autocomplete':'off'})   
+
+    
 
 class StudentProfileForm(forms.ModelForm):
     class Meta:
         model = Profile
         fields = ('birth_date','gender','country','city','bio','image','interests')
         widgets = {
-            'birth_date':DatePickerInput(format='%m/%d/%Y')
+            'image':CustomClearableFileInput(),
+
         }
     
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        self.fields['birth_date'].help_text = 'Pick your birth date.'
         self.fields['country'].help_text = 'Pick your country from the list.'
         self.fields['city'].help_text = 'Provide your city.'
         self.fields['bio'].help_text = 'Tell people what you want to archive here.'        
-        self.fields['interests'].help_text = 'Provide your interests.'       
+        self.fields['birth_date'].widget.attrs.update({'autocomplete':'off'})   
 
 class CustomUserCreationForm(UserCreationForm):
     
@@ -93,6 +100,7 @@ class CustomUserCreationForm(UserCreationForm):
         super().__init__(*args, **kwargs)
         self.fields['password1'].help_text = None
         self.fields['password2'].help_text = None 
+        
 
 class CustomUserChangeForm(UserChangeForm):
 
