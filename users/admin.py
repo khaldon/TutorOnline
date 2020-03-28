@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import CustomUser,StudentInterests,Subject,Course,University
+from .models import CustomUser,StudentInterests,Subject,Course,University, Profile
 from django.contrib.auth.admin import UserAdmin
 from .forms import UserCreationForm,UserChangeForm
 
@@ -16,7 +16,7 @@ class CustomUserAdmin(UserAdmin):
     add_form = UserCreationForm
     form = UserChangeForm
     model = CustomUser
-    list_display = ('email', 'is_staff', 'is_active', 'username','get_country',)
+    list_display = ('email', 'is_staff', 'is_active', 'username','get_country','is_student','is_teacher')
     list_filter = ('email', 'is_staff', 'is_active',)
     fieldsets = (
         (None, {'fields': ('email', 'password', 'username')}),
@@ -46,4 +46,5 @@ admin.site.register(CustomUser,CustomUserAdmin)
 admin.site.register(StudentInterests)
 admin.site.register(Subject)
 admin.site.register(Course)
+admin.site.register(Profile)
 admin.site.register(University)
