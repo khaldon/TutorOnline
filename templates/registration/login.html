@@ -40,6 +40,18 @@
             </div>
         </form>
         <div class="ui message">Don't have account ?  Sign up <a  href="{% url 'users:teacher_signup' %}">As teacher</a> or <a  href="{% url 'users:student_signup' %}">As student</a></div>
+       
+       {% if form.non_field_errors or form.username.errors or form.password.errors  %}
+       <div class="ui red message">
+        {{form.non_field_errors}}
+        {{form.username.errors}}
+        {{form.password.errors}}
+       </div>
+
+       {% endif %}
+         
+     
+       
     </div>
 </div>
 </body>
