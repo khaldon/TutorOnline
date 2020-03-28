@@ -125,10 +125,12 @@
                         <i class="remove icon"></i>
                         No
                       </div>
+                      <a href="{% url 'users:delete_user' user.username %}">
                       <div class="ui red basic cancel inverted button">
                         <i class="checkmark icon"></i>
-                        <a href="{% url 'users:delete_user' user.username %}">Yes</a>
+                        Yes
                       </div>
+                      </a>
                     </div>
                   </div>
                   

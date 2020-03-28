@@ -69,7 +69,7 @@ def profile(request):
     })
 
 def delete_user(request, username):
-    u = User.objects.get(username=username)
+    u = CustomUser.objects.get(username=username)
     u.delete()
     return redirect('core:home')
     
