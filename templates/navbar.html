@@ -1,5 +1,5 @@
 {% load static %}
-<div class="ui top fixed menu">
+<div class="ui top menu " style="border: 0px;">
     <a class="item">Features</a>
     <a class="item">Testimonials</a>
     <div class="right menu"  style="margin-right: 10px;">    
@@ -9,8 +9,8 @@
             <span>{{user.username}}</span>
             <i class="dropdown icon"></i>
             <div class="menu">
-                <a class="item">My profile</a>
-                <a href="{% url 'users:logout' %}" class="item">Logout</a>
+                <a class="item" href="{% url 'users:profile' %}" >My profile</a>
+                <a class="item" href="{% url 'users:logout' %}" >Logout</a>
             </div>
             {% endif %}
         </div>
