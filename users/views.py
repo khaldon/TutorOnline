@@ -8,8 +8,11 @@ from .forms import StudentSignUpForm,TeacherSignUpForm, CustomUserCreationForm,U
 from django.contrib.auth import login as auth_login
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages 
+from django.conf import settings
 
 # Create your views here.
+
+User = settings.AUTH_USER_MODEL
 
 class SignUpView(TemplateView):
     template_name = 'registration/signup.html'
@@ -65,8 +68,8 @@ def profile(request):
         'profile_form':profile_form
     })
 
-
-
-
-
+def delete_user(request, username):
+    u = User.objects.get(username=username)
+    u.delete()
+    return redirect('core:home')
     

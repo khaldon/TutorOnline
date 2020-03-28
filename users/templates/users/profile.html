@@ -59,7 +59,7 @@
                     </div>
                 </div>
                 
-                {% if user_type == student %}
+                {% if request.user.is_student %}
                 <div class="field">
                     <label>Interests</label>
                     <select multiple="" name="interests" class="ui fluid normal dropdown">
@@ -72,11 +72,19 @@
                 <div class="two fields">
                     <div class="eight field">
                         <label>Subjects</label>
-                        {{profile_form.subjects}}
+                        <select multiple="" name="subjects" class="ui fluid normal dropdown">
+                        {% for item in profile_form.subjects %}
+                             <option value="{{item.pk}}">{{item}}</option>
+                        {% endfor %}
+                        </select>
                     </div>
                     <div class="eight field">
-                        <label>Course</label>
-                        {{profile_form.course}}
+                        <label>Courses</label>
+                        <select multiple="" name="courses" class="ui fluid normal dropdown">
+                        {% for item in profile_form.course %}
+                             <option value="{{item.pk}}">{{item}}</option>
+                        {% endfor %}
+                        </select>
                     </div>
                 </div>
                 {% endif %}
@@ -102,7 +110,28 @@
         <div class="eight column row" style="margin-top: 30px;" >
             <div class="eight wide column right floated">
                 <h4 class="ui dividing red header">Delete Account</h4>
-                <button class="ui red button">Delete Account</button>
+                <button type="button" class="ui red button" id="delete">Delete Account</button>
+
+                <div class="ui basic modal delete">
+                    <div class="ui icon header">
+                      <i class="archive icon"></i>
+                        Are you sure that you want to delete {{ user.email }}
+                    </div>
+                    <div class="content">
+                      <p>Everything in your account will be removed</p>
+                    </div>
+                    <div class="actions">
+                      <div class="ui green ok inverted button ">
+                        <i class="remove icon"></i>
+                        No
+                      </div>
+                      <div class="ui red basic cancel inverted button">
+                        <i class="checkmark icon"></i>
+                        <a href="{% url 'users:delete_user' user.username %}">Yes</a>
+                      </div>
+                    </div>
+                  </div>
+                  
             </div>
         </div> 
     </div>
@@ -112,5 +141,9 @@
     $('#select').dropdown();
     $('#standard_calendar').calendar();
     $('.ui.normal.dropdown').dropdown({maxSelections: 3});
+    $('#delete').click(function(){
+        $('.ui.basic.modal').modal('show');    
+     });
  </script>
+
     {% endblock profile %}

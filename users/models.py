@@ -43,12 +43,6 @@ class StudentInterests(models.Model):
     def __str__(self):
         return self.name
 
-class TeacherMajors(models.Model):
-    name = models.CharField(max_length=50)
-
-    def __str__(self):
-        return self.name
-
 class CustomUser(AbstractUser): 
     email =  models.EmailField(_('email_address'), unique=True, name='email')
     username =  models.CharField(_('username'), unique=True, max_length=128)
