@@ -37,6 +37,13 @@ class StudentSignUpForm(UserCreationForm):
         model = CustomUser
         fields = ('username','email')
 
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.fields['password1'].widget.attrs.update({'placeholder':'Password'})
+        self.fields['password2'].widget.attrs.update({'placeholder':'Confirm Password'})
+        self.fields['username'].widget.attrs.update({'placeholder':'username'})
+        self.fields['email'].widget.attrs.update({'placeholder':'email'})
+
     def save(self, commit=True):
         user = super().save(commit=False)
         user.is_student = True

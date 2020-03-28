@@ -29,7 +29,7 @@ class StudentSignUpView(CreateView):
     def form_valid(self, form):
         user = form.save()
         auth_login(self.request,user,backend='django.contrib.auth.backends.ModelBackend')
-        return redirect('core:shome')
+        return redirect('core:student_home')
 
 class TeacherSignUpView(CreateView):
     model = CustomUserCreationForm
@@ -43,7 +43,7 @@ class TeacherSignUpView(CreateView):
     def form_valid(self, form):
         user = form.save()
         auth_login(self.request,user,backend='django.contrib.auth.backends.ModelBacked')
-        return redirect('core:thome')
+        return redirect('core:teacher_home')
     
 @login_required
 def profile(request):

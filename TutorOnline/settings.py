@@ -157,7 +157,7 @@ CRISPY_TEMPLATE_PACK = 'bootstrap4'
 
 LOGIN_URL = 'users:login'
 LOGOUT_REDIRECT_URL = '/'
-LOGIN_REDIRECT_URL = 'core:dashboard'
+LOGIN_REDIRECT_URL = 'core:home'
 
 AUTH_USER_MODEL = 'users.CustomUser'
 
