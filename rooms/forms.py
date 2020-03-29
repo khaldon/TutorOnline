@@ -8,4 +8,4 @@ class RoomForm(forms.ModelForm):
     class Meta:
         model = Room
         fields = ('title','description','stream_time','max_students_amount','subjects','room_type')
-        widgets = {'room_type':forms.RadioInput}
+        widgets = {'room_type':forms.RadioSelect}
