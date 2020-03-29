@@ -7,17 +7,29 @@
         </title>
     </head>
     <body>
-        {% include "navbar.html" %}
-        <div class="ui container">
-           
-
-            {% block profile %}{% endblock profile %}
-            
-            {% block teacher %}{% endblock teacher %}
-            {% block student %}{% endblock student %}
-            {% block content %}{% endblock content %}
+        <div class="ui bottom attached segment pushable">
+        {% include "sidebar.html" %}
+        <div class="pusher">
+            {% include "navbar.html" %}
+            <div class="ui container">
+                {% block profile %}{% endblock profile %}
+                {% block teacher %}{% endblock teacher %}
+                {% block student %}{% endblock student %}
+                {% block content %}{% endblock content %}
+                   {% block room %}{% endblock room %}
+            </div>
+            {% include "footer.html" %}
         </div>
-
-        {% include "footer.html" %}
+        </div>
+       
     </body>
+    <script>
+        // $('.ui.left.vertical.menu').sidebar('scrollLock','true');
+        $('.ui.left.vertical.menu')
+  .sidebar({
+    context: '.visible.segment'
+  })
+  .sidebar('hide')
+;
+    </script>
 </html>

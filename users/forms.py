@@ -4,7 +4,6 @@ from .models import CustomUser,StudentInterests,Profile,Subject,Course
 from django.contrib.auth.forms import AuthenticationForm
 from django.forms.widgets import PasswordInput, TextInput
 from django.conf import settings
-from bootstrap_datepicker_plus import DatePickerInput
 from django.forms.widgets import ClearableFileInput
 
 User = settings.AUTH_USER_MODEL

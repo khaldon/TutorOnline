@@ -13,6 +13,10 @@ def home(request):
 def dashboard(request):
     return render(request, 'base.html')
 
+
+def room(request):
+    return render(request, 'room.html')   
+
 # def shome(request):
 #     if request.user.is_authenticated and request.user.is_student:
 #         return render(request,'student_home.html')
