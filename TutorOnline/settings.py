@@ -41,6 +41,7 @@ INSTALLED_APPS = [
     'social_django',
     'users',
     'core',
+    'rooms',
     'crispy_forms',
     'django_countries',
     # all auth apps
