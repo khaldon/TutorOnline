@@ -9,15 +9,12 @@
     <body>
         {% include "navbar.html" %}
         <div class="ui container">
-           
-
             {% block profile %}{% endblock profile %}
-            
             {% block teacher %}{% endblock teacher %}
             {% block student %}{% endblock student %}
             {% block content %}{% endblock content %}
+                {% block room %}{% endblock room %}
         </div>
-
         {% include "footer.html" %}
     </body>
 </html>

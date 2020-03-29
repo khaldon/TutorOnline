@@ -1,0 +1,14 @@
+{% extends "base.html" %}
+
+{% block title %}{% endblock title %}
+
+{% block teacher %}
+<div class="ui center aligned grid">
+    <div class="five column">
+        <a href="{% url 'rooms:rooms' %}" class="ui violet big button">Show rooms</a>
+    </div>
+    <div class="five column">
+        <a href="{% url 'rooms:create_room' %}" class="ui violet big button">Create room</a>
+    </div>
+</div>
+{% endblock teacher %}

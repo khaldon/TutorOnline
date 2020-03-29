@@ -47,9 +47,6 @@ INSTALLED_APPS = [
     # all auth apps
     'allauth',
     'allauth.account',
-    # bootstrap datepicker
-    'bootstrap_datepicker_plus',
-    'bootstrap4',
 ]
 
 SITE_ID = 2
@@ -158,7 +155,7 @@ CRISPY_TEMPLATE_PACK = 'bootstrap4'
 
 LOGIN_URL = 'users:login'
 LOGOUT_REDIRECT_URL = '/'
-LOGIN_REDIRECT_URL = 'core:home'
+LOGIN_REDIRECT_URL = 'core:dashboard'
 
 AUTH_USER_MODEL = 'users.CustomUser'
 
