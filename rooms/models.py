@@ -4,6 +4,8 @@ from django.conf import settings
 from django.utils import timezone
 from users.models import Subject
 import short_url
+import uuid
+import base64
 
 # Create your models here.
 
@@ -24,6 +26,8 @@ class Room(models.Model):
     stream_time = models.TimeField()
     max_students_amount = models.PositiveIntegerField()
     room_type = models.CharField(max_length=10,choices=TYPES)
+    invite_url = models.CharField(max_length=300,blank=True,null=True)
+    is_active = models.BooleanField(default=True)
 
     class Meta:
         ordering = ('-created',)
@@ -34,6 +38,14 @@ class Room(models.Model):
     def get_absolute_url(self):
         return reverse('rooms:room',args=[self.slug])
 
-    def short_url(self):
-        _url = short_url.encode(self.get_absolute_url()+'join/')
-        return _url
+    def generate_invite_url(self):
+        return base64.urlsafe_b64encode(uuid.uuid1().bytes.encode("base64").rstrip())[:25]
+
+    def save(self, *args, **kwargs):
+        if not self.pk:
+            self.invite_url = self.generate_invite_url()
+        elif not self.invite_url:
+            self.invite_url = self.generate_invite_url()
+        return super(Room,self).save(*args, **kwargs)
+
+

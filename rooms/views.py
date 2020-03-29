@@ -5,6 +5,7 @@ from .models import Room
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponse
 from .forms import RoomForm
+from django.http import HttpResponseNotFound
 
 # Create your views here.
 
@@ -18,11 +19,15 @@ class RoomsView(ListView):
     context_object_name = 'rooms'
 
 @login_required
-def join_room(request,room):
-    room = get_object_or_404(Room,slug=room)
+def join_room(request,room): 
     user = request.user
-    room.students.add(user)
+    join_to_room(user, room)
     return HttpResponse(room.students.count())
+
+def join_to_room(user, room):
+    room = get_object_or_404(Room,slug=room)
+    room.students.add(user)
+    return room.get_absolute_url()
 
 @login_required
 def create_room(request):
@@ -36,3 +41,10 @@ def create_room(request):
         room_form = RoomForm()
     return render(request,'rooms/create_room.html',{'room_form':room_form})
     
+@login_required
+def submit_invite(request,room):
+    invite_url= request.GET['key']
+    room = get_object_or_404(Room,slug=room)
+    if room.invite_url != invite_url:
+        return HttpResponseNotFound
+    return room.get_absolute_url()
