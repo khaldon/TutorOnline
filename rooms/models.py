@@ -23,7 +23,7 @@ class Room(models.Model):
     subjects = models.ManyToManyField(Subject,related_name='room_subjects',blank=True)
     stream_time = models.TimeField()
     max_students_amount = models.PositiveIntegerField()
-    room_type = models.CharField(choices=TYPES)
+    room_type = models.CharField(choices=TYPES, max_length=150)
 
     class Meta:
         ordering = ('-created',)
