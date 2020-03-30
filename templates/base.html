@@ -8,7 +8,9 @@
     </head>
     <body>
         {% include "navbar.html" %}
-        <div class="ui container">
+        <div class="ui four column doubling stackable grid container">
+            {% block room_detail %}{% endblock room_detail %}
+
             {% block profile %}{% endblock profile %}
             {% block teacher %}{% endblock teacher %}
             {% block student %}{% endblock student %}

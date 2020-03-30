@@ -1,6 +1,6 @@
 from django.shortcuts import render,get_object_or_404,redirect
 from django.conf import settings
-from django.views.generic import ListView
+from django.views.generic import ListView, DetailView
 from .models import Room
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponse
@@ -18,6 +18,12 @@ class RoomsView(ListView):
     template_name = 'rooms/rooms.html'
     context_object_name = 'rooms'
 
+
+class RoomDetail(DetailView):
+    model = Room
+    template_name = 'rooms/room_detail.html'
+    context_object_name = 'room_detail'
+
 @login_required
 def join_room(request,room): 
     user = request.user
@@ -28,6 +34,7 @@ def join_to_room(user, room):
     room = get_object_or_404(Room,slug=room)
     room.students.add(user)
     return room.get_absolute_url()
+
 
 @login_required
 def create_room(request):

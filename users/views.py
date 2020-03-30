@@ -44,7 +44,7 @@ class TeacherSignUpView(CreateView):
     def form_valid(self, form):
         user = form.save()
         auth_login(self.request,user,backend='django.contrib.auth.backends.ModelBacked')
-        return redirect('core:teacher_home')
+        return redirect('core:dashboard')
     
 @login_required
 def profile(request):

@@ -88,12 +88,12 @@
     <div class="ui message"> Have account already ? <a href="{% url 'users:login' %}">Login</a></div>
     
     {% if form.errors %}
-        <ui class="red message">
+        <div class="ui red message">
             {% for e in form  %}
               {{e.errors}}
             {% endfor %}
             {{form.non_field_errors}}
-        </ui>
+        </div>
     {% endif %}
   </div>
 </div>
