@@ -26,7 +26,7 @@ class Room(models.Model):
     stream_time = models.TimeField()
     max_students_amount = models.PositiveIntegerField()
     room_type = models.CharField(max_length=10,choices=TYPES)
-    invite_url = models.CharField(max_length=300,blank=True,null=True)
+    invite_url = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     is_active = models.BooleanField(default=True)
 
     class Meta:
@@ -36,16 +36,16 @@ class Room(models.Model):
         return self.title
 
     def get_absolute_url(self):
-        return reverse('rooms:rooms',args=[self.slug])
+        return reverse('rooms:room_detail',args=[self.slug])
 
-    def generate_invite_url(self):
-        return base64.urlsafe_b64encode(uuid.uuid1().bytes.encode("base64").rstrip())[:25]
+    # def generate_invite_url(self):
+    #     return base64.urlsafe_b64encode(uuid.uuid1().bytes.encode("base64").rstrip())[:25]
 
-    def save(self, *args, **kwargs):
-        if not self.pk:
-            self.invite_url = self.generate_invite_url()
-        elif not self.invite_url:
-            self.invite_url = self.generate_invite_url()
-        return super(Room,self).save(*args, **kwargs)
+    # def save(self, *args, **kwargs):
+    #     if not self.pk:
+    #         self.invite_url = self.generate_invite_url()
+    #     elif not self.invite_url:
+    #         self.invite_url = self.generate_invite_url()
+    #     return super(Room,self).save(*args, **kwargs)
 
 
