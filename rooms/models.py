@@ -32,7 +32,7 @@ class Room(models.Model):
         return self.title
 
     def get_absolute_url(self):
-        return reverse('rooms:room',args=[self.slug])
+        return reverse('rooms:rooms',args=[self.slug])
 
     def short_url(self):
         _url = short_url.encode(self.get_absolute_url()+'join/')

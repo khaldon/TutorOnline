@@ -8,4 +8,7 @@ class RoomForm(forms.ModelForm):
     class Meta:
         model = Room
         fields = ('title','description','stream_time','max_students_amount','subjects','room_type')
-        widgets = {'room_type':forms.RadioSelect}
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)       
+        self.fields['stream_time'].widget.attrs.update({'autocomplete':'off'})   
+
