@@ -1,7 +1,54 @@
 {% extends "base.html" %}
 {% load static %}
 {% block room %}
-    <div class="ui padded grid">
+
+<div class="ui padded grid" style="overflow: auto; max-height: 500px ;">
+    {% if rooms %}
+        {% for room in rooms  %}
+            <div class="three wide column">
+                <div class="ui special primary cards">
+                    <div class="card">
+                    <div class="blurring dimmable image">
+                        <div class="ui dimmer">
+                        <div class="content">
+                            <div class="center">
+                            <div class="ui inverted button">Join Room</div>
+                            </div>
+                        </div>
+                        </div>
+                        <img src="{% static 'img/tom.jpg' %}">
+                    </div>
+                    <div class="content">
+                        <a class="header center aligned">{{room.title}}</a>
+                    </div>
+                    <div class="extra content center aligned">
+                        <div class="ui divider"></div>
+                        <a><i class="users icon"></i>{{room.students.count}} Students</a>
+                        <div class="ui divider"></div>
+                        <a>Max:{{room.max_students_amount}}</a>
+                        <div class="ui divider"></div>
+                        {% if room.room_type == 'public' %}
+                        <a class="ui green label">{{room.room_type}}</a>
+                        {% else %}
+                        <a class="ui red label">{{room.room_type}}</a>
+                        {% endif %}
+                        {% for i in room.subjects.all  %}
+                        <a class="ui violet label">{{i}}</a>
+                        {% endfor %}
+
+                    </div>
+                    </div>
+                </div>
+            </div>
+        {% endfor %}
+
+    {% else %}
+    {% endif %} 
+</div>
+    
+  
+
+    <!-- <div class="ui padded grid">
         <div class="ten wide column" style="border: 2px solid;" >
         </div>
         <div class="three wide column right floated" style="border: 2px solid rgb(224, 224, 224);background-color: rgb(252, 252, 252);">
@@ -26,8 +73,8 @@
                 </div>
             </div>
         </div>
-    </div>
-    <script>
-        // $('.ui.sidebar').sidebar('toggle');
-    </script>
+    </div> -->
+  <script>
+        $('.special.cards .image').dimmer({on: 'hover'});    
+  </script>
 {% endblock room %}
