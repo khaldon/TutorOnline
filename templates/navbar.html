@@ -1,10 +1,21 @@
 {% load static %}
 <div class="ui top menu " style="border: 0px;">
-    <a class="item">Features</a>
-    <a class="item">Testimonials</a>
-    <div class="right menu"  style="margin-right: 10px;">    
-        <div class="ui top right pointing dropdown link item borderless " >
-            {% if user.is_authenticated %}
+    <a class="item" href="{% url 'core:dashboard' %}">Dashboard</a>
+    
+    {% if user.is_student %}
+        student
+    {% endif %}
+
+  
+        
+    {% if user.is_authenticated %}
+    <div class="right menu">
+        {% if user.is_teacher %}
+            <div class="right item">
+                <a href="{% url 'rooms:create_room' %}" class="ui violet button">Create room</a>
+            </div>
+        {% endif %}
+        <div class="ui top right pointing dropdown item" style="margin-right: 12px;" >
             <img class="ui avatar image" src="{% static 'blocked.png' %}">
             <span>{{user.username}}</span>
             <i class="dropdown icon"></i>
@@ -12,9 +23,12 @@
                 <a class="item" href="{% url 'users:profile' %}" >My profile</a>
                 <a class="item" href="{% url 'users:logout' %}" >Logout</a>
             </div>
-            {% endif %}
-        </div>
+            
+        </div>  
     </div>
+    
+       
+    {% endif %}
 </div>  
 
 <script>

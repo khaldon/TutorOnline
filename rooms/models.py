@@ -36,7 +36,7 @@ class Room(models.Model):
         return self.title
 
     def get_absolute_url(self):
-        return reverse('rooms:room',args=[self.slug])
+        return reverse('rooms:rooms',args=[self.slug])
 
     def generate_invite_url(self):
         return base64.urlsafe_b64encode(uuid.uuid1().bytes.encode("base64").rstrip())[:25]

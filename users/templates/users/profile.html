@@ -154,42 +154,41 @@
     $('.custom_dropdown').dropdown({maxSelections: 20});
     $('#delete').click(function(){$('.ui.basic.modal').modal('show');});
     $(document).ready(function(){$('.custom_message').delay(3000).fadeOut(500);});
-    $('.ui.form')
-  .form({
+    $('.ui.form').form({
     on: 'blur',
     fields: {
       email: {
         identifier  : 'email',
         rules: [{type   : 'email',prompt : 'Please enter a valid e-mail'}]},
-      empty: {
+      username: {
         identifier  : 'username',
         rules: [{type   : 'empty',prompt : 'Please enter a value'}]
       },
-      empty: {
+      city: {
         identifier  : 'city',
         rules: [{type   : 'empty',prompt : 'Please enter a value'}]
       },
-      empty: {
+      country: {
         identifier  : 'country',
         rules: [{type   : 'empty',prompt : 'Please enter a value'}]
       },
-      empty: {
+      birth_date: {
         identifier  : 'birth_date',
         rules: [{type   : 'empty',prompt : 'Please enter a value'}]
       },
-      dropdown: {
+      gender: {
         identifier  : 'gender',
         rules: [{type   : 'empty',prompt : 'Please select a dropdown value'}]
       },
-      dropdown: {
+      subjects: {
         identifier  : 'subjects',
         rules: [{type   : 'empty',prompt : 'Please select a dropdown value'}]
       },
-      dropdown: {
+      course: {
         identifier  : 'course',
         rules: [{type   : 'empty',prompt : 'Please select a dropdown value'}]
       },
-    dropdown: {
+      country: {
         identifier  : 'country',
         rules: [
           {
@@ -199,8 +198,7 @@
         ]
       }
     }
-  })
-;
+  });
 
  </script>
 

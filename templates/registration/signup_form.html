@@ -86,15 +86,42 @@
     
     </form>
     <div class="ui message"> Have account already ? <a href="{% url 'users:login' %}">Login</a></div>
-    {% for f in form  %}
-      {{f.errors}}
-    {% endfor %}
-  
+    
+    {% if form.errors %}
+        <ui class="red message">
+            {% for e in form  %}
+              {{e.errors}}
+            {% endfor %}
+            {{form.non_field_errors}}
+        </ui>
+    {% endif %}
   </div>
 </div>
 <script>
   $('.ui.dropdown')
     .dropdown();
+    $('.ui.form').form({
+    on: 'blur',
+    fields: {
+      email: {
+        identifier  : 'email',
+        rules: [{type   : 'empty',prompt : 'Please enter a <b> {name} </b> value'}]
+        },
+      username: {
+        identifier  : 'username',
+        rules: [{type   : 'empty',prompt : 'Please select a <b> {name}</b> value'}]
+      },
+      password1: {
+        identifier  : 'password1',
+        rules: [{type   : 'empty',prompt : 'Please enter a <b> {name} </b> value'}]
+      },
+      password2: {
+        identifier  : 'password2',
+        rules: [{type   : 'empty',prompt : 'Please select a <b> Confim Password </b>  value'}]
+      }
+    }
+  });
+
 </script>
 
 {% include "footer.html" %}
