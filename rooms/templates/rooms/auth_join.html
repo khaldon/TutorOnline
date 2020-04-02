@@ -1,0 +1,39 @@
+{% extends 'base.html' %}
+{% block room_auth_pass %}
+<form method='post' class='ui form'>
+    {% csrf_token %}
+    <div class="ui middle aligned centered grid">
+        <div class="four wide column">
+            <h4 class="ui dividing teal header">Enter room password</h4>
+            <div class="field">
+                <label>Password</label>
+                {{form_auth.room_pass}}
+            </div>
+            <div class="field">
+                <label>Confirm password</label>
+                {{form_auth.password2}}
+            </div>
+            <button type="submit" class="ui teal button">join</button>
+            {% if messages %}
+                {% for message in messages  %}
+                    {% if message.tags == 'success' %}
+                         <div class="ui green message">{{message}}</div>
+                         {% else %}
+                         <div class="ui red message">{{message}}</div>
+
+                    {% endif %}
+                {% endfor %}
+            {% endif %}
+            {% if form_auth.errors %}
+                {% for i in form_auth  %}
+                <div class="ui red message">
+                    {{i.errors}}
+                </div>
+                {% endfor %}
+            {% endif %}
+        </div>
+    </div>
+</form> 
+
+
+{% endblock room_auth_pass %}

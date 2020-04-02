@@ -3,11 +3,15 @@ from django.conf import settings
 from django.views.generic import ListView, DetailView
 from .models import Room
 from django.contrib.auth.decorators import login_required
-from django.http import HttpResponse
-from .forms import RoomForm
+from django.http import HttpResponse, HttpResponseRedirect
+from .forms import RoomForm, AuthRoomForm
 from django.http import HttpResponseNotFound
 from guardian.models import UserObjectPermission
 from guardian.shortcuts import assign_perm
+from users.models import CustomUser
+from django.contrib import messages
+from users.models import CustomUser
+from django.urls import reverse
 # Create your views here.
 
 User = settings.AUTH_USER_MODEL
@@ -25,20 +29,56 @@ class RoomDetail(DetailView):
     template_name = 'rooms/room_detail.html'
     context_object_name = 'room_detail'
 
-@login_required
-def join_room(request,room): 
-    user = request.user
-    join_to_room(user, room)
-    return HttpResponse(room.students.count())
+# @login_required
+# def join_room(request,room): 
+#     user = request.user
+#     join_to_room(user, room)
+#     return HttpResponse(room.students.count())
 
-def join_to_room(user, room):
-    room = get_object_or_404(Room,slug=room)
-    room.students.add(user)
-    return room.get_absolute_url()
+# def join_room(user, room):
+#     room = get_object_or_404(Room,slug=room)
+#     room.students.add(user)
+#     return room.get_absolute_url()
 
+
+# def join_room(request, room, user):
+#     room = get_object_or_404(Room, slug=room)
+
+#     if user.has_perm('pass_perm', room):
+
+
+
+
+
+def auth_join(request, room, slug):
+    if request.method == 'POST':
+        user = request.user.username
+        form_auth = AuthRoomForm(request.POST)
+        if form_auth.is_valid():
+            room_pass = form_auth.cleaned_data.get('room_pass')
+            password2 = form_auth.cleaned_data.get('password2')
+            if room_pass != password2:
+                 messages.error(request, 'Doesn\'t match')
+                 return HttpResponse('error')
+            else:
+                # messages.success(request, 'match')
+                user = CustomUser.objects.get(username=user)
+                room = get_object_or_404(Room, slug=slug)
+                if user.has_perm('pass_perm', room):
+                    return HttpResponseRedirect(Room.get_absolute_url(room))
+                else:
+                    return HttpResponse('You don\'t have access to this page')
+    else:
+        form_auth = AuthRoomForm()
+
+    return render(request,'rooms/auth_join.html', {'form_auth':form_auth})
 
 def per_room(request, room):
-    user = request.user
+    user = request.user.username
+    print("user one {0}".format(user))
+    user = CustomUser.objects.get(username=user)
+    print("user two {0}".format(user))
+
     if request.user.is_student:
         print("I'm student")
     elif request.user.is_teacher:

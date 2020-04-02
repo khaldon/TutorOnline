@@ -7,7 +7,7 @@ from django.db.models.signals import post_save
 from django.dispatch import receiver
 from django.conf import settings
 from django.utils.translation import ugettext_lazy as _
-
+from guardian import mixins
 User = settings.AUTH_USER_MODEL
 
 # Create your models here.
@@ -43,7 +43,7 @@ class StudentInterests(models.Model):
     def __str__(self):
         return self.name
 
-class CustomUser(AbstractUser): 
+class CustomUser(AbstractUser,mixins.GuardianUserMixin): 
     email =  models.EmailField(_('email_address'), unique=True, name='email')
     username =  models.CharField(_('username'), unique=True, max_length=128)
     is_student = models.BooleanField(default=False)

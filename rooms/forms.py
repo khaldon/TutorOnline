@@ -12,3 +12,9 @@ class RoomForm(forms.ModelForm):
         super().__init__(*args, **kwargs)       
         self.fields['stream_time'].widget.attrs.update({'autocomplete':'off'})   
 
+
+class AuthRoomForm(forms.ModelForm):
+    password2 = forms.CharField(max_length=150)
+    class Meta:
+        model = Room 
+        fields = ('room_pass',)

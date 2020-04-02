@@ -15,12 +15,11 @@
     <body>
         {% include "navbar.html" %}
         {% block room_detail %}{% endblock room_detail %}
-
+        {% block room_auth_pass %}{% endblock room_auth_pass %}
         <div class="ui container" >
             {% block profile %}{% endblock profile %}
             {% block teacher %}{% endblock teacher %}
             {% block student %}{% endblock student %}
-            {% block content %}{% endblock content %}
                 {% block room %}{% endblock room %}
                 
         </div>
