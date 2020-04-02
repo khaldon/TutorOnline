@@ -29,7 +29,7 @@ class StudentSignUpView(CreateView):
     def form_valid(self, form):
         user = form.save()
         auth_login(self.request,user,backend='django.contrib.auth.backends.ModelBackend')
-        return redirect('core:student_home')
+        return redirect('core:dashboard')
 
 class TeacherSignUpView(CreateView):
     model = CustomUserCreationForm

@@ -28,9 +28,14 @@ class Room(models.Model):
     room_type = models.CharField(max_length=10,choices=TYPES)
     invite_url = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     is_active = models.BooleanField(default=True)
+    room_pass = models.CharField(max_length=150, default='')
 
     class Meta:
         ordering = ('-created',)
+        default_permissions = ('add', 'change', 'delete')
+        permissions = (
+            ('pass_perm', 'Pass permission'),
+        )
 
     def __str__(self):
         return self.title
@@ -38,6 +43,7 @@ class Room(models.Model):
     def get_absolute_url(self):
         self.slug = self.invite_url
         return reverse('rooms:room_detail',args=[self.slug])
+
 
     # def generate_invite_url(self):
     #     return base64.urlsafe_b64encode(uuid.uuid1().bytes.encode("base64").rstrip())[:25]

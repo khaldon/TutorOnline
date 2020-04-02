@@ -31,13 +31,15 @@ ALLOWED_HOSTS = []
 # Application definition
 
 INSTALLED_APPS = [
+
     'django.contrib.admin',
+    'django.contrib.sites',
+
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'django.contrib.sites',
     'social_django',
     'users',
     'core',
@@ -47,15 +49,21 @@ INSTALLED_APPS = [
     # all auth apps
     'allauth',
     'allauth.account',
+    
+    # auth and premission app 
+    'guardian',
+
 ]
 
-SITE_ID = 2
+SITE_ID = 3
 
 AUTHENTICATION_BACKENDS = (
     'social_core.backends.github.GithubOAuth2',
     'social_core.backends.google.GoogleOAuth',
     'social_core.backends.facebook.FacebookOAuth2',
     'django.contrib.auth.backends.ModelBackend',
+    'guardian.backends.ObjectPermissionBackend',
+
 )
 
 MIDDLEWARE = [

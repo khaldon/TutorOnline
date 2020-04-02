@@ -5,17 +5,24 @@
         <title>
             {% block title %}{% endblock title %}
         </title>
+    <style>
+        body, html {
+  height: 100%;
+}
+    </style>
     </head>
+
     <body>
         {% include "navbar.html" %}
-        <div class="ui container">
-            {% block room_detail %}{% endblock room_detail %}
+        {% block room_detail %}{% endblock room_detail %}
 
+        <div class="ui container" >
             {% block profile %}{% endblock profile %}
             {% block teacher %}{% endblock teacher %}
             {% block student %}{% endblock student %}
             {% block content %}{% endblock content %}
                 {% block room %}{% endblock room %}
+                
         </div>
         {% include "footer.html" %}
     </body>

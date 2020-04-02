@@ -2,12 +2,6 @@
 <div class="ui top menu " style="border: 0px;">
     <a class="item" href="{% url 'core:dashboard' %}">Dashboard</a>
     
-    {% if user.is_student %}
-        student
-    {% endif %}
-
-  
-        
     {% if user.is_authenticated %}
     <div class="right menu">
         {% if user.is_teacher %}
