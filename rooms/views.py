@@ -1,9 +1,9 @@
 from django.shortcuts import render,get_object_or_404,redirect
 from django.conf import settings
 from django.views.generic import ListView, DetailView
-from .models import Room
+from .models import Room, TYPES
 from django.contrib.auth.decorators import login_required
-from django.http import HttpResponse, HttpResponseRedirect
+from django.http import HttpResponse, HttpResponseRedirect, Http404
 from .forms import RoomForm, AuthRoomForm
 from django.http import HttpResponseNotFound
 from guardian.models import UserObjectPermission
@@ -28,51 +28,45 @@ class RoomDetail(DetailView):
     model = Room
     template_name = 'rooms/room_detail.html'
     context_object_name = 'room_detail'
+    slug_field = 'invite_url'
+    slug_url_kwarg = 'url'
 
-# @login_required
-# def join_room(request,room): 
-#     user = request.user
-#     join_to_room(user, room)
-#     return HttpResponse(room.students.count())
-
-# def join_room(user, room):
-#     room = get_object_or_404(Room,slug=room)
-#     room.students.add(user)
-#     return room.get_absolute_url()
-
-
-# def join_room(request, room, user):
-#     room = get_object_or_404(Room, slug=room)
-
-#     if user.has_perm('pass_perm', room):
-
-
-
-
-
-def auth_join(request, room, slug):
-    if request.method == 'POST':
-        user = request.user.username
-        form_auth = AuthRoomForm(request.POST)
-        if form_auth.is_valid():
-            room_pass = getattr(Room.objects.get(slug=slug), 'room_pass')
-            password2 = form_auth.cleaned_data.get('password2')
-            if room_pass != password2:
-                messages.error(request, 'Doesn\'t match')
-                return HttpResponse('error')
-            else:
-                # messages.success(request, 'match')
-                user = CustomUser.objects.get(username=user)
-                room = get_object_or_404(Room, slug=slug)
-                assign_perm('pass_perm',user, room)
-                if user.has_perm('pass_perm', room):
-                    return HttpResponseRedirect(Room.get_absolute_url(room))
+def auth_join(request, room, uuid):
+    try:
+        room_type = getattr(Room.objects.get(invite_url=uuid), 'room_type')
+    except ValueError:
+        raise Http404
+    if room_type == 'private':
+        if request.method == 'POST':
+            user = request.user.username    
+            form_auth = AuthRoomForm(request.POST)
+            if form_auth.is_valid():
+                try:
+                    room_pass = getattr(Room.objects.get(invite_url=uuid), 'room_pass')
+                except ValueError: 
+                    raise Http404
+                password2 = form_auth.cleaned_data.get('password2')
+                if room_pass != password2:
+                    messages.error(request, 'Doesn\'t match')
+                    return HttpResponse('error')
                 else:
-                    return HttpResponse('Problem issues')
-    else:
-        form_auth = AuthRoomForm()
+                    # messages.success(request, 'match')
+                    user = CustomUser.objects.get(username=user)
+                    try:
+                        room = get_object_or_404(Room, invite_url=uuid)
+                    except ValueError:
+                        raise Http404
 
-    return render(request,'rooms/auth_join.html', {'form_auth':form_auth})
+                    assign_perm('pass_perm',user, room)
+                    if user.has_perm('pass_perm', room):
+                        return HttpResponseRedirect(Room.get_absolute_url(room))
+                    else:
+                        return HttpResponse('Problem issues')
+        else:
+            form_auth = AuthRoomForm()
+        return render(request,'rooms/auth_join.html', {'form_auth':form_auth})
+    else:
+        return HttpResponse('this work on private room only')
 
 def per_room(request, room):
     user = request.user.username
@@ -103,7 +97,7 @@ def per_room(request, room):
     # return HttpResponse("room")
     
     # return render(request, 'rooms/check_per.html')
-    
+
 @login_required
 def create_room(request):
     room_form = RoomForm()
