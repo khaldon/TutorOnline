@@ -55,19 +55,20 @@ def auth_join(request, room, slug):
         user = request.user.username
         form_auth = AuthRoomForm(request.POST)
         if form_auth.is_valid():
-            room_pass = form_auth.cleaned_data.get('room_pass')
+            room_pass = getattr(Room.objects.get(slug=slug), 'room_pass')
             password2 = form_auth.cleaned_data.get('password2')
             if room_pass != password2:
-                 messages.error(request, 'Doesn\'t match')
-                 return HttpResponse('error')
+                messages.error(request, 'Doesn\'t match')
+                return HttpResponse('error')
             else:
                 # messages.success(request, 'match')
                 user = CustomUser.objects.get(username=user)
                 room = get_object_or_404(Room, slug=slug)
+                assign_perm('pass_perm',user, room)
                 if user.has_perm('pass_perm', room):
                     return HttpResponseRedirect(Room.get_absolute_url(room))
                 else:
-                    return HttpResponse('You don\'t have access to this page')
+                    return HttpResponse('Problem issues')
     else:
         form_auth = AuthRoomForm()
 

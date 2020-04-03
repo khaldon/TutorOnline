@@ -17,4 +17,5 @@ class AuthRoomForm(forms.ModelForm):
     password2 = forms.CharField(max_length=150)
     class Meta:
         model = Room 
-        fields = ('room_pass',)
+        fields = ('room_pass',)    
+        exclude = ['room_pass']
