@@ -48,7 +48,7 @@ def auth_join(request, room, uuid):
                 password2 = form_auth.cleaned_data.get('password2')
                 if room_pass != password2:
                     messages.error(request, 'Doesn\'t match')
-                    return HttpResponse('error')
+                    return HttpResponseRedirect(request.get_full_path())
                 else:
                     # messages.success(request, 'match')
                     user = CustomUser.objects.get(username=user)
