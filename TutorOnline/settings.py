@@ -44,7 +44,6 @@ INSTALLED_APPS = [
     'users',
     'core',
     'rooms',
-    'chat',
     'channels',
     'crispy_forms',
     'django_countries',
