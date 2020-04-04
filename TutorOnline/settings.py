@@ -44,6 +44,8 @@ INSTALLED_APPS = [
     'users',
     'core',
     'rooms',
+    'chat',
+    'channels',
     'crispy_forms',
     'django_countries',
     # all auth apps
@@ -98,6 +100,13 @@ TEMPLATES = [
 ]
 
 WSGI_APPLICATION = 'TutorOnline.wsgi.application'
+ASGI_APPLICATION="TutorOnline.routing.application"
+
+CHANNEL_LAYERS={
+    "default":{
+        "BACKEND":"channels.layers.InMemoryChannelLayer"
+    }
+}
 
 
 # Database
