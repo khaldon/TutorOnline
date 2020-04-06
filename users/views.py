@@ -32,10 +32,9 @@ class StudentSignUpView(CreateView):
         return redirect('core:dashboard')
 
 class TeacherSignUpView(CreateView):
-    model = CustomUserCreationForm
+    model = CustomUser
     form_class = TeacherSignUpForm
     template_name = 'registration/signup_form.html'
-
 
     def get_context_data(self, **kwargs):
         kwargs['user_type'] = 'teacher'

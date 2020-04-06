@@ -3,38 +3,22 @@
 {% block room_detail %}
 <div class="ui grid">
     <div class="nine wide column middle aligned center aligned" >
-      <h2>Streaming video Here</h2>
+      <h2>Streaming video here</h2>
     </div>
     <div class="three wide column left floated " style="padding: 0px; border-left: 1px solid rgb(230, 230, 230); overflow: auto; height: 100%; position: fixed; right:0px;">
       <div class="ui horizontal divider">Students</div>
       <div class="ui middle aligned selection list" >
+        {% for student in room.students.all %}
         <div class="item" style="border-radius: 0px;">
           <img class="ui avatar image" src="{% static 'img/tom.jpg' %}">
           <div class="content">
-            <div class="header">Helen</div>
+            <div class="header">{{ student.username }}</div>
           </div>
           {% if user.is_teacher %}
               <a class="ui red mini button right floated" href="#">Delete</a>
           {% endif %}      
         </div>
-        <div class="item" style="border-radius: 0px;">
-          <img class="ui avatar image" src="{% static 'img/tom.jpg' %}">
-          <div class="content">
-            <div class="header">Helen</div>
-          </div>
-          {% if user.is_teacher %}
-            <a class="ui red mini button right floated" href="#">Delete</a>
-          {% endif %}
-        </div>
-        <div class="item" style="border-radius: 0px;">
-          <img class="ui avatar image" src="{% static 'img/tom.jpg' %}">
-          <div class="content">
-            <div class="header">Helen</div>
-          </div>
-          {% if user.is_teacher %}
-             <a class="ui red mini button right floated" href="#">Delete</a>
-          {% endif %}
-        </div>
+        {% endfor %}
       </div>
     </div>
 

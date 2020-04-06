@@ -20,6 +20,7 @@ class Room(models.Model):
     title = models.CharField(max_length=100, unique=True)
     slug = models.SlugField(max_length=100, null=True, blank=True)
     description = models.TextField(max_length=500)
+    teacher = models.ManyToManyField(User,related_name='teacher_rooms')
     students = models.ManyToManyField(User,related_name='room_students',blank=True)
     created = models.DateTimeField(default=timezone.now)
     subjects = models.ManyToManyField(Subject,related_name='room_subjects',blank=True)

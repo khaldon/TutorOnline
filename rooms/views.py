@@ -12,6 +12,8 @@ from users.models import CustomUser
 from django.contrib import messages
 from users.models import CustomUser
 from django.urls import reverse
+from django.contrib.auth.mixins import LoginRequiredMixin
+
 # Create your views here.
 
 User = settings.AUTH_USER_MODEL
@@ -27,46 +29,69 @@ class RoomsView(ListView):
 class RoomDetail(DetailView):
     model = Room
     template_name = 'rooms/room_detail.html'
-    context_object_name = 'room_detail'
+    context_object_name = 'room'
     slug_field = 'invite_url'
     slug_url_kwarg = 'url'
 
-def auth_join(request, room, uuid):
-    try:
-        room_type = getattr(Room.objects.get(invite_url=uuid), 'room_type')
-    except ValueError:
-        raise Http404
-    if room_type == 'private':
-        if request.method == 'POST':
-            user = request.user.username    
-            form_auth = AuthRoomForm(request.POST)
-            if form_auth.is_valid():
-                try:
-                    room_pass = getattr(Room.objects.get(invite_url=uuid), 'room_pass')
-                except ValueError: 
-                    raise Http404
-                password2 = form_auth.cleaned_data.get('password2')
-                if room_pass != password2:
-                    messages.error(request, 'Doesn\'t match')
-                    return HttpResponseRedirect(request.get_full_path())
-                else:
-                    # messages.success(request, 'match')
-                    user = CustomUser.objects.get(username=user)
-                    try:
-                        room = get_object_or_404(Room, invite_url=uuid)
-                    except ValueError:
-                        raise Http404
+def room_detail(request,invite_url,username):
+    invite_url = get_object_or_404(Room,slug=invite_url)
+    username = get_object_or_404(CustomUser,username=request.user.username)
+    return render(request,'rooms/room_detil.html',{'invite_url':invite_url,'username':username})
 
-                    assign_perm('pass_perm',user, room)
-                    if user.has_perm('pass_perm', room):
-                        return HttpResponseRedirect(Room.get_absolute_url(room))
-                    else:
-                        return HttpResponse('Problem issues')
-        else:
-            form_auth = AuthRoomForm()
-        return render(request,'rooms/auth_join.html', {'form_auth':form_auth})
+
+def join_room(request,uuid):
+    room = get_object_or_404(Room,invite_url=uuid)
+    user = request.user
+    room.students.add(user)
+    return HttpResponseRedirect(Room.get_absolute_url(room))
+
+def leave_room(request,uuid):
+    room = get_object_or_404(Room,invite_url=uuid)
+    user = request.user
+    room.students.remove(user)
+    return redirect('rooms:rooms')
+
+def auth_join(request,room,uuid):
+    room = get_object_or_404(Room,invite_url=uuid)
+    if request.user in room.students.all():
+        return redirect(room.get_absolute_url())
     else:
-        return HttpResponse('this work on private room only')
+        try:
+            room_type = getattr(Room.objects.get(invite_url=uuid), 'room_type')
+        except ValueError:
+            raise Http404
+        if room_type == 'private':
+            if request.method == 'POST':
+                user = request.user.username    
+                form_auth = AuthRoomForm(request.POST)
+                if form_auth.is_valid():
+                    try:
+                        room_pass = getattr(Room.objects.get(invite_url=uuid), 'room_pass')
+                    except ValueError: 
+                        raise Http404
+                    password2 = form_auth.cleaned_data.get('password2')
+                    if room_pass != password2:
+                        messages.error(request, 'Doesn\'t match')
+                        return HttpResponseRedirect(request.get_full_path())
+                    else:
+                        # messages.success(request, 'match')
+                        user = CustomUser.objects.get(username=user)
+                        try:
+                            room = get_object_or_404(Room, invite_url=uuid)
+                        except ValueError:
+                            raise Http404
+
+                        assign_perm('pass_perm',user, room)
+                        if user.has_perm('pass_perm', room):
+                            # return HttpResponseRedirect(Room.get_absolute_url(room))
+                            return join_room(request,uuid)
+                        else:
+                            return HttpResponse('Problem issues')
+            else:
+                form_auth = AuthRoomForm()
+            return render(request,'rooms/auth_join.html', {'form_auth':form_auth})
+        else:
+            return HttpResponse('this work on private room only')
 
 def per_room(request, room):
     user = request.user.username
@@ -84,19 +109,15 @@ def per_room(request, room):
         print("error in permission")
     return HttpResponse("user")
 
+class TeacherCreatedRooms(LoginRequiredMixin,ListView):
+    model = Room
+    paginate_by = 20
+    template_name = 'rooms/teacher_created_rooms.html'
+    context_object_name = 'teacher_rooms'
 
-    # if request.user.is_student:
-    #     print("I'm student")
-    # elif request.user.is_teacher:
-    #     print("I'm teacher")
-    #     # assign_perm('password_check', user, room)
-    #     print(assign_perm('password_check', user, room))
-    # else:
-    #     print("error in permission")
-    
-    # return HttpResponse("room")
-    
-    # return render(request, 'rooms/check_per.html')
+    def get_queryset(self,**kwargs):
+        user = get_object_or_404(CustomUser,username=self.request.user.username)
+        return user.teacher_rooms.all()
 
 @login_required
 def create_room(request):
@@ -105,16 +126,9 @@ def create_room(request):
         room_form = RoomForm(request.POST,request.FILES)
         if room_form.is_valid():
             new_room = room_form.save()
+            new_room.teacher.add(request.user)
             return redirect(new_room.get_absolute_url())
     else:
         room_form = RoomForm()
     return render(request,'rooms/create_room.html',{'room_form':room_form})
-    
-@login_required
-def submit_invite(request,room):
-    invite_url= request.GET['key']
-    room = get_object_or_404(Room,slug=room)
-    if room.invite_url != invite_url:
-        return HttpResponseNotFound
-    return room.get_absolute_url()
 
