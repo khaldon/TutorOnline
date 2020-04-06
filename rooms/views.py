@@ -30,6 +30,11 @@ class RoomDetail(DetailView):
     context_object_name = 'room_detail'
     slug_field = 'invite_url'
     slug_url_kwarg = 'url'
+    def get_object(self, *args, **kwargs):
+        # user = get_object_or_404(CustomUser, username=self.request.user.username)
+        self.kwargs['username'] = self.request.user.username
+        return super().get_object(*args, **kwargs)
+
 
 def auth_join(request, room, uuid):
     try:
@@ -64,9 +69,13 @@ def auth_join(request, room, uuid):
                         return HttpResponse('Problem issues')
         else:
             form_auth = AuthRoomForm()
-        return render(request,'rooms/auth_join.html', {'form_auth':form_auth})
+        return render(request,'rooms/auth_join.html', {'form_auth':form_auth,'uuid':uuid})
     else:
-        return HttpResponse('this work on private room only')
+        try:
+            room = get_object_or_404(Room, invite_url=uuid)
+        except ValueError:
+            raise Http404
+        return HttpResponseRedirect(Room.get_absolute_url(room))
 
 def per_room(request, room):
     user = request.user.username
@@ -118,3 +127,6 @@ def submit_invite(request,room):
         return HttpResponseNotFound
     return room.get_absolute_url()
 
+
+def show_chat_page(request,room_name,person_name):
+    return render(request,"room_detail.html",{'room_name':room_name,'person_name':person_name})

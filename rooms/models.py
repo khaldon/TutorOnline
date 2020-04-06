@@ -41,8 +41,7 @@ class Room(models.Model):
         return self.title
 
     def get_absolute_url(self):
-        # uuid_url = str(self.invite_url)
-        return reverse('rooms:room_detail',args=[self.invite_url])
+        return reverse('rooms:room_detail',args=[str(self.invite_url)])
 
 
     # def generate_invite_url(self):

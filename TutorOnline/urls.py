@@ -15,11 +15,13 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path,include
-
+from rooms.views import show_chat_page
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('account/',include('users.urls')),
     path('rooms/',include('rooms.urls')),
     path('',include('core.urls')),
     path('oauth/', include('social_django.urls', namespace='social')),
+    # path('<str:room_name>/<str:person_name>/', show_chat_page, name='showchat'),
+
 ]
