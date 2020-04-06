@@ -38,11 +38,20 @@
                 <label>Room type</label>
                 <select class="ui dropdown" id="select_room_type" name="room_type">
                     {% for item in room_form.room_type  %}
-                        <option value="{{item.pk}}">{{item}}</option>
+                        <option id='item1' value="{{item.pk}}">{{item}}</option>
                     {% endfor %}
                 </select>
             </div>
            </div>
+           <div class="field">
+            <label>Room password</label>
+            {{room_form.room_pass}}
+        </div>
+        
+        {% if room_form.room_type == 'private' %}
+        
+        {% endif %}
+            
             <div class="field">
                 <label>Description</label>
                 {{room_form.description}}
@@ -63,6 +72,12 @@
     </div>
 </form>
 <script>
+    var e = document.getElementById("select_room_type");
+    var strUser = e.options[e.selectedIndex].text;
+    console.log("tell me "+strUser);
+    // $("#room_pass").prop("disabled", true);
+
+
     $('#select_subject').dropdown();
     $('#select_room_type').dropdown();
     $('#standard_calendar').calendar({
