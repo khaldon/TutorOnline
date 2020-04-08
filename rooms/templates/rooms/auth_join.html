@@ -9,7 +9,7 @@
                 <label>Room password</label>
                 {{form_auth.password2}}
             </div>
-            <button type="button" class="ui teal button" id="submit_password">join</button>
+            <button type="submit" class="ui teal button" id="submit_password">join</button>
             {% if messages %}
                 {% for message in messages  %}
                     {% if message.tags == 'success' %}

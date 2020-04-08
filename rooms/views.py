@@ -31,17 +31,11 @@ class RoomDetail(DetailView):
     template_name = 'rooms/room_detail.html'
     context_object_name = 'room'
     slug_field = 'invite_url'
-    slug_url_kwarg = 'url'
-    def get_object(self, *args, **kwargs):
-        # user = get_object_or_404(CustomUser, username=self.request.user.username)
-        self.kwargs['username'] = self.request.user.username
-        return super().get_object(*args, **kwargs)
+    slug_url_kwarg = 'room_name'
 
-
-def room_detail(request,invite_url,username):
-    invite_url = get_object_or_404(Room,slug=invite_url)
-    username = get_object_or_404(CustomUser,username=request.user.username)
-    return render(request,'rooms/room_detil.html',{'invite_url':invite_url,'username':username})
+def room_detail(request,room_name):
+    room_name = get_object_or_404(Room,invite_url=room_name)
+    return render(request,'rooms/room_detil.html',{'room_name':room_name,})
 
 
 def join_room(request,uuid):
@@ -90,6 +84,7 @@ def auth_join(request,room,uuid):
                         return HttpResponse('Problem issues')
         else:
             form_auth = AuthRoomForm()
+            return join_room(request,uuid)
         return render(request,'rooms/auth_join.html', {'form_auth':form_auth,'uuid':uuid})
     else:
         try:
@@ -138,5 +133,5 @@ def create_room(request):
     return render(request,'rooms/create_room.html',{'room_form':room_form})
 
 
-def show_chat_page(request,room_name,person_name):
-    return render(request,"room_detail.html",{'room_name':room_name,'person_name':person_name})
+def show_chat_page(request,room_name):
+    return render(request,"rooms/room_detail.html",{'room_name':room_name,})
