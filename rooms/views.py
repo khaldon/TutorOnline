@@ -50,48 +50,53 @@ def leave_room(request,uuid):
     room.students.remove(user)
     return redirect('rooms:rooms')
 
-def auth_join(request,room,uuid):
-    try:
-        room_type = getattr(Room.objects.get(invite_url=uuid), 'room_type')
-    except ValueError:
-        raise Http404
-    if room_type == 'private':
-        if request.method == 'POST':
-            user = request.user.username    
-            form_auth = AuthRoomForm(request.POST)
-            if form_auth.is_valid():
-                try:
-                    room_pass = getattr(Room.objects.get(invite_url=uuid), 'room_pass')
-                except ValueError: 
-                    raise Http404
-                password2 = form_auth.cleaned_data.get('password2')
-                if room_pass != password2:
-                    messages.error(request, 'Doesn\'t match')
-                    return HttpResponseRedirect(request.get_full_path())
-                else:
-                    # messages.success(request, 'match')
-                    user = CustomUser.objects.get(username=user)
-                    try:
-                        room = get_object_or_404(Room, invite_url=uuid)
-                    except ValueError:
-                        raise Http404
-
-                    assign_perm('pass_perm',user, room)
-                    if user.has_perm('pass_perm', room):
-                        # return HttpResponseRedirect(Room.get_absolute_url(room))
-                        return join_room(request,uuid)
-                    else:
-                        return HttpResponse('Problem issues')
-        else:
-            form_auth = AuthRoomForm()
-            return join_room(request,uuid)
-        return render(request,'rooms/auth_join.html', {'form_auth':form_auth,'uuid':uuid})
+def auth_join(request, room, uuid):
+    room = get_object_or_404(Room, invite_url=uuid)
+    if request.session.get('joined', False):
+        join_room(request,uuid)
+        return HttpResponseRedirect(Room.get_absolute_url(room))
     else:
         try:
-            room = get_object_or_404(Room, invite_url=uuid)
+            room_type = getattr(Room.objects.get(invite_url=uuid), 'room_type')
         except ValueError:
             raise Http404
-        return HttpResponseRedirect(Room.get_absolute_url(room))
+        if room_type == 'private':
+            if request.method == 'POST':
+                user = request.user.username    
+                form_auth = AuthRoomForm(request.POST)
+                if form_auth.is_valid():
+                    try:
+                        room_pass = getattr(Room.objects.get(invite_url=uuid), 'room_pass')
+                    except ValueError: 
+                        raise Http404
+                    password2 = form_auth.cleaned_data.get('password2')
+                    if room_pass != password2:
+                        messages.error(request, 'Doesn\'t match')
+                        return HttpResponseRedirect(request.get_full_path())
+                    else:
+                        user = CustomUser.objects.get(username=user)
+                        try:
+                            room = get_object_or_404(Room, invite_url=uuid)
+                        except ValueError:
+                            raise Http404
+
+                        assign_perm('pass_perm',user, room)
+                        if user.has_perm('pass_perm', room):
+                            request.session['joined'] = True
+                            join_room(request,uuid)
+                            return HttpResponseRedirect(Room.get_absolute_url(room))
+                        else:
+                            return HttpResponse('Problem issues')
+            else:
+                form_auth = AuthRoomForm()
+            return render(request,'rooms/auth_join.html', {'form_auth':form_auth})
+        else:
+            try:
+                room = get_object_or_404(Room, invite_url=uuid)
+            except ValueError:
+                raise Http404
+            join_room(request,uuid)
+            return HttpResponseRedirect(Room.get_absolute_url(room))
 
 def per_room(request, room):
     user = request.user.username
@@ -132,4 +137,5 @@ def create_room(request):
 
 
 def show_chat_page(request,room_name):
-    return render(request,"rooms/room_detail.html",{'room_name':room_name,})
+    room = get_object_or_404(Room,invite_url=room_name)
+    return render(request,"rooms/room_detail.html",{'room_name':room_name,'room':room})

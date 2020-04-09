@@ -43,16 +43,3 @@ class Room(models.Model):
 
     def get_absolute_url(self):
         return reverse('rooms:room_detail',args=[str(self.invite_url)])
-
-
-    # def generate_invite_url(self):
-    #     return base64.urlsafe_b64encode(uuid.uuid1().bytes.encode("base64").rstrip())[:25]
-
-    # def save(self, *args, **kwargs):
-    #     if not self.pk:
-    #         self.invite_url = self.generate_invite_url()
-    #     elif not self.invite_url:
-    #         self.invite_url = self.generate_invite_url()
-    #     return super(Room,self).save(*args, **kwargs)
-
-
