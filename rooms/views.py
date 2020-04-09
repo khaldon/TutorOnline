@@ -101,9 +101,7 @@ def per_room(request, room):
 
     if request.user.is_student:
         print("I'm student")
-    elif request.user.is_teacher:
-        print("I'm teacher")
-        # assign_perm('password_check', user, room)
+    elif request.user.is_teacher:        # assign_perm('password_check', user, room)
         assign_perm('pass_perm', user, room)
     else:
         print("error in permission")
