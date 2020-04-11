@@ -2,7 +2,6 @@
 {% load static %}
 {% block room_detail %}
 <!-- <div style=" position:fixed; bottom: 0px; right: 300px;"><a class="ui big violet label" style="border-radius: 0px; text-align: center;">Messanger</a></div> -->
-
 <div class="ui grid">
   <div class="four wide column">
     <div class="ui form">
@@ -15,18 +14,35 @@
       <h2>Streaming video Here</h2>
     </div>
     <div class="three wide column" style="padding: 0px; border-left: 1px solid rgb(230, 230, 230); overflow: auto; height: 100%; position: fixed; right:0px;">
-      <div class="ui horizontal divider">Students</div>
+      {% if request.user.is_student %}
+      <div class="ui horizontal divider">Teacher</div>
       <div class="ui middle aligned selection list" >
-        {% for student in room.students.all %}
+        {% for user in room.teacher.all %}
+        {% if user.is_teacher %}
         <div class="item" style="border-radius: 0px;">
           <img class="ui avatar image" src="{% static 'img/tom.jpg' %}">
           <div class="content">
-            <div class="header">{{ student.username }}</div>
+            <div class="header">{{ user.username }}</div>
+          </div>
+        </div>
+        {% endif %}
+        {% endfor %}
+      </div>
+      {% endif %}
+      <div class="ui horizontal divider">Students</div>
+      <div class="ui middle aligned selection list" >
+        {% for user in room.students.all %}
+        {% if user.is_student %}
+        <div class="item" style="border-radius: 0px;">
+          <img class="ui avatar image" src="{% static 'img/tom.jpg' %}">
+          <div class="content">
+            <div class="header">{{ user.username }}</div>
           </div>
           {% if user.is_teacher %}
               <a class="ui red mini button right floated" href="{% url 'rooms:ban_student' uuid=room.invite_url user_id=student.id  %}">Ban</a>
           {% endif %}      
         </div>
+        {% endif %}
         {% endfor %}
       </div>
      

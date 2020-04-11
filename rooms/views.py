@@ -76,7 +76,8 @@ def ban_student(request, uuid, user_id):
     
 def auth_join(request, room, uuid):
     room = get_object_or_404(Room, invite_url=uuid)
-    if request.session.get('joined', False):
+    join_key = f"joined_{room.invite_url}"
+    if request.session.get(join_key, False):
         join_room(request,uuid)
         return HttpResponseRedirect(Room.get_absolute_url(room))
     else:
@@ -106,7 +107,7 @@ def auth_join(request, room, uuid):
 
                         assign_perm('pass_perm',user, room)
                         if user.has_perm('pass_perm', room):
-                            request.session['joined'] = True
+                            request.session[join_key] = True
                             join_room(request,uuid)
                             return HttpResponseRedirect(Room.get_absolute_url(room))
                         else:
