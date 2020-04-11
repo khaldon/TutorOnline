@@ -24,7 +24,7 @@
             <div class="header">{{ student.username }}</div>
           </div>
           {% if user.is_teacher %}
-              <a class="ui red mini button right floated" href="#">Delete</a>
+              <a class="ui red mini button right floated" href="{% url 'rooms:ban_student' uuid=room.invite_url user_id=student.id  %}">Ban</a>
           {% endif %}      
         </div>
         {% endfor %}

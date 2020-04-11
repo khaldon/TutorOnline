@@ -1,5 +1,8 @@
 from django.urls import path
-from .views import RoomsView,create_room,RoomDetail,per_room,auth_join,TeacherCreatedRooms,join_room,leave_room,show_chat_page
+from .views import (RoomsView,create_room,RoomDetail,
+                    per_room,auth_join,TeacherCreatedRooms,
+                    join_room,leave_room,show_chat_page,
+                    banned_students, ban_student)
 
 app_name = 'rooms'
 
@@ -12,4 +15,6 @@ urlpatterns = [
     path('<username>/rooms/',TeacherCreatedRooms.as_view(),name='teacher_created_rooms'),
     path('rooms/<uuid>/join/',join_room,name='join_room'),
     path('rooms/<uuid>/leave/',leave_room,name='leave_room'),
+    path('rooms/banned_student/<uuid>/', banned_students,name='banned_student'),
+    path('rooms/ban_student/<uuid>/<user_id>/',ban_student, name='ban_student')
 ]

@@ -50,6 +50,30 @@ def leave_room(request,uuid):
     room.students.remove(user)
     return redirect('rooms:rooms')
 
+def banned_students(request, uuid):
+    room = get_object_or_404(Room, invite_url=uuid)
+    students = room.banned_users.all()
+    return render(request, 'rooms/banned_students.html', {'students':students, 'invite_url':uuid})
+
+def ban_student(request, uuid, user_id):
+    room = get_object_or_404(Room, invite_url=uuid)
+    student = get_object_or_404(CustomUser, id=user_id)
+    if student in room.students.all():
+        room.banned_users.add(student)
+        room.students.remove(student)
+        print("Hello world")
+        print(room.invite_url)
+        return redirect('rooms:banned_student', uuid=room.invite_url)
+    else:
+        print(student.students.all())
+        room.banned_users.remove(student)
+        room.students.add(student)
+
+        return redirect('rooms:banned_student', uuid=room.invite_url)
+  
+
+
+    
 def auth_join(request, room, uuid):
     room = get_object_or_404(Room, invite_url=uuid)
     if request.session.get('joined', False):
@@ -89,7 +113,7 @@ def auth_join(request, room, uuid):
                             return HttpResponse('Problem issues')
             else:
                 form_auth = AuthRoomForm()
-            return render(request,'rooms/auth_join.html', {'form_auth':form_auth})
+            return render(request,'rooms/auth_join.html', {'form_auth':form_auth, 'uuid':uuid})
         else:
             try:
                 room = get_object_or_404(Room, invite_url=uuid)
@@ -100,9 +124,7 @@ def auth_join(request, room, uuid):
 
 def per_room(request, room):
     user = request.user.username
-    print("user one {0}".format(user))
     user = CustomUser.objects.get(username=user)
-    print("user two {0}".format(user))
 
     if request.user.is_student:
         print("I'm student")
