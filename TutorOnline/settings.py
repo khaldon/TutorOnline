@@ -44,9 +44,11 @@ INSTALLED_APPS = [
     'users',
     'core',
     'rooms',
+    'courses',
     'channels',
     'crispy_forms',
     'django_countries',
+    'languages',
     # all auth apps
     'allauth',
     'allauth.account',

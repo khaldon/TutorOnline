@@ -21,6 +21,7 @@ urlpatterns = [
     path('account/',include('users.urls')),
     path('rooms/',include('rooms.urls')),
     path('',include('core.urls')),
+    path('courses/',include('courses.urls')),
     path('oauth/', include('social_django.urls', namespace='social')),
     # path('<str:room_name>/<str:person_name>/', show_chat_page, name='showchat'),
 
