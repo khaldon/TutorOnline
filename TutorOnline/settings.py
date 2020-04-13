@@ -49,6 +49,7 @@ INSTALLED_APPS = [
     'crispy_forms',
     'django_countries',
     'languages',
+    'stripe',
     # all auth apps
     'allauth',
     'allauth.account',

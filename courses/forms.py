@@ -13,3 +13,17 @@ class CourseForm(forms.ModelForm):
         self.fields['title'].widget.attrs.update({'placeholder':'Write course title'})
         self.fields['description'].widget.attrs.update({'placeholder':'Describe your course'})
         self.fields['price'].widget.attrs.update({'placeholder':'Write the price if that needed'})
+
+class CheckoutForm(forms.Form):
+    first_name = forms.CharField()
+    last_name = forms.CharField()
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.fields['first_name'].widget.attrs.update({'placeholder':'Provide your first name'})
+        self.fields['last_name'].widget.attrs.update({'placeholder':'Provide your last name'})
+
+class SectionVideoForm(forms.ModelForm):
+    class Meta:
+        model = Course
+        fields = ('')
