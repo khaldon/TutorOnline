@@ -50,6 +50,26 @@ def leave_room(request,uuid):
     room.students.remove(user)
     return redirect('rooms:rooms')
 
+def banned_students(request):
+    # room = get_object_or_404(Room)
+    # students = room.banned_users.all()
+    # teacher = get_object_or_404(CustomUser,username=request.user.username)
+    # teacher = teacher.teacher_rooms.all()
+    return render(request, 'rooms/banned_students.html')
+
+def ban_student(request, uuid, user_id):
+    room = get_object_or_404(Room, invite_url=uuid)
+    student = get_object_or_404(CustomUser, id=user_id)
+    if student in room.students.all():
+        room.banned_users.add(student)
+        room.students.remove(student)
+    else:
+        room.banned_users.remove(student)
+        room.students.add(student)
+  
+
+
+    
 def auth_join(request, room, uuid):
     room = get_object_or_404(Room, invite_url=uuid)
     join_key = f"joined_{room.invite_url}"
@@ -80,7 +100,6 @@ def auth_join(request, room, uuid):
                             room = get_object_or_404(Room, invite_url=uuid)
                         except ValueError:
                             raise Http404
-
                         assign_perm('pass_perm',user, room)
                         if user.has_perm('pass_perm', room):
                             request.session[join_key] = True
@@ -90,7 +109,7 @@ def auth_join(request, room, uuid):
                             return HttpResponse('Problem issues')
             else:
                 form_auth = AuthRoomForm()
-            return render(request,'rooms/auth_join.html', {'form_auth':form_auth})
+            return render(request,'rooms/auth_join.html', {'form_auth':form_auth, 'uuid':uuid})
         else:
             try:
                 room = get_object_or_404(Room, invite_url=uuid)
@@ -101,15 +120,11 @@ def auth_join(request, room, uuid):
 
 def per_room(request, room):
     user = request.user.username
-    print("user one {0}".format(user))
     user = CustomUser.objects.get(username=user)
-    print("user two {0}".format(user))
 
     if request.user.is_student:
         print("I'm student")
-    elif request.user.is_teacher:
-        print("I'm teacher")
-        # assign_perm('password_check', user, room)
+    elif request.user.is_teacher:        # assign_perm('password_check', user, room)
         assign_perm('pass_perm', user, room)
     else:
         print("error in permission")

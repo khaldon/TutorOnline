@@ -4,7 +4,8 @@
 
 {% block room %}
 
-{% if teacher_rooms %}
+<div class="ui grid">
+    {% if teacher_rooms %}
     {% for room in teacher_rooms %}
             <div class="three wide column">
                 <div class="ui special primary cards">
@@ -42,7 +43,12 @@
             </div>
     {% endfor %}
 {% else %}
-<p>You have not any created rooms yet</p>
+<div class="ui message">
+    <div class="header">You have not any created rooms yet</div>
+</div>
 {% endif %}
-
+</div>
+<script>
+    $('.special.cards .image').dimmer({on: 'hover'});    
+</script>
 {% endblock room %}

@@ -22,8 +22,4 @@ class CheckoutForm(forms.Form):
         super().__init__(*args, **kwargs)
         self.fields['first_name'].widget.attrs.update({'placeholder':'Provide your first name'})
         self.fields['last_name'].widget.attrs.update({'placeholder':'Provide your last name'})
-
-class SectionVideoForm(forms.ModelForm):
-    class Meta:
-        model = Course
-        fields = ('')
+        

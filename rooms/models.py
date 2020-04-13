@@ -30,6 +30,8 @@ class Room(models.Model):
     invite_url = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     is_active = models.BooleanField(default=True)
     room_pass = models.CharField(max_length=150, default='')
+    banned_users = models.ManyToManyField(User, related_name='forbidden_groups',blank=True)
+
 
     class Meta:
         ordering = ('-created',)
