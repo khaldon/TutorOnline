@@ -50,10 +50,12 @@ def leave_room(request,uuid):
     room.students.remove(user)
     return redirect('rooms:rooms')
 
-def banned_students(request, uuid):
-    room = get_object_or_404(Room, invite_url=uuid)
-    students = room.banned_users.all()
-    return render(request, 'rooms/banned_students.html', {'students':students, 'invite_url':uuid})
+def banned_students(request):
+    # room = get_object_or_404(Room)
+    # students = room.banned_users.all()
+    # teacher = get_object_or_404(CustomUser,username=request.user.username)
+    # teacher = teacher.teacher_rooms.all()
+    return render(request, 'rooms/banned_students.html')
 
 def ban_student(request, uuid, user_id):
     room = get_object_or_404(Room, invite_url=uuid)
@@ -61,15 +63,9 @@ def ban_student(request, uuid, user_id):
     if student in room.students.all():
         room.banned_users.add(student)
         room.students.remove(student)
-        print("Hello world")
-        print(room.invite_url)
-        return redirect('rooms:banned_student', uuid=room.invite_url)
     else:
-        print(student.students.all())
         room.banned_users.remove(student)
         room.students.add(student)
-
-        return redirect('rooms:banned_student', uuid=room.invite_url)
   
 
 
@@ -104,7 +100,6 @@ def auth_join(request, room, uuid):
                             room = get_object_or_404(Room, invite_url=uuid)
                         except ValueError:
                             raise Http404
-
                         assign_perm('pass_perm',user, room)
                         if user.has_perm('pass_perm', room):
                             request.session[join_key] = True

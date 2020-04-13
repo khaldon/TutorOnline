@@ -11,10 +11,11 @@ urlpatterns = [
     path('rooms/forms/<room>/<uuid>/', auth_join, name='auth_join' ),
     path('rooms/<str:room_name>/',show_chat_page, name='room_detail'),
     path('rooms/',RoomsView.as_view(),name='rooms'),
+    path('rooms/student_banned/', banned_students,name='banned_student'),
+
     path('create_room/',create_room,name='create_room'),
     path('<username>/rooms/',TeacherCreatedRooms.as_view(),name='teacher_created_rooms'),
     path('rooms/<uuid>/join/',join_room,name='join_room'),
     path('rooms/<uuid>/leave/',leave_room,name='leave_room'),
-    path('rooms/banned_student/<uuid>/', banned_students,name='banned_student'),
     path('rooms/ban_student/<uuid>/<user_id>/',ban_student, name='ban_student')
 ]

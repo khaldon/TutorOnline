@@ -2,28 +2,6 @@
 
 {% block room %}
 <div class="ui grid">
-    <div class="column">
-        {% for student in students  %}
-        
-        <h1 class="ui header center aligned" style="margin: 15px;">All banned students</h1>
-        <table class="ui celled table center aligned">
-            <thead>
-              <tr>
-              <th>Username</th>
-              <th>Email</th>
-              <th>Event</th>
-            </tr>
-            </thead>
-            <tbody>
-              <tr>
-                <td>{{student.username}}</td>
-                <td>{{student}}</td>
-                <td><a href="{% url 'rooms:banned_student' uuid=invite_url %}" class="ui green button">Unban</a></td>
-              </tr>
-            </tbody>
-          </table>
-    {% endfor %}
-    </div>
 </div>
 {% endblock room %}
 
