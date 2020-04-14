@@ -51,11 +51,10 @@ def leave_room(request,uuid):
     return redirect('rooms:rooms')
 
 def banned_students(request):
-    # room = get_object_or_404(Room)
-    # students = room.banned_users.all()
-    # teacher = get_object_or_404(CustomUser,username=request.user.username)
-    # teacher = teacher.teacher_rooms.all()
-    return render(request, 'rooms/banned_students.html')
+    teacher = get_object_or_404(CustomUser,username=request.user.username)
+    teacher = teacher.teacher_rooms.all()
+    print("student", teacher)
+    return render(request, 'rooms/banned_students.html', {'teacher_room':teacher})
 
 def ban_student(request, uuid, user_id):
     room = get_object_or_404(Room, invite_url=uuid)
@@ -63,12 +62,11 @@ def ban_student(request, uuid, user_id):
     if student in room.students.all():
         room.banned_users.add(student)
         room.students.remove(student)
+        return redirect('rooms:student_banned')
     else:
         room.banned_users.remove(student)
         room.students.add(student)
-  
-
-
+        return redirect('rooms:student_banned')
     
 def auth_join(request, room, uuid):
     room = get_object_or_404(Room, invite_url=uuid)

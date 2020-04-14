@@ -7,12 +7,12 @@ from .views import (RoomsView,create_room,RoomDetail,
 app_name = 'rooms'
 
 urlpatterns = [
+    path('rooms/student_banned/', banned_students,name='student_banned'),
+
     path('rooms/check_pre/<room>',per_room, name='check_pre'),
     path('rooms/forms/<room>/<uuid>/', auth_join, name='auth_join' ),
     path('rooms/<str:room_name>/',show_chat_page, name='room_detail'),
     path('rooms/',RoomsView.as_view(),name='rooms'),
-    path('rooms/student_banned/', banned_students,name='banned_student'),
-
     path('create_room/',create_room,name='create_room'),
     path('<username>/rooms/',TeacherCreatedRooms.as_view(),name='teacher_created_rooms'),
     path('rooms/<uuid>/join/',join_room,name='join_room'),
