@@ -48,6 +48,8 @@ class CustomUser(AbstractUser,mixins.GuardianUserMixin):
     username =  models.CharField(_('username'), unique=True, max_length=128)
     is_student = models.BooleanField(default=False)
     is_teacher = models.BooleanField(default=False)
+    first_name = models.CharField(max_length=255)
+    last_name = models.CharField(max_length=255)
     USERNAME_FIELD = 'email'
     REQUIRED_FIELDS = ['username']
     objects = UserManager()
