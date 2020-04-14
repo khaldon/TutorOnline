@@ -1,6 +1,6 @@
 from django.shortcuts import render,redirect,get_object_or_404
 from .models import Course,OrderCourse,Order,Payment,PaymentInfo
-from .forms import CourseForm,CheckoutForm,CourseForm1,CourseForm2,CourseForm3,CourseForm4
+from .forms import CheckoutForm,CourseForm1,CourseForm2,CourseForm3,CourseForm4
 from users.decorators import teacher_required
 from django.contrib.auth.decorators import login_required
 from .decorators import course_tutor
@@ -233,8 +233,13 @@ class Wishlist(LoginRequiredMixin,ListView):
         
 class FormWizardView(SessionWizardView):
     template_name = 'courses/create_course.html'
-    form_list = [CourseForm1,CourseForm2,CourseForm3,CourseForm4]
     file_storage = FileSystemStorage(location=os.path.join(settings.MEDIA_ROOT,'courses'))
+    form_list = (CourseForm1,CourseForm2,CourseForm3,CourseForm4)
 
     def done(self, form_list, **kwargs):
-        return render(self.request, 'courses/done.html',{'form_data': [form.cleaned_data for form in form_list],})
+        instance = Course()
+        for form in form_list:
+            for field, value in form.cleaned_data.items():
+                setattr(instance, field, value)
+        instance.save()
+        return redirect('courses:my_courses',username=self.request.user.username)
