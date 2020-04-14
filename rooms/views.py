@@ -66,10 +66,13 @@ def ban_student(request, uuid, user_id):
         room.banned_users.remove(student)
         room.students.add(student)
         return redirect('rooms:student_banned')
+<<<<<<< HEAD
 
   
 
 
+=======
+>>>>>>> 2062737e1cc7f420c1b64107dba4b414b931508d
     
 def auth_join(request, room, uuid):
     room = get_object_or_404(Room, invite_url=uuid)

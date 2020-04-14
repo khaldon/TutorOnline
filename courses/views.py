@@ -1,32 +1,23 @@
 from django.shortcuts import render,redirect,get_object_or_404
 from .models import Course,OrderCourse,Order,Payment,PaymentInfo
-from .forms import CourseForm,CheckoutForm
+from .forms import CourseForm,CheckoutForm,CourseForm1,CourseForm2,CourseForm3,CourseForm4
 from users.decorators import teacher_required
 from django.contrib.auth.decorators import login_required
 from .decorators import course_tutor
 from django.http import HttpResponseRedirect
-from django.views.generic import View
+from django.views.generic import View,ListView,RedirectView
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib import messages
 from django.core.exceptions import ObjectDoesNotExist
 from django.utils import timezone
 import stripe
+from users.models import CustomUser
+from formtools.wizard.views import SessionWizardView
+from django.core.files.storage import FileSystemStorage
+from django.conf import settings
+import os
 
 # Create your views here.
-
-@login_required
-@teacher_required
-def create_course(request):
-    course_form = CourseForm()
-    if request.method == 'POST':
-        course_form = CourseForm(request.POST,request.FILES)
-        if course_form.is_valid():
-            new_course = course_form.save()
-            new_course.tutor.add(request.user)
-            return redirect(new_course.get_absolute_url())
-    else:
-        course_form = CourseForm()
-    return render(request,'courses/create_course.html',{'course_form':course_form})
 
 @login_required
 @course_tutor
@@ -206,3 +197,44 @@ class PaymentView(View):
         except Exception as e:
             messages.warning    (self.request,"A serious error occurred. We have been notifed.")
             return redirect("/")
+
+class MyCourses(LoginRequiredMixin,ListView):
+    model = Course
+    paginate_by = 10
+    template_name = 'courses/my_courses.html'
+    context_object_name = 'mygroups'
+
+    def get_queryset(self,**kwargs):
+        user = get_object_or_404(CustomUser,username=self.request.user.username)
+        return user.course_students.all()
+
+class CourseWishlistAdd(RedirectView):
+    def get_redirect_url(self,*args,**kwargs):
+        slug = self.kwargs.get("slug")
+        course = get_object_or_404(Course,slug=slug)
+        url_ = course.get_absolute_url()
+        user = self.request.user
+        if user.is_authenticated:
+            if user in course.wishlist.all():
+                course.wishlist.remove(user)
+            else:
+                course.wishlist.add(user)
+        return url_
+
+class Wishlist(LoginRequiredMixin,ListView):
+    model = CustomUser
+    paginate_by = 10
+    template_name = 'courses/wishlist.html'
+    context_object_name = 'wishlist'
+
+    def get_queryset(self,**kwargs):
+        user = get_object_or_404(CustomUser,username=self.request.user.username)
+        return user.wcourses.all()
+        
+class FormWizardView(SessionWizardView):
+    template_name = 'courses/create_course.html'
+    form_list = [CourseForm1,CourseForm2,CourseForm3,CourseForm4]
+    file_storage = FileSystemStorage(location=os.path.join(settings.MEDIA_ROOT,'courses'))
+
+    def done(self, form_list, **kwargs):
+        return render(self.request, 'courses/done.html',{'form_data': [form.cleaned_data for form in form_list],})
