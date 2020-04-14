@@ -23,3 +23,24 @@ class CheckoutForm(forms.Form):
         self.fields['first_name'].widget.attrs.update({'placeholder':'Provide your first name'})
         self.fields['last_name'].widget.attrs.update({'placeholder':'Provide your last name'})
         
+class CourseForm1(forms.ModelForm):
+    class Meta:
+        model = Course
+        fields = ('title',)
+
+class CourseForm2(forms.ModelForm):
+    class Meta:
+        model = Course
+        fields = ('description',)
+
+class CourseForm3(forms.ModelForm):
+    class Meta:
+        model = Course
+        fields = ('category',)
+
+class CourseForm4(forms.ModelForm):
+    image = forms.ImageField(required=False)
+    cover = forms.ImageField(required=False)
+    class Meta:
+        model = Course
+        fields = ('image','cover','languages','price',)

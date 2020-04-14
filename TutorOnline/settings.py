@@ -50,6 +50,7 @@ INSTALLED_APPS = [
     'django_countries',
     'languages',
     'stripe',
+    'formtools',
     # all auth apps
     'allauth',
     'allauth.account',
