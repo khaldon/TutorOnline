@@ -1,9 +1,80 @@
 {% extends 'base.html' %}
 
-{% block room %}
-<div class="ui grid">
-</div>
-{% endblock room %}
+{% load static %}
+
+{% block teacher %}
+<h2 class="ui large header center aligned" style="margin: 20px;">All banned students</h2>
+  <div class="ui grid">
+    {% if teacher_room %}
+    {% for room in teacher_room  %}
+      <div class="three wide column">
+          <div class="ui special primary cards">
+              <div class="card">
+              <div class="blurring dimmable image">
+                  <div class="ui dimmer">
+                  <div class="content">
+                      <div class="center">
+                        <a href="{% url 'rooms:auth_join' room=room uuid=room.invite_url  %}" class="ui inverted button">Join Room</a>
+                      </div>
+                  </div>
+                  </div>
+                  <img src="{% static 'img/tom.jpg' %}">
+              </div>
+              <div class="content">
+                  <a class="header center aligned">{{room.title}}</a>
+              </div>
+              <div class="extra content center aligned">
+                  <div class="ui divider"></div>
+                  <a><i class="users icon"></i>{{room.students.count}} Students</a>
+                  <div class="ui divider"></div>
+                  <a>Max:{{room.max_students_amount}}</a>
+                  <div class="ui divider"></div>
+                  {% if room.room_type == 'public' %}
+                  <a class="ui green label">{{room.room_type}}</a>
+                  {% else %}
+                  <a class="ui red label">{{room.room_type}}</a>
+                  {% endif %}
+                  {% for i in room.subjects.all  %}
+                  <a class="ui violet label">{{i}}</a>
+                  {% endfor %}
+              </div>
+              </div>
+          </div>
+      </div>
+      <div class="thirteen wide column">
+        <div class="ui middle aligned selection list" style="overflow: auto; height: 420px;">
+          {% if room.banned_users.all %}
+            {% for student in room.banned_users.all  %}
+            <div class="item">
+              <img class="ui avatar image" src="{{ student.profile.get_picture }}">
+              <div class="content">
+                <div class="header">{{student}}</div>
+              </div>
+            </div>
+            {% endfor %}
+          {% else %}
+          <div class="item">
+            <div class="content">
+              <div class="header">You don't have any banned students in this room</div>
+            </div>
+          </div>
+            
+          {% endif %}
+            
+       
+        </div>
+      </div>
+      <div class="ui divider row"></div>
 
 
+    {% endfor %}
+    {% else %}
+      <div class="ui message">
+        <div class="header">You have not any created rooms yet</div>
+      </div>
+    {% endif %}
+  </div>
 
+   
+
+{% endblock teacher %}
