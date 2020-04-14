@@ -1,0 +1,33 @@
+{% extends 'base.html' %}
+{% block header_teacher %}
+<div class="ui center aligned grid" style="margin-bottom: 10px;">
+    <div class="sixteen wide column"  style="padding: 0px;">
+        <div class="ui violet inverted segment">
+            <div class="ui large header left aligned" style="padding: 10px; margin: 10px; color: #d3beff;">Courses Dashboard</div>
+            <div class="ui secondary violet inverted pointing menu" style="padding: 0px;">
+                <a class="item active">
+                  Courses
+                </a>
+                <a class="item">
+                  Q&A
+                </a>
+                <a class="item">
+                  Reviews
+                </a>
+              </div>
+        </div>
+          <div class="ui segment">
+            
+            {% if mygroups %}
+                {% for course in mygroups  %}
+                  {{course}}
+                {% endfor %}
+            {% else %}
+            <h4 class="ui medium header">you don't have any courses you can create a first course now <a href="{% url 'courses:create_course' %}" class="ui violet button">Create course</a></h4>
+            {% endif %}
+                
+          </div>
+    </div>
+
+</div>
+{% endblock header_teacher %}

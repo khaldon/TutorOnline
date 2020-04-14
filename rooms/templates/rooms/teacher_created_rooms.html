@@ -1,9 +1,22 @@
 {% extends 'base.html' %}
 
 {% load static %}
+{% block header_teacher %}
+<div class="ui center aligned grid" style="margin-bottom: 10px;">
+    <div class="sixteen wide column"  style="padding: 0px;">
+        <div class="ui violet inverted segment">
+            <div class="ui large header left aligned" style="padding: 10px; margin: 10px; color: #d3beff;">Rooms Dashboard</div>
+            <div class="ui secondary violet inverted pointing menu" style="padding: 0px;">
+                <a class="item active">
+                  Rooms
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
 
+{% endblock header_teacher %}
 {% block room %}
-
 <div class="ui grid">
     {% if teacher_rooms %}
     {% for room in teacher_rooms %}

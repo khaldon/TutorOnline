@@ -1,11 +1,21 @@
 {% extends "base.html" %}
 
 {% block title %}{% endblock title %}
-
 {% block teacher %}
-<div class="ui center aligned grid">
-    <div class="five column">
-        <a href="{% url 'rooms:student_banned' %}" class="ui violet big button">Show banned students</a>
-    </div>
+<div class="row">
+    <div class="ui segment">
+        <div class="ui two column very relaxed grid">
+          <div class="column center aligned">
+              <a href="{% url 'courses:create_course' %}" class="ui violet big button">Create Course</a>
+          </div>
+          <div class="column center aligned">
+              <a href="{% url 'rooms:create_room' %}" class="ui violet big button">Create Room</a>
+          </div>
+        </div>
+        <div class="ui vertical divider">
+          OR
+        </div>
+      </div>
 </div>
+
 {% endblock teacher %}

@@ -27,6 +27,7 @@ class CourseForm1(forms.ModelForm):
     class Meta:
         model = Course
         fields = ('title',)
+        # self.fields['title'].widget.attrs.update()
 
 class CourseForm2(forms.ModelForm):
     class Meta:
