@@ -53,7 +53,6 @@ def leave_room(request,uuid):
 def banned_students(request):
     teacher = get_object_or_404(CustomUser,username=request.user.username)
     teacher = teacher.teacher_rooms.all()
-    print("student", teacher)
     return render(request, 'rooms/banned_students.html', {'teacher_room':teacher})
 
 def ban_student(request, uuid, user_id):
@@ -62,9 +61,12 @@ def ban_student(request, uuid, user_id):
     if student in room.students.all():
         room.banned_users.add(student)
         room.students.remove(student)
+        return redirect('rooms:student_banned')
     else:
         room.banned_users.remove(student)
         room.students.add(student)
+        return redirect('rooms:student_banned')
+
   
 
 

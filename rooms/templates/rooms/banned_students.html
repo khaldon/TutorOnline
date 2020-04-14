@@ -46,7 +46,7 @@
           {% if room.banned_users.all %}
             {% for student in room.banned_users.all  %}
             <div class="item">
-              <img class="ui avatar image" src="{{ student.profile.get_picture }}">
+              <img class="ui avatar image" src="{{student.profile.get_picture }}">
               <div class="content">
                 <div class="header">{{student}}</div>
               </div>

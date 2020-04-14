@@ -20,7 +20,7 @@
         {% for user in room.teacher.all %}
         {% if user.is_teacher %}
         <div class="item" style="border-radius: 0px;">
-          <img class="ui avatar image" src="{% static 'img/tom.jpg' %}">
+          <img class="ui avatar image" src="{{user.profile.get_picture}}">
           <div class="content">
             <div class="header">{{ user.username }}</div>
           </div>
@@ -34,12 +34,12 @@
         {% for user in room.students.all %}
         {% if user.is_student %}
         <div class="item" style="border-radius: 0px;">
-          <img class="ui avatar image" src="{% static 'img/tom.jpg' %}">
+          <img class="ui avatar image" src="{{user.profile.get_picture}}">
           <div class="content">
             <div class="header">{{ user.username }}</div>
           </div>
-          {% if user.is_teacher %}
-              <a class="ui red mini button right floated" href="{% url 'rooms:ban_student' uuid=room.invite_url user_id=student.id  %}">Ban</a>
+          {% if request.user.is_teacher %}
+              <a class="ui red mini button right floated" href="{% url 'rooms:ban_student' uuid=room.invite_url user_id=user.id  %}">Ban</a>
           {% endif %}      
         </div>
         {% endif %}
