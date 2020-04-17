@@ -25,19 +25,11 @@ class RoomsView(ListView):
     template_name = 'rooms/rooms.html'
     context_object_name = 'rooms'
 
-
-class RoomDetail(DetailView):
-    model = Room
-    template_name = 'rooms/room_detail.html'
-    context_object_name = 'room'
-    slug_field = 'invite_url'
-    slug_url_kwarg = 'room_name'
-
 def room_detail(request,room_name):
     room_name = get_object_or_404(Room,invite_url=room_name)
     return render(request,'rooms/room_detil.html',{'room_name':room_name,})
 
-
+@login_required
 def join_room(request,uuid):
     room = get_object_or_404(Room,invite_url=uuid)
     user = request.user
@@ -66,7 +58,8 @@ def ban_student(request, uuid, user_id):
         room.banned_users.remove(student)
         room.students.add(student)
         return redirect('rooms:student_banned')
-    
+
+@login_required   
 def auth_join(request, room, uuid):
     room = get_object_or_404(Room, invite_url=uuid)
     join_key = f"joined_{room.invite_url}"

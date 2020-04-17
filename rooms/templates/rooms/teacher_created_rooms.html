@@ -5,22 +5,43 @@
 <div class="ui center aligned grid" style="margin-bottom: 10px;">
     <div class="sixteen wide column"  style="padding: 0px;">
         <div class="ui violet inverted segment">
-            <div class="ui large header left aligned" style="padding: 10px; margin: 10px; color: #d3beff;">Rooms Dashboard</div>
-            <div class="ui secondary violet inverted pointing menu" style="padding: 0px;">
+            <div class="ui inverted icon input" style="float: right; margin-top: 20px; margin-right: 10px;">
+                <input type="text" placeholder="Search your rooms">
+                <i class="search icon"></i>
+            </div>
+            <div class="ui large header" style="padding: 10px; margin: 10px; color: #d3beff; width: 220px;  ">
+                Rooms Dashboard  
+            </div>
+            <div class="ui secondary violet inverted pointing menu" style="padding: 0px; ">
                 <a class="item active">
                   Rooms
                 </a>
             </div>
+         
         </div>
     </div>
 </div>
 
 {% endblock header_teacher %}
 {% block room %}
+
+
 <div class="ui grid">
+    <div class="sixteen wide column right aligned">
+        <div class="ui selection dropdown">
+            <input type="hidden" name="sorting">
+            <i class="dropdown icon"></i>
+            <div class="default text">Sorted by</div>
+            <div class="menu">
+              <div class="item" data-value="1">A to Z</div>
+              <div class="item" data-value="0">Z to A</div>
+              <div class="item" data-value="0">Time created</div>
+            </div>
+        </div>
+    </div>
     {% if teacher_rooms %}
     {% for room in teacher_rooms %}
-            <div class="three wide column">
+            <div class="three wide column"> 
                 <div class="ui special primary cards">
                     <div class="card">
                     <div class="blurring dimmable image">
@@ -62,6 +83,7 @@
 {% endif %}
 </div>
 <script>
-    $('.special.cards .image').dimmer({on: 'hover'});    
+    $('.special.cards .image').dimmer({on: 'hover'}); 
+
 </script>
 {% endblock room %}
