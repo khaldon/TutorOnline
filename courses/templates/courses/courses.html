@@ -6,7 +6,7 @@
     <div class="ui special cards">
         <div class="card">
           <div class="blurring dimmable image">
-            <a href="#">
+            <a href="{% url 'courses:course_detail' course %}">
               <img src="{{course.image.url}}" style="height: 200px; width: 100%;">
             </a>
           </div>

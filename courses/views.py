@@ -21,7 +21,7 @@ import os
 
 class CourseView(LoginRequiredMixin,DetailView):
     model = Course
-
+    template_name='courses/course_detail.html'
     def get_context_data(self,**kwargs):
         context = super(CourseView,self).get_context_data(**kwargs)
         context['sections'] = CourseSections.objects.filter(course__title=self.course.title)
@@ -236,7 +236,7 @@ def delete_from_wishlist(request,slug):
     wished_course.delete()
     return redirect('courses:wishlist')
 
-class WishList(ListView):
+class WishListView(ListView):
     model = Wishlist
     template_name = 'courses/wishlist.html'
     paginate_by = 10
