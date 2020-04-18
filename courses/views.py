@@ -12,6 +12,7 @@ from django.core.exceptions import ObjectDoesNotExist
 from django.utils import timezone
 import stripe
 from users.models import CustomUser
+from django.contrib.postgres.search import SearchVector
 from formtools.wizard.views import SessionWizardView
 from django.core.files.storage import FileSystemStorage
 from django.conf import settings

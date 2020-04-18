@@ -34,7 +34,7 @@ INSTALLED_APPS = [
 
     'django.contrib.admin',
     'django.contrib.sites',
-
+    'django.contrib.postgres',
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
