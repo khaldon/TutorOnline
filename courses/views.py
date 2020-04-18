@@ -43,6 +43,12 @@ def edit_course(request,course):
         course_form = CourseForm(instance=course)
     return render(request,'courses/edit_course.html',{'course_form':course_form})
 
+
+class CoursesList(ListView):
+    model = Course
+    template_name='courses/courses.html'
+    context_object_name = 'courses'
+
 @login_required
 def enroll_to_free_course(request,course):
     course = get_object_or_404(Course,slug=course)
@@ -64,7 +70,7 @@ class CartView(LoginRequiredMixin,View):
             return render(self.request,'courses/cart.html',context)
         except ObjectDoesNotExist:
             messages.error(self.request,"You do not have an active order")
-            return redirect("/")
+            return render(self.request,'courses/cart.html')
 
 @login_required
 def add_to_cart(request,pk):

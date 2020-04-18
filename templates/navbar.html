@@ -11,7 +11,19 @@
             <div class="right item">
                 <a href="{% url 'courses:my_courses' %}" class="ui violet button">My courses</a>
             </div>
-         
+         {% else %}
+         <div class="ui left aligned category search item">
+            <div class="ui transparent icon input">
+              <input class="prompt" type="text" placeholder="Search for anything" style="width: 400px;">
+              <i class="search link icon"></i>
+            </div>
+            <div class="results"></div>
+          </div>
+            <a href="{% url 'courses:wishlist' %}" class="ui item"><i class="icon large red heart outline"></i></a>
+            <a href="{% url 'courses:cart' %}" class="ui item"><i class="icon large green shopping cart"></i></a>
+         <div class="right item">
+            <a href="{% url 'courses:courses' %}" class="ui green button">Browse All courses</a>
+         </div>
         {% endif %}
         <div class="ui top right pointing dropdown item" style="margin-right: 12px;" >
             <img class="ui avatar image" src="{% static 'blocked.png' %}">

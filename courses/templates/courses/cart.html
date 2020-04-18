@@ -1,0 +1,9 @@
+{% extends "base.html" %}
+
+{% block student %}
+    {% if messages %}
+        {% for message  in messages %}
+             <div class="ui message"><h4 class="ui header">{{message}}</h4></div>
+        {% endfor %}        
+    {% endif %}
+{% endblock student %}

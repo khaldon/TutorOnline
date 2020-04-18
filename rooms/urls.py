@@ -1,5 +1,5 @@
 from django.urls import path
-from .views import (RoomsView,create_room,RoomDetail,
+from .views import (RoomsView,create_room,
                     per_room,auth_join,TeacherCreatedRooms,
                     join_room,leave_room,show_chat_page,
                     banned_students, ban_student)
