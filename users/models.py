@@ -50,7 +50,6 @@ class CustomUser(AbstractUser,mixins.GuardianUserMixin):
     is_teacher = models.BooleanField(default=False)
     first_name = models.CharField(max_length=255)
     last_name = models.CharField(max_length=255)
-    wishlist = models.ManyToManyField(User,related_name='wcourses',blank=True)
     USERNAME_FIELD = 'email'
     REQUIRED_FIELDS = ['username']
     objects = UserManager()

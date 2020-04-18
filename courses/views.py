@@ -1,11 +1,11 @@
 from django.shortcuts import render,redirect,get_object_or_404
-from .models import Course,OrderCourse,Order,Payment,PaymentInfo
-from .forms import CheckoutForm,CourseForm1,CourseForm2,CourseForm3,CourseForm4
+from .models import Course,OrderCourse,Order,Payment,PaymentInfo,Wishlist,CourseSections,SectionVideos
+from .forms import CheckoutForm,CourseForm1,CourseForm2,CourseForm3,CourseForm4,SectionForm,SectionVideoForm
 from users.decorators import teacher_required
 from django.contrib.auth.decorators import login_required
 from .decorators import course_tutor
 from django.http import HttpResponseRedirect
-from django.views.generic import View,ListView,RedirectView
+from django.views.generic import View,ListView,RedirectView,DetailView
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib import messages
 from django.core.exceptions import ObjectDoesNotExist
@@ -18,6 +18,15 @@ from django.conf import settings
 import os
 
 # Create your views here.
+
+class CourseView(LoginRequiredMixin,DetailView):
+    model = Course
+
+    def get_context_data(self,**kwargs):
+        context = super(CourseView,self).get_context_data(**kwargs)
+        context['sections'] = CourseSections.objects.filter(course__title=self.course.title)
+        context['videos'] = SectionVideos.objects.filter(section__course__title=self.section.course.title)
+        return context
 
 @login_required
 @course_tutor
@@ -206,30 +215,28 @@ class MyCourses(LoginRequiredMixin,ListView):
 
     def get_queryset(self,**kwargs):
         user = get_object_or_404(CustomUser,username=self.request.user.username)
-        return user.course_students.all()
+        return user.tutor_courses.all()
 
-class CourseWishlistAdd(RedirectView):
-    def get_redirect_url(self,*args,**kwargs):
-        slug = self.kwargs.get("slug")
-        course = get_object_or_404(Course,slug=slug)
-        url_ = course.get_absolute_url()
-        user = self.request.user
-        if user.is_authenticated:
-            if user in course.wishlist.all():
-                course.wishlist.remove(user)
-            else:
-                course.wishlist.add(user)
-        return url_
+@login_required
+def add_to_wishlist(request,slug):
+    course = get_object_or_404(Course,slug=slug)
+    wished_course,created = Wishlist.objects.get_or_create(wished_course=course,slug=course.slug,user=request.user,)
+    return redirect('courses:course',slug=slug)
 
-class Wishlist(LoginRequiredMixin,ListView):
-    model = CustomUser
-    paginate_by = 10
+@login_required
+def delete_from_wishlist(request,slug):
+    course = get_object_or_404(Course,slug=slug)
+    wished_course = Wishlist.objects.filter(wished_course=course,slug=course.slug,user=request.user,)
+    wished_course.delete()
+    return redirect('courses:wishlist')
+
+class WishList(ListView):
+    model = Wishlist
     template_name = 'courses/wishlist.html'
-    context_object_name = 'wishlist'
+    paginate_by = 10
 
-    def get_queryset(self,**kwargs):
-        user = get_object_or_404(CustomUser,username=self.request.user.username)
-        return user.wcourses.all()
+    def get_queryset(self):
+        return Wishlist.objects.filter(user=self.request.user)
         
 class FormWizardView(SessionWizardView):
     template_name = 'courses/create_course.html'
@@ -243,3 +250,27 @@ class FormWizardView(SessionWizardView):
                 setattr(instance, field, value)
         instance.save()
         return redirect('courses:my_courses',username=self.request.user.username)
+
+@login_required
+def add_section_to_course(request):
+    section_form = SectionForm()
+    if request.method == 'POST':
+        section_form = SectionForm(request.POST,request.FILES)
+        if section_form.is_valid():
+            new_section = section_form.save()
+            return redirect(new_section.get_absolute_url())
+    else:
+        section_form = SectionForm()
+    return render(request,'courses/create_section.html',{'section_form':section_form})
+
+@login_required
+def add_video_to_section(request):
+    video_form = SectionVideoForm()
+    if request.method == 'POST':
+        video_form = SectionVideoForm(request.POST,request.FILES)
+        if video_form.is_valid():
+            new_video = video_form.save()
+            return redirect(new_video.get_absolute_url())
+    else:
+        video_form = SectionVideoForm()
+    return render(request,'courses/create_video.html',{'video_form':video_form})

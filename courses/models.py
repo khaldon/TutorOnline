@@ -4,6 +4,7 @@ from django.utils import timezone
 from languages.fields import LanguageField
 from slugify import UniqueSlugify
 from django.urls import reverse
+from users.models import UserManager
 
 # Create your models here.
 
@@ -15,20 +16,9 @@ class CourseCategories(models.Model):
     def __str__(self):
         return self.title
 
-class SectionVideos(models.Model):
-    video = models.FileField(upload_to='courses/section_videos')
-
-class CourseSections(models.Model):
-    title = models.CharField(max_length=50)
-    video = models.ForeignKey(SectionVideos,on_delete=models.CASCADE)
-
-    def __str__(self):
-        return self.title
-
 class Course(models.Model):
     title = models.CharField(max_length=255)
     slug = models.SlugField(max_length=150, null=True, blank=True)
-    section = models.ForeignKey(CourseSections,related_name='course_sections',on_delete=models.CASCADE,null=True)
     description = models.TextField()
     image = models.ImageField(upload_to='courses/course_images',blank=True,null=True)
     cover = models.ImageField(upload_to='courses/course_covers',blank=True,null=True)
@@ -59,6 +49,23 @@ class Course(models.Model):
 
     def __str__(self):
         return self.title
+
+class CourseSections(models.Model):
+    title = models.CharField(max_length=50)
+    course = models.ForeignKey(Course,on_delete=models.CASCADE,null=True)
+
+    def get_absolute_url(self):
+        return reverse('courses:course',args=[self.course.slug])
+
+    def __str__(self):
+        return self.title
+
+class SectionVideos(models.Model):
+    video = models.FileField(upload_to='courses/course_videos',max_length=100)
+    section = models.ForeignKey(CourseSections,on_delete=models.CASCADE,null=True)
+
+    def get_absolute_url(self):
+        return reverse('courses:course',args=[self.section.course.slug])
 
 class OrderCourse(models.Model):
     user = models.ForeignKey(User,on_delete=models.CASCADE)
@@ -127,6 +134,12 @@ class Review(models.Model):
 
     def __str__(self):
         return self.reviewer + ' ' + self.body
+
+class Wishlist(models.Model):
+    user = models.ForeignKey(User,on_delete=models.CASCADE)
+    wished_course = models.ForeignKey(Course,on_delete=models.CASCADE)
+    slug = models.CharField(max_length=30,null=True,blank=True)
+    added_date = models.DateTimeField(auto_now_add=True)
 
 course_slugify = UniqueSlugify(
                     to_lower=True,
