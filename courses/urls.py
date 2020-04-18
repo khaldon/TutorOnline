@@ -18,5 +18,5 @@ urlpatterns = [
     path('checkout/',CheckoutView.as_view(),name='checkout'),
     path('payment/',PaymentView.as_view(),name='payment'),
     path('courses/',CoursesList.as_view(),name='courses'),
-    path('course/<course>/', CourseView.as_view(), name='course_detail')
+    path('course/<slug>/', CourseView, name='course_detail')
 ]
