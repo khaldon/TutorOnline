@@ -19,14 +19,20 @@ import os
 
 # Create your views here.
 
-class CourseView(LoginRequiredMixin,DetailView):
-    model = Course
-    template_name='courses/course_detail.html'
-    def get_context_data(self,**kwargs):
-        context = super(CourseView,self).get_context_data(**kwargs)
-        context['sections'] = CourseSections.objects.filter(course__title=self.course.title)
-        context['videos'] = SectionVideos.objects.filter(section__course__title=self.section.course.title)
-        return context
+# class CourseView(LoginRequiredMixin,DetailView):
+#     model = Course
+#     template_name='courses/course_detail.html'
+#     def get_context_data(self,**kwargs):
+#         context = super(CourseView,self).get_context_data(**kwargs)
+#         context['sections'] = CourseSections.objects.filter(course__title=self.request.course.title)
+#         context['videos'] = SectionVideos.objects.filter(section__course__title=self.section.course.title)
+#         return context
+
+def CourseView(request,slug):
+    course = get_object_or_404(Course,slug=slug)
+    sections = CourseSections.objects.filter(course__title=course.title)
+    videos = SectionVideos.objects.filter(section__course__title=course.title)
+    return render(request,'courses/course_detail.html',{'course':course,'sections':sections,'videos':videos})
 
 @login_required
 @course_tutor

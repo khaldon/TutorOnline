@@ -1,2 +1,14 @@
-{{sections}}
-{{videos}}
+{% extends 'base.html' %}
+
+{% block content %}
+<h1>{{ course.title }}</h1>
+
+{% for section in sections %}
+<h1>{{ section.title }}</h1>
+
+{% for video in videos %}
+<img src="{{ video.video.url }}" alt="">
+{% endfor %}
+
+{% endfor %}
+{% endblock content %}
