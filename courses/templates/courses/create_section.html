@@ -1,0 +1,22 @@
+{% extends 'base.html' %}
+
+{% block title %}Add new section{% endblock title %}
+
+{% block content %}
+<form method="POST" class="ui form">
+    {% csrf_token %}
+    <div class="ui centered grid">
+    <div class="eight wide column">
+        <h4 class="ui dividing teal header">Create new section</h4>
+        <div class="field">
+            <label>Select your course</label>
+            {{section_form.course}}
+        </div>
+        <div class="field">
+            <label>Section title</label>
+            {{section_form.title}}
+        </div>
+    </div>
+    </div>
+</form>
+{% endblock content %}

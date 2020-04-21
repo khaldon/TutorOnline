@@ -19,15 +19,6 @@ import os
 
 # Create your views here.
 
-# class CourseView(LoginRequiredMixin,DetailView):
-#     model = Course
-#     template_name='courses/course_detail.html'
-#     def get_context_data(self,**kwargs):
-#         context = super(CourseView,self).get_context_data(**kwargs)
-#         context['sections'] = CourseSections.objects.filter(course__title=self.request.course.title)
-#         context['videos'] = SectionVideos.objects.filter(section__course__title=self.section.course.title)
-#         return context
-
 def CourseView(request,slug):
     course = get_object_or_404(Course,slug=slug)
     sections = CourseSections.objects.filter(course__title=course.title)
@@ -255,8 +246,9 @@ class FormWizardView(SessionWizardView):
     file_storage = FileSystemStorage(location=os.path.join(settings.MEDIA_ROOT,'courses'))
     form_list = (CourseForm1,CourseForm2,CourseForm3,CourseForm4)
 
-    def done(self, form_list, **kwargs):
+    def done(self,form_list,form_dict,**kwargs):
         instance = Course()
+        instance.tutor = self.request.user
         for form in form_list:
             for field, value in form.cleaned_data.items():
                 setattr(instance, field, value)
@@ -265,11 +257,13 @@ class FormWizardView(SessionWizardView):
 
 @login_required
 def add_section_to_course(request):
-    section_form = SectionForm()
+    section_form = SectionForm(**{'user': request.user})
     if request.method == 'POST':
         section_form = SectionForm(request.POST,request.FILES)
         if section_form.is_valid():
-            new_section = section_form.save()
+            new_section = section_form.save(commit=False)
+            new_section.creator.add(request.user)
+            new_section.save()
             return redirect(new_section.get_absolute_url())
     else:
         section_form = SectionForm()
@@ -277,11 +271,12 @@ def add_section_to_course(request):
 
 @login_required
 def add_video_to_section(request):
-    video_form = SectionVideoForm()
+    video_form = SectionVideoForm(**{'user': request.user})
     if request.method == 'POST':
         video_form = SectionVideoForm(request.POST,request.FILES)
         if video_form.is_valid():
             new_video = video_form.save()
+            new_video.save()
             return redirect(new_video.get_absolute_url())
     else:
         video_form = SectionVideoForm()

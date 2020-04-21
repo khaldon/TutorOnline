@@ -34,11 +34,36 @@ class CourseForm4(forms.ModelForm):
         fields = ('image','cover','languages','price',)
 
 class SectionForm(forms.ModelForm):
+    def get_tutor_courses(self):
+        return self.user.tutor_courses
+
+    course = forms.ModelChoiceField(queryset=Course.objects.all())
+
+    def __init__(self, *args, **kwargs):
+        user = kwargs.pop('user', None)
+        super(SectionForm, self).__init__(*args, **kwargs)
+        tutor_courses = user.tutor_courses.all()
+        self.fields['course'].queryset = tutor_courses
+        if not tutor_courses:
+            self.fields['course'].help_text = "You need to <b>create</b> a course to create sections in it"
+
     class Meta:
         model = CourseSections
         fields = ('title','course')
 
 class SectionVideoForm(forms.ModelForm):
+    section = forms.ModelChoiceField(queryset=CourseSections.objects.all())
+
+    def __init__(self, *args, **kwargs):
+        user = kwargs.pop('user', None)
+        super(SectionVideoForm, self).__init__(*args, **kwargs)
+        if user is not None:
+            creator_sections = user.creator_sections.all()
+            self.fields['section'].queryset = creator_sections
+
+            if not creator_sections:
+                self.fields['section'].help_text = "You need to <b>create</b> a section to add videos in it"
+
     class Meta:
         model = SectionVideos
         fields = ('section','video')

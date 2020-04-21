@@ -22,7 +22,7 @@ class Course(models.Model):
     description = models.TextField()
     image = models.ImageField(upload_to='courses/course_images',blank=True,null=True)
     cover = models.ImageField(upload_to='courses/course_covers',blank=True,null=True)
-    tutor = models.ForeignKey(User,related_name='tutor_courses',on_delete=models.CASCADE,null=True)
+    tutor = models.ForeignKey(User,related_name='tutor_courses',on_delete=models.CASCADE)
     students = models.ForeignKey(User,related_name='course_students',blank=True,on_delete=models.CASCADE,null=True)
     created = models.DateTimeField(default=timezone.now)
     updated = models.DateTimeField(auto_now=True)
@@ -51,6 +51,7 @@ class Course(models.Model):
         return self.title
 
 class CourseSections(models.Model):
+    creator = models.ForeignKey(User,related_name='creator_sections',on_delete=models.CASCADE,null=True)
     title = models.CharField(max_length=50)
     course = models.ForeignKey(Course,on_delete=models.CASCADE,null=True)
 

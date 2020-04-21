@@ -62,6 +62,12 @@
 
             console.log(e)
         }
+    $('#message').blur(function()
+    {
+    if( $(this).val().length === 0 ) {
+      alert('dsasdas')
+    }
+    });
         chatSocket.onclose=function(e){ 
             var data=JSON.parse(e.data)
             console.log(data)

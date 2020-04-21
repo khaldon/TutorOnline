@@ -1,7 +1,7 @@
 from django.urls import path
 from .views import (FormWizardView,edit_course,CartView,
                     add_to_cart,remove_from_cart,CheckoutView,PaymentView
-                    ,MyCourses,CoursesList, WishListView, CourseView, add_to_wishlist)
+                    ,MyCourses,CoursesList, WishListView, CourseView, add_to_wishlist,add_section_to_course,add_video_to_section)
 
 app_name = 'courses'
 
@@ -18,5 +18,7 @@ urlpatterns = [
     path('checkout/',CheckoutView.as_view(),name='checkout'),
     path('payment/',PaymentView.as_view(),name='payment'),
     path('courses/',CoursesList.as_view(),name='courses'),
-    path('course/<slug>/', CourseView, name='course_detail')
+    path('course/<slug>/', CourseView, name='course_detail'),
+    path('section/add/',add_section_to_course,name='add_section_to_course'),
+    path('video/add/',add_video_to_section,name='add_video_to_section')
 ]
