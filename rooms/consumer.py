@@ -9,7 +9,6 @@ class Consumer(WebsocketConsumer):
         self.name = self.scope['user'].username
         if self.scope['user'].is_anonymous:
             self.send({'close':True})
-            return HttpResponseRedirect('users:login')
         else:
             async_to_sync(self.channel_layer.group_add)(
                 self.room_group_name,
