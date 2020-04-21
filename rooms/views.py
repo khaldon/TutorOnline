@@ -25,10 +25,15 @@ class RoomsView(ListView):
     paginate_by = 15
     template_name = 'rooms/rooms.html'
     context_object_name = 'rooms'
-
 def room_detail(request,room_name):
+    print("hello world")
+    if request.user.is_anonymous:
+        print("hello annonymous")
+    else:
+        print("no ")
     room_name = get_object_or_404(Room,invite_url=room_name)
     return render(request,'rooms/room_detil.html',{'room_name':room_name,})
+
 
 @login_required
 def join_room(request,uuid):
@@ -60,7 +65,6 @@ def ban_student(request, uuid, user_id):
         room.students.add(student)
         return redirect('rooms:student_banned')
 
-@login_required   
 def auth_join(request, room, uuid):
     room = get_object_or_404(Room, invite_url=uuid)
     join_key = f"joined_{room.invite_url}"
@@ -97,7 +101,7 @@ def auth_join(request, room, uuid):
                             join_room(request,uuid)
                             return HttpResponseRedirect(Room.get_absolute_url(room))
                         else:
-                            return HttpResponse('Problem issues')
+                            return HttpResponseRedirect("core:home")
             else:
                 form_auth = AuthRoomForm()
             return render(request,'rooms/auth_join.html', {'form_auth':form_auth, 'uuid':uuid})
