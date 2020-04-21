@@ -60,7 +60,6 @@
     <script>
         var roomName='{{ room_name }}';
         var personname='{{ request.user.username }}';
-        
         var chatSocket=new WebSocket('ws://'+window.location.host+'/ws/chat/'+roomName+'/');
         {% if request.user.is_anonymous %}
             window.location.pathname = '{% url 'users:login' %}'
@@ -73,10 +72,6 @@
             console.log(e)
          
         }
-    $('#message').blur(function()
-    {
-  
-    });
         chatSocket.onclose=function(e){ 
             var data=JSON.parse(e.data)
             console.log(data)
@@ -86,14 +81,16 @@
         }
         document.addEventListener("keydown", function(event){
           if(event.which == 13){
-            if( $(this).val().length === 0 ) {
-              alert('error')
-          }else{
             var message=document.querySelector("#message").value;
-            chatSocket.send(JSON.stringify({'message':message}))
-            document.querySelector("#message").value=''
+            if(message.length == 0){
+              return false
+            }else{
+              chatSocket.send(JSON.stringify({'message':message}))
+              document.querySelector("#message").value=''
+            }
+            
           }
-          }})
+          })
 
     </script>
 </div>
