@@ -1,7 +1,7 @@
 {% load static %}
 <div class="ui top menu " style="border: 0px;">
     <a class="item" href="{% url 'core:dashboard' %}">Dashboard</a>
-    
+
     {% if user.is_authenticated %}
     <div class="right menu">
         {% if user.is_teacher %}
@@ -13,10 +13,16 @@
             </div>
          {% else %}
          <div class="ui left aligned category search item">
-            <div class="ui transparent icon input">
-              <input class="prompt" type="text" placeholder="Search for anything" style="width: 400px;">
+            {% if request.path == '/courses/courses/' %}
+            <form class='ui transparent icon input' method="get" action="{% url 'courses:course_search' %}">
+                <input class="prompt" type="text" placeholder="Search for anything" style="width: 400px;" name="student_query">
+            </form>
+            {% else %}
+            <form class='ui transparent icon input' method="get" action="{% url 'rooms:search_name' %}">
+                <input class="prompt" type="text" placeholder="Search for anything" style="width: 400px;" name="student_query">
+            </form>
+            {% endif %}
               <i class="search link icon"></i>
-            </div>
             <div class="results"></div>
           </div>
             <a href="{% url 'courses:wishlist' %}" class="ui item"><i class="icon large red heart outline"></i></a>

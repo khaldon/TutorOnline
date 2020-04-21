@@ -1,13 +1,14 @@
 from django.urls import path
 from .views import (FormWizardView,edit_course,CartView,
                     add_to_cart,remove_from_cart,CheckoutView,PaymentView
-                    ,MyCourses,CoursesList, WishListView, CourseView, add_to_wishlist)
+                    ,MyCourses,CoursesList, WishListView, CourseView, add_to_wishlist,course_search)
 
 app_name = 'courses'
 
 urlpatterns = [
     path('add_course_to_wishlist/<slug>/',add_to_wishlist,name='add_to_wishlist'),
     path('create_course/',FormWizardView.as_view(),name='create_course'),
+    path('search/',course_search, name='course_search'),
     path('my_courses/', MyCourses.as_view(), name='my_courses'),
     path('edit_course/<course>/',edit_course,name='edit_course'),
     path('wishlist/', WishListView.as_view(), name='wishlist'),

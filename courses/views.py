@@ -1,6 +1,9 @@
 from django.shortcuts import render,redirect,get_object_or_404
 from .models import Course,OrderCourse,Order,Payment,PaymentInfo,Wishlist,CourseSections,SectionVideos
-from .forms import CheckoutForm,CourseForm1,CourseForm2,CourseForm3,CourseForm4,SectionForm,SectionVideoForm
+from .forms import (CheckoutForm,CourseForm1,CourseForm2,CourseForm3,
+                   CourseForm4,SectionForm,SectionVideoForm, 
+                   SearchStudentForm)
+
 from users.decorators import teacher_required
 from django.contrib.auth.decorators import login_required
 from .decorators import course_tutor
@@ -16,6 +19,7 @@ from django.contrib.postgres.search import SearchVector
 from formtools.wizard.views import SessionWizardView
 from django.core.files.storage import FileSystemStorage
 from django.conf import settings
+from .documents import CourseDocument
 import os
 
 # Create your views here.
@@ -264,6 +268,7 @@ class FormWizardView(SessionWizardView):
         instance.save()
         return redirect('courses:my_courses',username=self.request.user.username)
 
+
 @login_required
 def add_section_to_course(request):
     section_form = SectionForm()
@@ -275,6 +280,20 @@ def add_section_to_course(request):
     else:
         section_form = SectionForm()
     return render(request,'courses/create_section.html',{'section_form':section_form})
+
+
+def course_search(request):
+    form = SearchStudentForm(request.GET)
+    query = None 
+    results = None 
+    if form.is_valid():
+        query = form.cleaned_data['student_query']
+        results = CourseDocument.search().filter("term",title=query)
+        results = results.to_queryset()
+    return render(request,'courses/student_search.html', {'form':form,'query':query,'results':results})
+
+
+
 
 @login_required
 def add_video_to_section(request):

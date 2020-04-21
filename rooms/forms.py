@@ -18,3 +18,8 @@ class AuthRoomForm(forms.ModelForm):
         model = Room 
         fields = ('room_pass',)    
         exclude = ['room_pass']
+
+
+class SearchStudentForm(forms.Form):
+    student_query = forms.CharField(max_length=200)
+    

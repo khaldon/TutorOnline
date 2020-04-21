@@ -1,0 +1,37 @@
+{% extends "base.html" %}
+
+{% block student %}
+<h1>You are searching for "{{query}}"</h1>
+{% if results %}
+{% for course in results  %}
+<div class="ui special cards">
+    <div class="card">
+      <div class="blurring dimmable image">
+        <a href="{% url 'courses:course_detail' course %}">
+          <img src="{{course.image.url}}" style="height: 200px; width: 100%;">
+        </a>
+      </div>
+      <div class="content">
+        <a class="header" href="">{{course.title}}</a>
+        <a class="header right floated">${{course.price}}</a>
+      </div>
+        <div class="extra content">
+          <span class="right floated like">
+            <i class="like icon"></i>
+          </span>
+          <div class="ui star rating left floated"></div>
+        </div>
+        <div class="extra content">
+            <div class="right floated author">
+              <img class="ui avatar image" src="{{course.tutor.profile.get_picture}}"> 
+              {{course.tutor.username}}
+            </div>
+        </div>
+    </div>
+{% endfor %}
+</div>
+{% else %}
+<div class="ui message"><h4 class="ui header">Don't have any results for your searching</h4></div>
+{% endif %}
+
+{% endblock student %}
