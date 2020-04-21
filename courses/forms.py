@@ -1,6 +1,14 @@
 from django import forms
 from .models import Course,CourseSections,SectionVideos
 
+
+
+
+class SearchStudentForm(forms.Form):
+    student_query = forms.CharField(max_length=200)
+    
+
+
 class CheckoutForm(forms.Form):
     first_name = forms.CharField()
     last_name = forms.CharField()

@@ -4,7 +4,7 @@ from django.views.generic import ListView, DetailView
 from .models import Room, TYPES
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponse, HttpResponseRedirect, Http404
-from .forms import RoomForm, AuthRoomForm
+from .forms import RoomForm, AuthRoomForm,SearchStudentForm
 from django.http import HttpResponseNotFound
 from guardian.models import UserObjectPermission
 from guardian.shortcuts import assign_perm
@@ -13,6 +13,7 @@ from django.contrib import messages
 from users.models import CustomUser
 from django.urls import reverse
 from django.contrib.auth.mixins import LoginRequiredMixin
+from .documents import RoomDocument
 
 # Create your views here.
 
@@ -143,7 +144,17 @@ def create_room(request):
         room_form = RoomForm()
     return render(request,'rooms/create_room.html',{'room_form':room_form})
 
-
 def show_chat_page(request,room_name):
     room = get_object_or_404(Room,invite_url=room_name)
     return render(request,"rooms/room_detail.html",{'room_name':room_name,'room':room})
+
+def room_search(request):
+    form = SearchStudentForm(request.GET)
+    query = None 
+    results = None 
+    if form.is_valid():
+        query = form.cleaned_data['student_query']
+        results = RoomDocument.search().filter("term",title=query)
+        results = results.to_queryset()
+    return render(request,'rooms/student_search.html', {'form':form,'query':query,'results':results})
+
