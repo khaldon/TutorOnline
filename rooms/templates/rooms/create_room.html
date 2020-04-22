@@ -35,18 +35,10 @@
                 </select>
             </div>
             <div class="field">
-                <label>Room type</label>
-                <select class="ui dropdown" id="select_room_type" name="room_type">
-                    {% for item in room_form.room_type  %}
-                        <option id='item1' value="{{item.pk}}">{{item}}</option>
-                    {% endfor %}
-                </select>
+                <label>Room password</label>
+                {{room_form.room_pass}}
             </div>
            </div>
-           <div class="field">
-            <label>Room password</label>
-            {{room_form.room_pass}}
-        </div>
         
         {% if room_form.room_type == 'private' %}
         

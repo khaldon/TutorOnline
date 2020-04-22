@@ -11,11 +11,6 @@ import base64
 
 User = settings.AUTH_USER_MODEL
 
-TYPES = [
-    ('public','Public'),
-    ('private','Private')
-]
-
 class Room(models.Model):
     title = models.CharField(max_length=100, unique=True)
     slug = models.SlugField(max_length=100, null=True, blank=True)
@@ -26,7 +21,6 @@ class Room(models.Model):
     subjects = models.ManyToManyField(Subject,related_name='room_subjects',blank=True)
     stream_time = models.TimeField()
     max_students_amount = models.PositiveIntegerField()
-    room_type = models.CharField(max_length=10,choices=TYPES)
     invite_url = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     is_active = models.BooleanField(default=True)
     room_pass = models.CharField(max_length=150, default='')

@@ -265,14 +265,14 @@ class FormWizardView(SessionWizardView):
 def add_section_to_course(request):
     section_form = SectionForm(**{'user': request.user})
     if request.method == 'POST':
-        section_form = SectionForm(request.POST,request.FILES)
+        section_form = SectionForm(request.POST,request.FILES,user=request.user)
         if section_form.is_valid():
-            new_section = section_form.save(commit=False)
-            new_section.creator.add(request.user)
+            new_section = section_form.save()
+            new_section.creator = request.user
             new_section.save()
             return redirect(new_section.get_absolute_url())
     else:
-        section_form = SectionForm()
+        section_form = SectionForm(user=request.user)
     return render(request,'courses/create_section.html',{'section_form':section_form})
 
 
@@ -293,11 +293,11 @@ def course_search(request):
 def add_video_to_section(request):
     video_form = SectionVideoForm(**{'user': request.user})
     if request.method == 'POST':
-        video_form = SectionVideoForm(request.POST,request.FILES)
+        video_form = SectionVideoForm(request.POST,request.FILES,user=request.user)
         if video_form.is_valid():
             new_video = video_form.save()
             new_video.save()
             return redirect(new_video.get_absolute_url())
     else:
-        video_form = SectionVideoForm()
+        video_form = SectionVideoForm(user=request.user)
     return render(request,'courses/create_video.html',{'video_form':video_form})
