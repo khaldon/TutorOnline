@@ -49,12 +49,22 @@ class SectionForm(forms.ModelForm):
 
     def __init__(self, *args, **kwargs):
         user = kwargs.pop('user', None)
+<<<<<<< HEAD
         super(SectionForm, self).__init__(*args, **kwargs)
         if user is not None:
             tutor_courses = user.tutor_courses.all()
             self.fields['course'].queryset = tutor_courses
             if not tutor_courses:
                 self.fields['course'].help_text = "You need to <b>create</b> a course to create sections in it"
+=======
+        tutor_courses = user.tutor_courses.all()
+        super(SectionForm, self).__init__(*args, **kwargs)
+        self.fields['course'].queryset = tutor_courses
+
+        if not tutor_courses:
+            self.fields['course'].help_text = "You need to <b>create</b> a course to create sections in it"
+>>>>>>> e93e3dfdebc84c2c649d3471d9be4a12a1b769f5
+
 
     class Meta:
         model = CourseSections

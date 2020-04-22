@@ -3,6 +3,13 @@
 {% block room_detail %}
 <!-- <div style=" position:fixed; bottom: 0px; right: 300px;"><a class="ui big violet label" style="border-radius: 0px; text-align: center;">Messanger</a></div> -->
 <div class="ui grid">
+  
+  {% if request.user.is_anonymous %}
+    {% else %}
+  ttt
+    
+  {% endif %}
+    
   <div class="four wide column">
    {% if request.user in room.teacher.all %}
     <div class="ui action input">
@@ -56,28 +63,25 @@
         {% endfor %}
       </div>
      
+
+       
     </div>
     
     <script>
         var roomName='{{ room_name }}';
         var personname='{{ request.user.username }}';
         var chatSocket=new WebSocket('ws://'+window.location.host+'/ws/chat/'+roomName+'/');
+        {% if request.user.is_anonymous %}
+            window.location.pathname = '{% url 'users:login' %}'
+            {% endif %}
         chatSocket.onmessage=function(e){
             var data=JSON.parse(e.data)
             var message=data['message']
             var div=document.querySelector("#div_data");
             div.innerHTML+='<br><img class="ui avatar image" style="margin-left:2px;" src="{{user.profile.get_picture}}"><a style="padding:10px; margin-bottom:8px; " class="ui left pointing grey basic label">'+message+'</a>';
-          // <i class="ui user icon" style="margin-left:10px;">
-          
-
             console.log(e)
+         
         }
-    $('#message').blur(function()
-    {
-    if( $(this).val().length === 0 ) {
-      alert('dsasdas')
-    }
-    });
         chatSocket.onclose=function(e){ 
             var data=JSON.parse(e.data)
             console.log(data)
@@ -88,9 +92,15 @@
         document.addEventListener("keydown", function(event){
           if(event.which == 13){
             var message=document.querySelector("#message").value;
-            chatSocket.send(JSON.stringify({'message':message}))
-            document.querySelector("#message").value=''
-          }})
+            if(message.length == 0){
+              return false
+            }else{
+              chatSocket.send(JSON.stringify({'message':message}))
+              document.querySelector("#message").value=''
+            }
+            
+          }
+          })
     </script>
 <script src="{% static 'js/clipboard.min.js' %}"></script>
 <script type="text/javascript">
