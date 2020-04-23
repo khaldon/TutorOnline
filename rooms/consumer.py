@@ -44,7 +44,7 @@ class Consumer(WebsocketConsumer):
             self.room_group_name,
             {
                 'type':'chat_message',
-                'message':self.name+" : "+message
+                'message':self.name+" : "+message 
             }
         )
 
