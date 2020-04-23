@@ -99,7 +99,7 @@
     </div>
   
       <div class="eight wide column centered">
-        <form action="" method="post" class="ui form segment ">
+        <form action="" method="post" class="ui form segment" enctype="multipart/form-data">
             {% csrf_token %}
             {{ wizard.management_form }}
             {% if wizard.form.forms %}
