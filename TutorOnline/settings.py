@@ -54,7 +54,9 @@ INSTALLED_APPS = [
     # all auth apps
     'allauth',
     'allauth.account',
-    
+    #filter 
+    'django_filters',
+
     # auth and premission app 
     'guardian',
     

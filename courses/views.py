@@ -20,6 +20,8 @@ from formtools.wizard.views import SessionWizardView
 from django.core.files.storage import FileSystemStorage
 from django.conf import settings
 from .documents import CourseDocument
+from .filters import CourseFilter 
+
 import os
 
 # Create your views here.
@@ -221,9 +223,27 @@ class MyCourses(LoginRequiredMixin,ListView):
     template_name = 'courses/my_courses.html'
     context_object_name = 'mygroups'
 
+    ordering = ['created']
+
     def get_queryset(self,**kwargs):
         user = get_object_or_404(CustomUser,username=self.request.user.username)
         return user.tutor_courses.all()
+
+    # def get_ordering(self):
+    #     self.order = self.request.GET.get('order','asc')
+    #     selected_ordering = self.request.GET.get('ordering', 'created')
+    #     if self.order == 'desc':
+    #         selected_ordering = "-" + selected_ordering
+    #     return selected_ordering
+    
+    # def get_context_data(self, *args, **kwargs):
+    #     context = super().get_context_data(*args, **kwargs)
+    #     context['current_order'] = self.get_ordering()
+    #     context['order'] = self.order
+    #     return context
+def course_filter(request):
+    f = CourseFilter(request.GET, queryset=Course.objects.all())
+    return render(request, 'courses/course_filter.html',{'filter':f})
 
 @login_required
 def add_to_wishlist(request,slug):
@@ -285,6 +305,18 @@ def course_search(request):
         results = CourseDocument.search().filter("term",title=query)
         results = results.to_queryset()
     return render(request,'courses/student_search.html', {'form':form,'query':query,'results':results})
+
+def course_search_teacher(request):
+    form = SearchStudentForm(request.GET)
+    query = None 
+    results = None 
+    if form.is_valid():
+        query = form.cleaned_data['course_searcher_teacher']
+        results = CourseDocument.search().filter("term",title=query)
+        results = results.to_queryset()
+    return render(request,'courses/my_courses.html', {'form':form,'query':query,'results':results})
+
+
 
 
 

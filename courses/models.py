@@ -32,6 +32,7 @@ class Course(models.Model):
     rank_score = models.FloatField(default=0.0)
     price = models.FloatField(default=0.0)
     discount_price = models.FloatField(blank=True, null=True)
+    
 
     def save(self, *args, **kwargs):
         if not self.slug:

@@ -1,8 +1,11 @@
 {% extends 'base.html' %}
 {% load static %}
 {% block student %}
+<div class="ui center aligned grid" style="margin-bottom: 10px;">
+
     {% if courses %}
     {% for course in courses  %}
+    <div class="three wide column" style="margin: 5px;">            
     <div class="ui special cards">
         <div class="card">
           <div class="blurring dimmable image">
@@ -27,11 +30,14 @@
                 </div>
             </div>
         </div>
+    </div>
+    </div>
     {% endfor %}
     {% else %}
     <div class="ui segment">
         <h4 class="ui header centered">we don't have any courses right now</h4>
     </div>
     {% endif %}
+    </div>
 {% endblock student %}
 

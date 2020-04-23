@@ -1,7 +1,8 @@
 from django.urls import path
 from .views import (FormWizardView,edit_course,CartView,
                     add_to_cart,remove_from_cart,CheckoutView,PaymentView,
-                    MyCourses,CoursesList, WishListView, CourseView, add_to_wishlist,add_section_to_course,add_video_to_section,course_search)
+                    MyCourses,CoursesList, WishListView, CourseView, add_to_wishlist,
+                    add_section_to_course,add_video_to_section,course_search,course_filter)
 
 app_name = 'courses'
 
@@ -21,5 +22,6 @@ urlpatterns = [
     path('courses/',CoursesList.as_view(),name='courses'),
     path('course/<slug>/', CourseView, name='course_detail'),
     path('section/add/',add_section_to_course,name='add_section_to_course'),
-    path('video/add/',add_video_to_section,name='add_video_to_section')
+    path('video/add/',add_video_to_section,name='add_video_to_section'),
+    path('filter/', course_filter, name='course_filter')
 ]

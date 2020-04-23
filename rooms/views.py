@@ -162,3 +162,13 @@ def room_search(request):
         results = results.to_queryset()
     return render(request,'rooms/student_search.html', {'form':form,'query':query,'results':results})
 
+def course_search_teacher(request):
+    form = SearchStudentForm(request.GET)
+    query = None 
+    results = None 
+    if form.is_valid():
+        query = form.cleaned_data['course_searcher_teacher']
+        results = CourseDocument.search().filter("term",title=query)
+        results = results.to_queryset()
+    return render(request,'courses/my_courses.html', {'form':form,'query':query,'results':results})
+

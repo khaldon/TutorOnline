@@ -3,10 +3,10 @@
 <div class="ui center aligned grid" style="margin-bottom: 10px;">
     <div class="sixteen wide column"  style="padding: 0px;">
         <div class="ui violet inverted segment">
-          <div class="ui inverted icon input" style="float: right; margin-top: 20px; margin-right: 10px;">
-            <input type="text" placeholder="Search your rooms">
+          <form class="ui inverted icon input" style="float: right; margin-top: 20px; margin-right: 10px;" action="" method="GET">
+              <input type="text" placeholder="Search your courses" name="course_search_teacher">
             <i class="search icon"></i>
-          </div>
+          </form>
             <div class="ui large header left aligned" style="padding: 10px; margin: 10px; color: #d3beff;">Courses Dashboard</div>
             <div class="ui secondary violet inverted pointing menu" style="padding: 0px;">
                 <a class="item active">
@@ -20,7 +20,6 @@
                 </a>
               </div>
         </div>
-
     </div>
     <div class="fifteen wide column right aligned">
       <div class="ui selection dropdown">
@@ -34,19 +33,47 @@
           </div>
       </div>
   </div>
-    <div class="sixteen wide column">
-      <div class="ui segment">
-            
+  <table>
+    <tr>
+        <th><a href="{% url 'courses:my_courses' %}?ordering=created&order={% if order == 'desc' %}asc{% else %}desc{% endif %}">created</a></th>
+    </tr>
+
+  </table>
+
         {% if mygroups %}
             {% for course in mygroups  %}
-              {{course}}
-            {% endfor %}
+            <div class="three wide column" style="margin: 5px;">            
+            <div class="ui special cards">
+            <div class="card card-teacher">
+              <div class="blurring dimmable image">
+                <a href="{% url 'courses:course_detail' course %}">
+                  <img src="{{course.image.url}}" style="height: 200px; width: 100%;">
+                </a>
+              </div>
+              <div class="content">
+                <a class="header" href="">{{course.title}}</a>
+                <a class="header right floated">${{course.price}}</a>
+              </div>
+                <div class="extra content">
+                  <span class="right floated like">
+                    <i class="like icon"></i>
+                  </span>
+                  <div class="ui star rating left floated"></div>
+                </div>
+                <div class="extra content">
+                    <div class="right floated author">
+                      <img class="ui avatar image" src="{{course.tutor.profile.get_picture}}"> 
+                      {{course.tutor.username}}
+                    </div>
+                </div>
+            </div>
+            </div>
+          </div>
+          {% endfor %}
+
         {% else %}
         <h4 class="ui medium header">you don't have any courses you can create a first course now <a href="{% url 'courses:create_course' %}" class="ui violet button">Create course</a></h4>
         {% endif %}
-            
-      </div>
-    </div>
     
 
 </div>
