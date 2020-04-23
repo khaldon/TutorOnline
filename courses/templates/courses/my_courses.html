@@ -1,4 +1,5 @@
 {% extends 'base.html' %}
+{% load static %}
 {% block header_teacher %}
 <div class="ui center aligned grid" style="margin-bottom: 10px;">
     <div class="sixteen wide column"  style="padding: 0px;">
@@ -33,13 +34,6 @@
           </div>
       </div>
   </div>
-  <table>
-    <tr>
-        <th><a href="{% url 'courses:my_courses' %}?ordering=created&order={% if order == 'desc' %}asc{% else %}desc{% endif %}">created</a></th>
-    </tr>
-
-  </table>
-
         {% if mygroups %}
             {% for course in mygroups  %}
             <div class="three wide column" style="margin: 5px;">            
@@ -47,7 +41,11 @@
             <div class="card card-teacher">
               <div class="blurring dimmable image">
                 <a href="{% url 'courses:course_detail' course %}">
+                  {% if course.image %}
                   <img src="{{course.image.url}}" style="height: 200px; width: 100%;">
+                  {% else %}
+                  <img src="{% static 'img/image.png' %}" style="height: 200px; width: 100%;">
+                  {% endif %}           
                 </a>
               </div>
               <div class="content">
