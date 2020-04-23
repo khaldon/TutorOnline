@@ -20,7 +20,7 @@ class Course(models.Model):
     title = models.CharField(max_length=255)
     slug = models.SlugField(max_length=150, null=True, blank=True)
     description = models.TextField()
-    image = models.ImageField(upload_to='courses/course_images',blank=True,null=True)
+    image = models.ImageField(upload_to='courses/course_images',blank=True,null=True , default='courses/image.png')
     cover = models.ImageField(upload_to='courses/course_covers',blank=True,null=True)
     tutor = models.ForeignKey(User,related_name='tutor_courses',on_delete=models.CASCADE)
     students = models.ForeignKey(User,related_name='course_students',blank=True,on_delete=models.CASCADE,null=True)
