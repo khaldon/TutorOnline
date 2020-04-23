@@ -48,7 +48,11 @@
                         <div class="ui dimmer">
                         <div class="content">
                             <div class="center">
-                              <a href="{% url 'rooms:auth_join' room=room uuid=room.invite_url  %}" class="ui inverted button">Join Room</a>
+                                {% if request.user in room.teacher.all %}
+                                    <a href="{% url 'rooms:auth_join' room=room uuid=room.invite_url  %}" class="ui inverted button">Open Room</a>
+                                {% else %}
+                                    <a href="{% url 'rooms:auth_join' room=room uuid=room.invite_url  %}" class="ui inverted button">Join Room</a>
+                                {% endif %}
                             </div>
                         </div>
                         </div>
@@ -63,11 +67,6 @@
                         <div class="ui divider"></div>
                         <a>Max:{{room.max_students_amount}}</a>
                         <div class="ui divider"></div>
-                        {% if room.room_type == 'public' %}
-                        <a class="ui green label">{{room.room_type}}</a>
-                        {% else %}
-                        <a class="ui red label">{{room.room_type}}</a>
-                        {% endif %}
                         {% for i in room.subjects.all  %}
                         <a class="ui violet label">{{i}}</a>
                         {% endfor %}

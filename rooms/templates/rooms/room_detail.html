@@ -11,6 +11,16 @@
   {% endif %}
     
   <div class="four wide column">
+   {% if request.user in room.teacher.all %}
+    <div class="ui action input">
+      <input type="text" value="http://127.0.0.1:8000/rooms/rooms/{{ room.invite_url }}/join/">
+      <a class="ui teal right labeled icon button" id="invite_link" data-clipboard-text="{{ request.get_host }}/{{ room.invite_url }}/join/">
+        <i class="copy icon"></i>
+        Copy
+      </a>
+    </div>
+    {% endif %}
+
     <div class="ui form">
       <div style="height:400px;width:100%;overflow-y:scroll" id="div_data"></div>
       <input type="text" name="message" id="message" placeholder="Message" style="padding:10px;width:100%; border-radius: 0px;">
@@ -91,7 +101,11 @@
             
           }
           })
-
     </script>
+<script src="{% static 'js/clipboard.min.js' %}"></script>
+<script type="text/javascript">
+    new ClipboardJS('#invite_link');
+</script>
+
 </div>
 {% endblock room_detail %}

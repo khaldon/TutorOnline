@@ -1,7 +1,7 @@
 from django.shortcuts import render,get_object_or_404,redirect
 from django.conf import settings
 from django.views.generic import ListView, DetailView
-from .models import Room, TYPES
+from .models import Room
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponse, HttpResponseRedirect, Http404
 from .forms import RoomForm, AuthRoomForm,SearchStudentForm
@@ -67,51 +67,42 @@ def ban_student(request, uuid, user_id):
 
 def auth_join(request, room, uuid):
     room = get_object_or_404(Room, invite_url=uuid)
+    if request.user in room.teacher.all():
+        return HttpResponseRedirect(Room.get_absolute_url(room))
     join_key = f"joined_{room.invite_url}"
     if request.session.get(join_key, False):
         join_room(request,uuid)
         return HttpResponseRedirect(Room.get_absolute_url(room))
     else:
-        try:
-            room_type = getattr(Room.objects.get(invite_url=uuid), 'room_type')
-        except ValueError:
-            raise Http404
-        if room_type == 'private':
-            if request.method == 'POST':
-                user = request.user.username    
-                form_auth = AuthRoomForm(request.POST)
-                if form_auth.is_valid():
+        if request.method == 'POST':
+            user = request.user.username    
+            form_auth = AuthRoomForm(request.POST)
+            if form_auth.is_valid():
+                try:
+                    room_pass = getattr(Room.objects.get(invite_url=uuid), 'room_pass')
+                except ValueError: 
+                    raise Http404
+                password2 = form_auth.cleaned_data.get('password2')
+                if room_pass != password2:
+                    messages.error(request, 'Doesn\'t match')
+                    return HttpResponseRedirect(request.get_full_path())
+                else:
+                    user = CustomUser.objects.get(username=user)
                     try:
-                        room_pass = getattr(Room.objects.get(invite_url=uuid), 'room_pass')
-                    except ValueError: 
+                        room = get_object_or_404(Room, invite_url=uuid)
+                    except ValueError:
                         raise Http404
-                    password2 = form_auth.cleaned_data.get('password2')
-                    if room_pass != password2:
-                        messages.error(request, 'Doesn\'t match')
-                        return HttpResponseRedirect(request.get_full_path())
+                    assign_perm('pass_perm',user, room)
+                    if user.has_perm('pass_perm', room):
+                        request.session[join_key] = True
+                        join_room(request,uuid)
+                        return HttpResponseRedirect(Room.get_absolute_url(room))
                     else:
-                        user = CustomUser.objects.get(username=user)
-                        try:
-                            room = get_object_or_404(Room, invite_url=uuid)
-                        except ValueError:
-                            raise Http404
-                        assign_perm('pass_perm',user, room)
-                        if user.has_perm('pass_perm', room):
-                            request.session[join_key] = True
-                            join_room(request,uuid)
-                            return HttpResponseRedirect(Room.get_absolute_url(room))
-                        else:
-                            return HttpResponseRedirect("core:home")
-            else:
-                form_auth = AuthRoomForm()
-            return render(request,'rooms/auth_join.html', {'form_auth':form_auth, 'uuid':uuid})
+                        return HttpResponse('Problem issues')
         else:
-            try:
-                room = get_object_or_404(Room, invite_url=uuid)
-            except ValueError:
-                raise Http404
-            join_room(request,uuid)
-            return HttpResponseRedirect(Room.get_absolute_url(room))
+            form_auth = AuthRoomForm()
+        return render(request,'rooms/auth_join.html', {'form_auth':form_auth, 'uuid':uuid})
+
 
 def per_room(request, room):
     user = request.user.username

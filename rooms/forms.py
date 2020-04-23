@@ -7,7 +7,7 @@ class RoomForm(forms.ModelForm):
     room_pass = forms.CharField(required=False)
     class Meta:
         model = Room
-        fields = ('title','description','stream_time','max_students_amount','subjects','room_type','room_pass')
+        fields = ('title','description','stream_time','max_students_amount','subjects','room_pass')
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)       
         self.fields['stream_time'].widget.attrs.update({'autocomplete':'off'})   

@@ -4,25 +4,97 @@
   
 <!-- <p>Step {{ wizard.steps.step1 }} of {{ wizard.steps.count }}</p> -->
 <div class="ui grid">
-    <div class=" sixteen wide column">
+    <div class="sixteen wide column">
         <div class="ui top attached ordered steps">  
-                 {% for step in wizard.steps.all  %}
-            {% if wizard.steps.current == step %}
+            {% if wizard.steps.step1 == 1 %}
                 <div class="active step">
                     <div class="content">
-                    <div class="title">Step</div>
+                    <div class="title">Title</div>
                     <!-- <div class="description">Verify order details</div> -->
                     </div>
                 </div>   
-            {% else  %}
               <div class="disabled step">
-                <i class="info circle icon"></i>
                 <div class="content">
-                  <div class="title">Step</div>            
+                  <div class="title">Description</div>            
                 </div>
               </div>
+              <div class="disabled step">
+                <div class="content">
+                  <div class="title">Choose your category</div>            
+                </div>
+              </div>
+              <div class="disabled step">
+                <div class="content">
+                  <div class="title">More parameters</div>            
+                </div>
+              </div>
+            {% elif wizard.steps.step1 == 2  %}
+            <div class="completed step">
+              <div class="content">
+              <div class="title">Title</div>
+              <!-- <div class="description">Verify order details</div> -->
+              </div>
+          </div>   
+        <div class="active step">
+          <div class="content">
+            <div class="title">Description</div>            
+          </div>
+        </div>
+        <div class="disabled step">
+          <div class="content">
+            <div class="title">Choose your category</div>            
+          </div>
+        </div>
+        <div class="disabled step">
+          <div class="content">
+            <div class="title">More parameters</div>            
+          </div>
+        </div>
+        {% elif wizard.steps.step1 == 3 %}
+            <div class="completed step">
+              <div class="content">
+              <div class="title">Title</div>
+              <!-- <div class="description">Verify order details</div> -->
+              </div>
+          </div>   
+        <div class="completed step">
+          <div class="content">
+            <div class="title">Description</div>            
+          </div>
+        </div>
+        <div class="active step">
+          <div class="content">
+            <div class="title">Choose your category</div>            
+          </div>
+        </div>
+        <div class="disabled step">
+          <div class="content">
+            <div class="title">More parameters</div>            
+          </div>
+        </div>
+        {% elif wizard.steps.step1 == 4 %}
+        <div class="completed step">
+          <div class="content">
+          <div class="title">Title</div>
+          <!-- <div class="description">Verify order details</div> -->
+          </div>
+      </div>   
+    <div class="completed step">
+      <div class="content">
+        <div class="title">Description</div>            
+      </div>
+    </div>
+    <div class="completed step">
+      <div class="content">
+        <div class="title">Choose your category</div>            
+      </div>
+    </div>
+    <div class="active step">
+      <div class="content">
+        <div class="title">More parameters</div>            
+      </div>
+    </div>
               {% endif %}
-            {% endfor %}
         </div>
     </div>
   

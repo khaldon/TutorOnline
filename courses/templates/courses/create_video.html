@@ -1,0 +1,23 @@
+{% extends 'base.html' %}
+
+{% block title %}Add new video to the section{% endblock title %}
+
+{% block content %}
+<form method="POST" class="ui form" enctype="multipart/form-data">
+    {% csrf_token %}
+    <div class="ui centered grid">
+    <div class="eight wide column">
+        <h4 class="ui dividing teal header">Add new video to the section</h4>
+        <div class="field">
+            <label>Select your section</label>
+            {{video_form.section}}
+        </div>
+        <div class="field">
+            <label>Choose your video</label>
+            {{video_form.video}}
+        </div>
+        <input type="submit" value="submit" class="ui violet button" style="margin-top: 15px;"/>    
+    </div>
+    </div>
+</form>
+{% endblock content %}
