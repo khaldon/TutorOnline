@@ -61,15 +61,15 @@ INSTALLED_APPS = [
     'guardian',
     
     # elasticsearch for searching using index 
-    'django_elasticsearch_dsl'
+    # 'django_elasticsearch_dsl'
 
 ]
 
-ELASTICSEARCH_DSL={
-    'default': {
-        'hosts': 'localhost:9200'
-    },
-}
+# ELASTICSEARCH_DSL={
+#     'default': {
+#         'hosts': 'localhost:9200'
+#     },
+# }
 
 SITE_ID = 3
 

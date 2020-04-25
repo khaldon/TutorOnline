@@ -3,6 +3,8 @@ from django_elasticsearch_dsl.registries import registry
 from .models import Course
 from django.conf import settings
 User = settings.AUTH_USER_MODEL
+from users.models import CustomUser
+from django.shortcuts import get_object_or_404
 
 
 @registry.register_document
@@ -23,13 +25,3 @@ class CourseDocument(Document):
             'description',
         ]
         # related_models = [User]
-        # def get_queryset(self):
-        #     return super(CourseDocument, self).get_queryset().select_related(
-        #         'tutor'
-        #     )
-        # def get_instances_from_related(self, related_instance):
-        #     if isinstance(related_instance, User):
-        #         return related_instance.course_set.all()
-
-
- 

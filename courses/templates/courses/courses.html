@@ -3,6 +3,9 @@
 {% block student %}
 <div class="ui center aligned grid" style="margin-bottom: 10px;">
     {% if courses %}
+    <div class="sixteen wide column">
+      {% include "courses/dropdown_order_search.html" %}
+    </div>
     {% for course in courses  %}
     <div class="three wide column" style="margin: 5px;">            
     <div class="ui special cards">
@@ -42,5 +45,8 @@
     </div>
     {% endif %}
     </div>
+    <script>
+        $('.ui.dropdown').dropdown();
+    </script>
 {% endblock student %}
 

@@ -1,13 +1,12 @@
-{% extends "base.html" %}
-{% load static %}
-{% block room %}
 
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
 <div class="ui padded grid" style="overflow: auto; max-height: 500px ;">
-    {% if rooms %}
     <div class="sixteen wide column">
     {% include "rooms/dropdown_order_search.html" %}
     </div>
-        {% for room in rooms  %}
+        {% for room in filter.qs  %}
             <div class="three wide column">
                 <div class="ui special primary cards">
                     <div class="card">
@@ -42,15 +41,9 @@
                 </div>
             </div>
         {% endfor %}
-
-    {% else %}
-        <div class="ui message">
-            <div class="header">You have not any created rooms yet</div>
-        </div>
-    {% endif %} 
-</div>
-<script>
-    $('.special.cards .image').dimmer({on: 'hover'});    
-    $('.ui.dropdown').dropdown();
-</script>
-{% endblock room %}
+</div>        
+    <script>
+        $('.special.cards .image').dimmer({on: 'hover'});    
+        $('.ui.dropdown').dropdown();
+    </script>
+{% endblock content %}

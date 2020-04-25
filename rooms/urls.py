@@ -8,6 +8,7 @@ app_name = 'rooms'
 
 urlpatterns = [
     path('rooms/search/',room_search, name='search_name'),
+    # path('rooms/search/t/',room_search_teacher,name='teacher_search_room'),
     path('rooms/student_banned/', banned_students,name='student_banned'),
     path('rooms/check_pre/<room>',per_room, name='check_pre'),
     path('rooms/forms/<room>/<uuid>/', auth_join, name='auth_join' ),

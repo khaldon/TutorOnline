@@ -10,7 +10,7 @@ class RoomDocument(Document):
     
     class Django:
         model = Room
-        fields = [
+        fields = {
             'title',
             'description',
-        ]
+        }

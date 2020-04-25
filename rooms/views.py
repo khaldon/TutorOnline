@@ -4,7 +4,7 @@ from django.views.generic import ListView, DetailView
 from .models import Room
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponse, HttpResponseRedirect, Http404
-from .forms import RoomForm, AuthRoomForm,SearchStudentForm
+from .forms import RoomForm, AuthRoomForm,SearchStudentForm, SearchTeacherForm
 from django.http import HttpResponseNotFound
 from guardian.models import UserObjectPermission
 from guardian.shortcuts import assign_perm
@@ -14,6 +14,7 @@ from users.models import CustomUser
 from django.urls import reverse
 from django.contrib.auth.mixins import LoginRequiredMixin
 from .documents import RoomDocument
+from .filters import RoomFilter
 
 # Create your views here.
 
@@ -144,22 +145,18 @@ def show_chat_page(request,room_name):
     return render(request,"rooms/room_detail.html",{'room_name':room_name,'room':room})
 
 def room_search(request):
-    form = SearchStudentForm(request.GET)
-    query = None 
-    results = None 
-    if form.is_valid():
-        query = form.cleaned_data['student_query']
-        results = RoomDocument.search().filter("term",title=query)
-        results = results.to_queryset()
-    return render(request,'rooms/student_search.html', {'form':form,'query':query,'results':results})
+    f = RoomFilter(request.GET, queryset=Room.objects.all())
+    return render(request,'rooms/search.html', {'filter':f})
 
-def course_search_teacher(request):
-    form = SearchStudentForm(request.GET)
-    query = None 
-    results = None 
-    if form.is_valid():
-        query = form.cleaned_data['course_searcher_teacher']
-        results = CourseDocument.search().filter("term",title=query)
-        results = results.to_queryset()
-    return render(request,'courses/my_courses.html', {'form':form,'query':query,'results':results})
+# def room_search_teacher(request):
+#     form = SearchTeacherForm(request.GET)
+#     query = None 
+#     results = None 
+#     if form.is_valid():
+#         query = form.cleaned_data['teacher_query']
+#         print(RoomDocument.search())
+#         results = RoomDocument.search().query("term",title=query)
+#         results = results.to_queryset()
+
+#     return render(request,'rooms/teacher_search.html', {'form_teacher':form,'query_teacher':query,'result_teachers':results})
 

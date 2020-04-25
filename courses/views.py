@@ -297,14 +297,8 @@ def add_section_to_course(request):
 
 
 def course_search(request):
-    form = SearchStudentForm(request.GET)
-    query = None 
-    results = None 
-    if form.is_valid():
-        query = form.cleaned_data['student_query']
-        results = CourseDocument.search().filter("term",title=query)
-        results = results.to_queryset()
-    return render(request,'courses/student_search.html', {'form':form,'query':query,'results':results})
+    f = CourseFilter(request.GET, queryset=Course.objects.all())
+    return render(request,'courses/student_course_search.html', {'filter':f})
 
 def course_search_teacher(request):
     form = SearchStudentForm(request.GET)

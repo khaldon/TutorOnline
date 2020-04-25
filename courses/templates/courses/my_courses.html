@@ -2,26 +2,7 @@
 {% load static %}
 {% block header_teacher %}
 <div class="ui center aligned grid" style="margin-bottom: 10px;">
-    <div class="sixteen wide column"  style="padding: 0px;">
-        <div class="ui violet inverted segment">
-          <form class="ui inverted icon input" style="float: right; margin-top: 20px; margin-right: 10px;" action="" method="GET">
-              <input type="text" placeholder="Search your courses" name="course_search_teacher">
-            <i class="search icon"></i>
-          </form>
-            <div class="ui large header left aligned" style="padding: 10px; margin: 10px; color: #d3beff;">Courses Dashboard</div>
-            <div class="ui secondary violet inverted pointing menu" style="padding: 0px;">
-                <a class="item active">
-                  Courses
-                </a>
-                <a class="item">
-                  Q&A
-                </a>
-                <a class="item">
-                  Reviews
-                </a>
-              </div>
-        </div>
-    </div>
+   {% include "courses/teacher_header.html" %}
     <div class="fifteen wide column right aligned">
       <div class="ui selection dropdown">
           <input type="hidden" name="sorting">
@@ -68,7 +49,6 @@
             </div>
           </div>
           {% endfor %}
-
         {% else %}
         <h4 class="ui medium header">you don't have any courses you can create a first course now <a href="{% url 'courses:create_course' %}" class="ui violet button">Create course</a></h4>
         {% endif %}
