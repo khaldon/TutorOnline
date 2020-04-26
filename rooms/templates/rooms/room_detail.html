@@ -1,11 +1,14 @@
 {% extends 'base.html' %}
 {% load static %}
 {% block room_detail %}
+
+
 <!-- <div style=" position:fixed; bottom: 0px; right: 300px;"><a class="ui big violet label" style="border-radius: 0px; text-align: center;">Messanger</a></div> -->
 <div class="ui grid">    
   <div class="four wide column">
     <div class="ui form">
       <div style="height:400px;width:100%;overflow-y:scroll" id="div_data"></div>
+
       <input type="text" name="message" id="message" placeholder="Message" style="padding:10px;width:100%; border-radius: 0px;">
 
       <!-- <button type="button" id="send_message" class="ui violet button" style="border-radius: 0px; margin: 5px;" >Send</button> -->
@@ -67,17 +70,25 @@
         {% if request.user.is_anonymous %}
             window.location.pathname = '{% url 'users:login' %}'
             {% endif %}
+            // function typing(){
+            //     var user_typing = '<i class="icons"><i class="big comment outline outline icon grey"></i><i class=" center ellipsis horizontal icon grey"></i></i>';
+            //     var div=document.querySelector("#div_data");
+            //     div.innerHTML = user_typing
+            //   }
         chatSocket.onmessage=function(e){
             var data=JSON.parse(e.data)
             var message=data['message']
+            console.log(e.data)
             var div=document.querySelector("#div_data");
-            div.innerHTML+='<br><img class="ui avatar image" style="margin-left:2px;" src="{{user.profile.get_picture}}"><a style="padding:10px; margin-bottom:8px; " class="ui left pointing grey basic label">'+message+'</a>';
-            console.log(e)
-         
+            if (data['teacher']){
+              div.innerHTML+='<div style="margin-left:150px; float:right; witdh:100%"><div style="color:rgba(0,0,0,.4); margin-left:10px;">'+data['user']+' <i class="small star yellow icon"></i></div><a style="padding:6px; margin-bottom:8px;" class="ui right pointing violet basic label">'+message+' </a><img class="ui avatar image" style="margin-left:2px;" src="{{user.profile.get_picture}}"></div>';         
+
+            }else{
+              div.innerHTML+='<div style="width:100%"><div style="color:rgba(0,0,0,.4); margin-left:41px;">'+data['user']+'</div> <img class="ui avatar image" style="margin-left:2px;" src="{{user.profile.get_picture}}"><a style="padding:6px; margin-bottom:8px;" class="ui left pointing green basic label">'+message+'</a></div>';         
+            }
         }
         chatSocket.onclose=function(e){ 
             var data=JSON.parse(e.data)
-            console.log(data)
             var message=data['message']
             var div=document.querySelector("#div_data");
             div.innerHTML+='<br><img class="ui avatar image" src="{% static "img/tom.jpg" %}"><a style="padding:10px; margin-bottom:8px;" class="ui right pointing teal basic label">'+message+'</a>';
