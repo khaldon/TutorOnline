@@ -1,28 +1,25 @@
+
 {% extends 'base.html' %}
 {% load static %}
-{% block header_teacher %}
-    {% include "rooms/teacher_header.html" %}
-{% endblock header_teacher %}
-{% block room %}
-
-<div class="ui grid">
-        <div class="sixteen wide column">
-            {% include "rooms/dropdown_order_search_teacher.html" %}
-        </div>
-    {% if teacher_rooms %}
-    {% for room in teacher_rooms %}
-            <div class="three wide column"> 
+{% block content %}
+<div class="ui padded grid" style="overflow: auto; max-height: 500px ;">
+    <div class="sixteen wide column">
+    {% include "rooms/dropdown_order_search.html" %}
+    </div>
+        {% for room in filter.qs  %}
+            <div class="three wide column">
                 <div class="ui special primary cards">
                     <div class="card">
                     <div class="blurring dimmable image">
                         <div class="ui dimmer">
                         <div class="content">
                             <div class="center">
-                                {% if request.user in room.teacher.all %}
-                                    <a href="{% url 'rooms:auth_join' room=room uuid=room.invite_url  %}" class="ui inverted button">Open Room</a>
-                                {% else %}
-                                    <a href="{% url 'rooms:auth_join' room=room uuid=room.invite_url  %}" class="ui inverted button">Join Room</a>
-                                {% endif %}
+                            {% if room.students.all.count < room.max_students_amount %}
+                            <a href="{% url 'rooms:auth_join' room=room uuid=room.invite_url  %}" class="ui inverted button">Join Room</a>
+                            {% elif request.user in room.students.all %}
+                            <a href="{% url 'rooms:auth_join' room=room uuid=room.invite_url  %}" class="ui inverted button">Open Room</a>
+                            {% endif %}
+
                             </div>
                         </div>
                         </div>
@@ -43,16 +40,10 @@
                     </div>
                 </div>
             </div>
-    {% endfor %}
-{% else %}
-<div class="ui message sixteen wide column">
-    <div class="header">You have not any created rooms yet</div>
-</div>
-{% endif %}
-</div>
-<script>
-    $('.special.cards .image').dimmer({on: 'hover'}); 
-    $('.ui.dropdown').dropdown();
-
-</script>
-{% endblock room %}
+        {% endfor %}
+</div>        
+    <script>
+        $('.special.cards .image').dimmer({on: 'hover'});    
+        $('.ui.dropdown').dropdown();
+    </script>
+{% endblock content %}

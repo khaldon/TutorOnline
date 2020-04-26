@@ -1,0 +1,11 @@
+
+<form action="{% url 'courses:course_search' %}" method="get" class="ui form">
+    <select name="ordering" id="id_ordering" onchange="this.form.submit()" class="ui dropdown">
+        <option value="" selected>SORT BY</option>
+
+        <option value="ascending">Date Created (Oldest)</option>
+    
+        <option value="descending">Date Created (Newest)</option>
+    
+    </select>
+</form>

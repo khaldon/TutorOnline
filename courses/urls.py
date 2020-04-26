@@ -1,12 +1,15 @@
 from django.urls import path
 from .views import (FormWizardView,edit_course,CartView,
                     add_to_cart,remove_from_cart,CheckoutView,PaymentView,
-                    MyCourses,CoursesList, WishListView, CourseView, add_to_wishlist,add_section_to_course,add_video_to_section,course_search)
+                    MyCourses,CoursesList, WishListView, CourseView, add_to_wishlist,
+                    add_section_to_course,add_video_to_section,course_search,course_filter,
+                    course_search_teacher)
 
 app_name = 'courses'
 
 urlpatterns = [
     path('add_course_to_wishlist/<slug>/',add_to_wishlist,name='add_to_wishlist'),
+    path('search/t/',course_search_teacher,name='teacher_search_course'),
     path('create_course/',FormWizardView.as_view(),name='create_course'),
     path('search/',course_search, name='course_search'),
     path('my_courses/', MyCourses.as_view(), name='my_courses'),
@@ -21,5 +24,6 @@ urlpatterns = [
     path('courses/',CoursesList.as_view(),name='courses'),
     path('course/<slug>/', CourseView, name='course_detail'),
     path('section/add/',add_section_to_course,name='add_section_to_course'),
-    path('video/add/',add_video_to_section,name='add_video_to_section')
+    path('video/add/',add_video_to_section,name='add_video_to_section'),
+    path('filter/', course_filter, name='course_filter')
 ]

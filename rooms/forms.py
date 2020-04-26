@@ -21,5 +21,8 @@ class AuthRoomForm(forms.ModelForm):
 
 
 class SearchStudentForm(forms.Form):
-    student_query = forms.CharField(max_length=200)
+    query = forms.CharField(max_length=200)
+    
+class SearchTeacherForm(forms.Form):
+    teacher_query = forms.CharField(max_length=200)
     

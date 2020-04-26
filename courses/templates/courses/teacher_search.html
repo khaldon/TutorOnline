@@ -1,12 +1,12 @@
 {% extends 'base.html' %}
 {% load static %}
-{% block student %}
+{% block header_teacher %}
 <div class="ui center aligned grid" style="margin-bottom: 10px;">
-    {% if courses %}
+    {% include "courses/teacher_header.html" %}
     <div class="sixteen wide column">
-      {% include "courses/dropdown_order_search.html" %}
+      {% include "courses/dropdown_order_search_teacher.html" %}
     </div>
-    {% for course in courses  %}
+    {% for course in  filter.qs   %}
     <div class="three wide column" style="margin: 5px;">            
     <div class="ui special cards">
         <div class="card">
@@ -39,14 +39,9 @@
     </div>
     </div>
     {% endfor %}
-    {% else %}
-    <div class="ui segment">
-        <h4 class="ui header centered">we don't have any courses right now</h4>
-    </div>
-    {% endif %}
     </div>
     <script>
         $('.ui.dropdown').dropdown();
     </script>
-{% endblock student %}
+{% endblock header_teacher %}
 

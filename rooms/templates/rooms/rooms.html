@@ -4,6 +4,9 @@
 
 <div class="ui padded grid" style="overflow: auto; max-height: 500px ;">
     {% if rooms %}
+    <div class="sixteen wide column">
+    {% include "rooms/dropdown_order_search.html" %}
+    </div>
         {% for room in rooms  %}
             <div class="three wide column">
                 <div class="ui special primary cards">
@@ -31,12 +34,6 @@
                         <a><i class="users icon"></i>{{room.students.count}} Students</a>
                         <div class="ui divider"></div>
                         <a>Max:{{room.max_students_amount}}</a>
-                        <div class="ui divider"></div>
-                        {% if room.room_type == 'public' %}
-                        <a class="ui green label">{{room.room_type}}</a>
-                        {% else %}
-                        <a class="ui red label">{{room.room_type}}</a>
-                        {% endif %}
                         {% for i in room.subjects.all  %}
                         <a class="ui violet label">{{i}}</a>
                         {% endfor %}
@@ -54,5 +51,6 @@
 </div>
 <script>
     $('.special.cards .image').dimmer({on: 'hover'});    
+    $('.ui.dropdown').dropdown();
 </script>
 {% endblock room %}

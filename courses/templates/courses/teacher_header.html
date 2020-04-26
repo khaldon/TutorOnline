@@ -1,0 +1,22 @@
+<div class="sixteen wide column"  style="padding: 0px;">
+    <div class="ui violet inverted segment">
+      <form class="ui inverted icon input" style="float: right; margin-top: 20px; margin-right: 10px;" action="{% url 'courses:teacher_search_course' %}" method="GET">
+          <input type="text" placeholder="Search your courses" name="title__icontains">
+        <i class="search icon"></i>
+      </form>
+        <div class="ui large header left aligned" style="padding: 10px; margin: 10px; color: #d3beff;">
+            <a href="{% url 'courses:my_courses' %}" style="color: white;">Courses Dashboard</a>
+        </div>
+        <div class="ui secondary violet inverted pointing menu" style="padding: 0px;">
+            <a class="item active">
+              Courses
+            </a>
+            <a class="item">
+              Q&A
+            </a>
+            <a class="item">
+              Reviews
+            </a>
+          </div>
+    </div>
+</div>

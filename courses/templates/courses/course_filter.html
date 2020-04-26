@@ -1,0 +1,10 @@
+{% extends "base.html" %}
+{% block content %}
+<form method="get" class="ui form">
+    {{ filter.form }}
+    <button type="submit" class="ui teal button">Filter</button>
+</form>
+{% for obj in filter.qs %}
+    {{ obj.title }}<br />
+{% endfor %}
+{% endblock content %}

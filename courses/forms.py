@@ -5,7 +5,7 @@ from .models import Course,CourseSections,SectionVideos
 
 
 class SearchStudentForm(forms.Form):
-    student_query = forms.CharField(max_length=200)
+    query = forms.CharField(max_length=200)
     
 
 
