@@ -1,5 +1,4 @@
 {% extends 'base.html' %}
-
 {% load static %}
 {% block header_teacher %}
     {% include "rooms/teacher_header.html" %}
@@ -7,18 +6,9 @@
 {% block room %}
 
 <div class="ui grid">
-    <div class="sixteen wide column right aligned">
-        <div class="ui selection dropdown">
-            <input type="hidden" name="sorting">
-            <i class="dropdown icon"></i>
-            <div class="default text">Sorted by</div>
-            <div class="menu">
-              <div class="item" data-value="1">A to Z</div>
-              <div class="item" data-value="0">Z to A</div>
-              <div class="item" data-value="0">Time created</div>
-            </div>
+        <div class="sixteen wide column">
+            {% include "rooms/dropdown_order_search_teacher.html" %}
         </div>
-    </div>
     {% if teacher_rooms %}
     {% for room in teacher_rooms %}
             <div class="three wide column"> 
@@ -62,6 +52,7 @@
 </div>
 <script>
     $('.special.cards .image').dimmer({on: 'hover'}); 
+    $('.ui.dropdown').dropdown();
 
 </script>
 {% endblock room %}

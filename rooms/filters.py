@@ -2,8 +2,8 @@ import django_filters
 from .models import Room
 class RoomFilter(django_filters.FilterSet):
     CHOICES = (
-        ('ascending','Ascending'),
-        ('descending', 'Descending')
+        ('oldest','Ascending'),
+        ('newest', 'Descending')
     )
     ordering = django_filters.ChoiceFilter(label='ordering', choices=CHOICES, method='filter_by_order')
     class Meta:
@@ -13,5 +13,5 @@ class RoomFilter(django_filters.FilterSet):
         }
 
     def filter_by_order(self, queryset, name, value):
-        expression  = 'created' if value == 'ascending' else '-created'
+        expression  = 'created' if value == 'oldest' else '-created'
         return queryset.order_by(expression)        

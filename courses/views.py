@@ -301,14 +301,9 @@ def course_search(request):
     return render(request,'courses/student_course_search.html', {'filter':f})
 
 def course_search_teacher(request):
-    form = SearchStudentForm(request.GET)
-    query = None 
-    results = None 
-    if form.is_valid():
-        query = form.cleaned_data['course_searcher_teacher']
-        results = CourseDocument.search().filter("term",title=query)
-        results = results.to_queryset()
-    return render(request,'courses/my_courses.html', {'form':form,'query':query,'results':results})
+    user = get_object_or_404(CustomUser,username=request.user.username)
+    f = CourseFilter(request.GET, queryset=user.tutor_courses.all())
+    return render(request,'courses/teacher_search.html', {'filter':f})
 
 
 

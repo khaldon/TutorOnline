@@ -4,10 +4,11 @@
     {% include "rooms/teacher_header.html" %}
 {% endblock header_teacher %}
 {% block teacher %}
-<h1>You are searching for "{{query_teacher}}"</h1>
-{% if result_teachers %}
 <div class="ui padded grid" style="overflow: auto; max-height: 500px;">       
-    {% for room in result_teachers  %}
+    <div class="sixteen wide column">
+        {% include "rooms/dropdown_order_search_teacher.html" %}
+    </div>
+    {% for room in filter.qs  %}
     <div class="three wide column">
         <div class="ui special primary cards">
             <div class="card">
@@ -37,9 +38,10 @@
         </div>
     </div>
     {% endfor %} 
-    {% else %}
-    <div class="ui message"><h4 class="ui header">Don't have any results for your searching</h4></div>
-    {% endif %}
 </div>
+<script>
+    $('.special.cards .image').dimmer({on: 'hover'});    
+    $('.ui.dropdown').dropdown();
+</script>
 
 {% endblock teacher %}

@@ -3,56 +3,49 @@
 {% block header_teacher %}
 <div class="ui center aligned grid" style="margin-bottom: 10px;">
    {% include "courses/teacher_header.html" %}
-    <div class="fifteen wide column right aligned">
-      <div class="ui selection dropdown">
-          <input type="hidden" name="sorting">
-          <i class="dropdown icon"></i>
-          <div class="default text">Sorted by</div>
-          <div class="menu">
-            <div class="item" data-value="1">A to Z</div>
-            <div class="item" data-value="0">Z to A</div>
-            <div class="item" data-value="0">Time created</div>
+    <div class="sixteen wide column">
+      {% include "courses/dropdown_order_search_teacher.html" %}
+  </div>
+  {% if mygroups %}
+      {% for course in mygroups  %}
+      <div class="three wide column" style="margin: 5px;">            
+      <div class="ui special cards">
+      <div class="card card-teacher">
+      <a href="{% url 'courses:course_detail' course %}">
+        <div class="blurring dimmable image">
+            {% if course.image %}
+            <img src="{{course.image.url}}" style="height: 200px; width: 100%;">
+            {% else %}
+            <img src="{% static 'img/image.png' %}" style="height: 200px; width: 100%;">
+            {% endif %}           
+        </div>
+      </a>
+        <div class="content">
+          <a class="header" href="">{{course.title}}</a>
+          <a class="header right floated">${{course.price}}</a>
+        </div>
+          <div class="extra content">
+            <span class="right floated like">
+              <i class="like icon"></i>
+            </span>
+            <div class="ui star rating left floated"></div>
+          </div>
+          <div class="extra content">
+              <div class="right floated author">
+                <img class="ui avatar image" src="{{course.tutor.profile.get_picture}}"> 
+                <a href="#">{{course.tutor.username}}</a>
+              </div>
           </div>
       </div>
-  </div>
-        {% if mygroups %}
-            {% for course in mygroups  %}
-            <div class="three wide column" style="margin: 5px;">            
-            <div class="ui special cards">
-            <div class="card card-teacher">
-              <div class="blurring dimmable image">
-                <a href="{% url 'courses:course_detail' course %}">
-                  {% if course.image %}
-                  <img src="{{course.image.url}}" style="height: 200px; width: 100%;">
-                  {% else %}
-                  <img src="{% static 'img/image.png' %}" style="height: 200px; width: 100%;">
-                  {% endif %}           
-                </a>
-              </div>
-              <div class="content">
-                <a class="header" href="">{{course.title}}</a>
-                <a class="header right floated">${{course.price}}</a>
-              </div>
-                <div class="extra content">
-                  <span class="right floated like">
-                    <i class="like icon"></i>
-                  </span>
-                  <div class="ui star rating left floated"></div>
-                </div>
-                <div class="extra content">
-                    <div class="right floated author">
-                      <img class="ui avatar image" src="{{course.tutor.profile.get_picture}}"> 
-                      {{course.tutor.username}}
-                    </div>
-                </div>
-            </div>
-            </div>
-          </div>
-          {% endfor %}
-        {% else %}
-        <h4 class="ui medium header">you don't have any courses you can create a first course now <a href="{% url 'courses:create_course' %}" class="ui violet button">Create course</a></h4>
-        {% endif %}
-    
-
+      </div>
+    </div>
+    {% endfor %}
+  {% else %}
+  <h4 class="ui medium header">you don't have any courses you can create a first course now <a href="{% url 'courses:create_course' %}" class="ui violet button">Create course</a></h4>
+  {% endif %}
 </div>
+<script>
+    $('.ui.dropdown').dropdown();
+    $('.blurring.dimmable.image').dimmer({on: 'hover'});
+</script>
 {% endblock header_teacher %}

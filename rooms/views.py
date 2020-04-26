@@ -148,6 +148,11 @@ def room_search(request):
     f = RoomFilter(request.GET, queryset=Room.objects.all())
     return render(request,'rooms/search.html', {'filter':f})
 
+def room_search_teacher(request):
+    user = get_object_or_404(CustomUser, username=request.user.username)
+    f = RoomFilter(request.GET, queryset=user.teacher_rooms.all())
+    return render(request,'rooms/teacher_search.html', {'filter':f})
+
 # def room_search_teacher(request):
 #     form = SearchTeacherForm(request.GET)
 #     query = None 
