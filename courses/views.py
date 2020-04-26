@@ -322,3 +322,9 @@ def add_video_to_section(request):
     else:
         video_form = SectionVideoForm(user=request.user)
     return render(request,'courses/create_video.html',{'video_form':video_form})
+
+@login_required
+def VideoView(request,pk,slug):
+    video = get_object_or_404(SectionVideos,pk=pk)
+    course = get_object_or_404(Course,slug=slug)
+    return render(request,'courses/video_detail.html',{'video':video,'course':course})

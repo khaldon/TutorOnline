@@ -11,7 +11,7 @@
       <div class="three wide column" style="margin: 5px;">            
       <div class="ui special cards">
       <div class="card card-teacher">
-      <a href="{% url 'courses:course_detail' course %}">
+      <a href="{% url 'courses:course_detail' course.slug %}">
         <div class="blurring dimmable image">
             {% if course.image %}
             <img src="{{course.image.url}}" style="height: 200px; width: 100%;">

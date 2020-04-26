@@ -1,13 +1,8 @@
 from django import forms
 from .models import Course,CourseSections,SectionVideos
 
-
-
-
 class SearchStudentForm(forms.Form):
     query = forms.CharField(max_length=200)
-    
-
 
 class CheckoutForm(forms.Form):
     first_name = forms.CharField()
@@ -35,11 +30,13 @@ class CourseForm3(forms.ModelForm):
         fields = ('category',)
 
 class CourseForm4(forms.ModelForm):
-    image = forms.ImageField(required=False)
+    image = forms.ImageField(required=True)
     cover = forms.ImageField(required=False)
+    preview_video = forms.FileField(label='You can add a preview video, that will show main idea of your course',required=False)
+
     class Meta:
         model = Course
-        fields = ('image','cover','languages','price',)
+        fields = ('image','cover','languages','price','preview_video')
 
 class SectionForm(forms.ModelForm):
     def get_tutor_courses(self):

@@ -32,6 +32,7 @@ class Course(models.Model):
     rank_score = models.FloatField(default=0.0)
     price = models.FloatField(default=0.0)
     discount_price = models.FloatField(blank=True, null=True)
+    preview_video = models.FileField(upload_to='courses/course_preview_videos',max_length=100,null=True)
     
 
     def save(self, *args, **kwargs):
@@ -46,7 +47,7 @@ class Course(models.Model):
         return reverse("courses:remove_from_cart",kwargs={'slug': self.slug})
 
     def get_absolute_url(self):
-        return reverse('courses:course',args=[self.slug])
+        return reverse('courses:course_detail',args=[self.slug])
 
     def __str__(self):
         return self.title
@@ -57,7 +58,7 @@ class CourseSections(models.Model):
     course = models.ForeignKey(Course,on_delete=models.CASCADE,null=True)
 
     def get_absolute_url(self):
-        return reverse('courses:course',args=[self.course.slug])
+        return reverse('courses:course_detail',args=[self.course.slug])
 
     def __str__(self):
         return self.title
@@ -66,10 +67,11 @@ class SectionVideos(models.Model):
     title = models.CharField(max_length=50,null=True)
     video = models.FileField(upload_to='courses/course_videos',max_length=100)
     section = models.ForeignKey(CourseSections,on_delete=models.CASCADE,null=True)
-    short_description = models.CharField(max_length=50)
+    preview_image = models.ImageField(upload_to='courses/course_videos_preview_images',null=True)
+    short_description = models.CharField(max_length=50,null=True)
 
     def get_absolute_url(self):
-        return reverse('courses:course',args=[self.section.course.slug])
+        return reverse('courses:course_detail',args=[self.section.course.slug])
 
 class OrderCourse(models.Model):
     user = models.ForeignKey(User,on_delete=models.CASCADE)
