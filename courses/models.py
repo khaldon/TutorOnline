@@ -62,8 +62,10 @@ class CourseSections(models.Model):
         return self.title
 
 class SectionVideos(models.Model):
+    title = models.CharField(max_length=50,null=True)
     video = models.FileField(upload_to='courses/course_videos',max_length=100)
     section = models.ForeignKey(CourseSections,on_delete=models.CASCADE,null=True)
+    short_description = models.CharField(max_length=50)
 
     def get_absolute_url(self):
         return reverse('courses:course',args=[self.section.course.slug])

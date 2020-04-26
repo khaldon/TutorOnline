@@ -75,5 +75,5 @@ class SectionVideoForm(forms.ModelForm):
 
     class Meta:
         model = SectionVideos
-        fields = ('section','video')
+        fields = ('title','section','video')
 
