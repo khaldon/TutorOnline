@@ -4,15 +4,49 @@
 
 {% block content %}
 <h1>{{ video.title }}</h1>
-<video id="plyr-video" poster="/path/to/video-poster.png" controls>
+<video width="960" height="620" id="plyr-video" poster="/path/to/video-poster.png" controls>
     <source src="{{ video.video.url }}" type="video/mp4">
     <source src="/path/to/video.webm" type="video/webm">
     <!-- Captions are optional -->
     <track kind="captions" label="English captions" src="/path/to/video-caption.vtt" srclang="en" default>
   </video>
-
+  <h1>{{ course.title }}</h1>
+  <div class="ui styled accordion">
+    {% for section in sections %}
+    <div class="title {% if section == video.section %}active{% endif %}">
+      <i class="dropdown icon"></i>
+      Section {{forloop.counter}}: {{ section.title }}
+    </div>
+    <div class="content {% if video.section == section %}active{% endif %}">
+      <div class="ui divided list">
+        {% for video in videos %}
+        {% if video.section == section %}
+        <div class="item">
+          <i class="map video icon"></i>
+          <div class="content">
+            <a class="header" href="{% url 'courses:video_detail' course.slug video.pk %}">Lesson {{ forloop.counter }}: {{ video.title }}
+              <div class="ui disabled checkbox">
+              <input type="checkbox" disabled='disabled' {% if video.watched == True %}checked=""{% endif %}>
+              <label></label>
+            </div></a>
+            <div class="description">An excellent polish restaurant, quick delivery and hearty, filling meals.</div>
+          </div>
+        </div>
+        {% endif %}
+        {% endfor %}
+      </div>
+    </div>
+    {% endfor %}
+  </div>
+  <script>
+    $('.ui.styled.accordion')
+    .accordion({
+      selector: {
+        trigger: '.title'
+      }
+    });
+  </script>
   <script>
     plyr.setup("#plyr-video");
   </script>
-
 {% endblock content %}

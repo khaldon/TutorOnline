@@ -1,0 +1,25 @@
+{% extends 'base.html' %}
+
+{% block title %}Checkout{% endblock title %}
+
+{% block content %}
+<form class="ui form" method="POST">
+    {% csrf_token %}
+<h4 class="ui dividing header">Checkout</h4>
+    <div class="field">
+      <label>First Name</label>
+      <input type="text" name="first_name" placeholder="First Name">
+    </div>
+    <div class="field">
+      <label>Last Name</label>
+      <input type="text" name="last_name" placeholder="Last Name">
+    </div>
+    <div class="field">
+      <div class="ui checkbox">
+        <input type="checkbox" tabindex="0" class="hidden">
+        <label>I agree to the Terms and Conditions</label>
+      </div>
+    </div>
+    <button class="ui button" type="submit">Continue to checkout</button>
+  </form>
+{% endblock content %}

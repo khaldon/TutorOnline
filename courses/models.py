@@ -69,6 +69,8 @@ class SectionVideos(models.Model):
     section = models.ForeignKey(CourseSections,on_delete=models.CASCADE,null=True)
     preview_image = models.ImageField(upload_to='courses/course_videos_preview_images',null=True)
     short_description = models.CharField(max_length=50,null=True)
+    watched = models.BooleanField(default=False)
+    created = models.DateTimeField(auto_now_add=True,null=True)
 
     def get_absolute_url(self):
         return reverse('courses:course_detail',args=[self.section.course.slug])
