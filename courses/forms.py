@@ -1,5 +1,6 @@
 from django import forms
 from .models import Course,CourseSections,SectionVideos
+import subprocess
 
 class SearchStudentForm(forms.Form):
     query = forms.CharField(max_length=200)
@@ -33,10 +34,17 @@ class CourseForm4(forms.ModelForm):
     image = forms.ImageField(required=True)
     cover = forms.ImageField(required=False)
     preview_video = forms.FileField(label='You can add a preview video, that will show main idea of your course',required=False)
+    thumbnails = forms.ImageField(required=False)
+
 
     class Meta:
         model = Course
-        fields = ('image','cover','languages','price','preview_video')
+        fields = ('image','cover','languages','price','preview_video','poster_preview_video')
+
+    # def save(self):
+
+    #     subprocess.call(" ffmpeg -i"+ uploaded_filename +"-ss 00:00:01.000 -vframes 1 "+thumbnail_name ,shell=True)
+
 
 class SectionForm(forms.ModelForm):
     def get_tutor_courses(self):

@@ -1,44 +1,87 @@
 {% extends 'base.html' %}
+{% load static  %}
 
-{% block content %}
-<div class="ui placeholder segment">
-  <div class="ui two column stackable center aligned grid">
-    <div class="middle aligned row">
-      <div class="column">
-        <h1>{{ course.title }}</h1>
-        <img class="disabled medium ui image" src="/images/wireframe/image.png">
-      </div>
-      <div class="column">
+{% block course_header %}
 
-      </div>
-    </div>
-  </div>
+<div class="ui grid">
+  {% include "courses/course_header.html" %}
 </div>
-<div class="ui styled accordion">
-  {% for section in sections %}
-  <div class="title">
-    <i class="dropdown icon"></i>
-    {{ section.title }}
-  </div>
-  <div class="content">
-    <div class="ui divided list">
-      {% for video in videos %}
-      {% if video.section == section %}
-      <div class="item">
-        <i class="map video icon"></i>
-        <div class="content">
-          <a class="header" href="{% url 'courses:video_detail' course.slug video.pk %}">{{ video.title }}</a>
-          <div class="description">An excellent polish restaurant, quick delivery and hearty, filling meals.</div>
+
+{% endblock course_header %}
+{% block teacher %}
+<div class="ui grid">
+  <div class="four wide column" style="position: absolute; right: 50px; top: 120px;">
+    <div class="ui cards" >
+      <div class="card">
+        <div class="content" style="padding: 0px;">
+          <div class="description" >
+            <a class="click_prev_image ui violet small header"><i class="ui huge play icon"  style="position: absolute; top: 25%; left: 40%;" ></i></a>
+            {% if not course.preview_video and  not course.poster_preview_video and not course.image and not course.cover %} 
+            <img src="{% static 'img/image.png' %}" width='290' height='200'>
+            {% else %}
+            <img src="{{course.image.url}}" width='290' height='200'>
+            {% endif %}
+          </div>
+        </div>
+        <div class="ui horizontal divider"></div>
+        <div class="extra content" style="padding: 10px;">
+          <div class="header center aligned">
+            ${{course.price}}
+          </div>
+        </div>
+        <div class="extra content">
+          <div class="author center aligned">
+            <a href="#"><i class="ui share icon"></i> share</a>
+          </div>
+        </div>
+        <div class="ui two bottom attached buttons">
+          <div class="ui button">
+            Add to Cart
+          </div>
+          <div class="ui green button">
+            Buy Now
+          </div>
         </div>
       </div>
-      {% endif %}
-      {% endfor %}
     </div>
   </div>
-  {% endfor %}
+      <div class="ui modal">
+        <i class="close icon"></i>
+  
+        {% if course.preview_video and course.poster_preview_video   %}
+        <div style="width:910px; height:510px;">
+          {% include "courses/media_player.html" with video=course.preview_video.url poster=course.image.url    %}
+        </div>
+          {% else %}
+          <img src="{% static 'img/image.png' %}" width='290' height='200' alt="">
+        {% endif %}
+      </div>
+      <div class="ui styled accordion">
+        {% for section in sections %} 
+        <div class="title">
+          <i class="dropdown icon"></i>
+          {{ section.title }}
+        </div>
+        <div class="content">
+          <div class="ui divided list">
+            {% for video in videos %}
+            {% if video.section == section %}
+            <div class="item">
+              <i class="map video icon"></i>
+              <div class="content">
+                <a class="header" href="{% url 'courses:video_detail' course.slug video.pk %}">{{ video.title }}</a>
+              </div>
+            </div>
+            {% endif %}
+            {% endfor %}
+          </div>
+        </div>
+        {% endfor %}
+      </div>
+    </div>
 
-</div>
-
+  </div>
+  
   <script>
     $('.ui.styled.accordion')
     .accordion({
@@ -46,6 +89,8 @@
         trigger: '.title'
       }
     });
+// $(".prev_image")
+ 
   </script>
-
-{% endblock content %}
+  
+{% endblock teacher %}

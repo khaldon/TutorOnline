@@ -4,6 +4,7 @@ from .forms import (CheckoutForm,CourseForm1,CourseForm2,CourseForm3,
                    CourseForm4,SectionForm,SectionVideoForm, 
                    SearchStudentForm)
 
+
 from users.decorators import teacher_required
 from django.contrib.auth.decorators import login_required
 from .decorators import course_tutor
@@ -23,6 +24,7 @@ from .documents import CourseDocument
 from .filters import CourseFilter 
 
 import os
+
 
 # Create your views here.
 

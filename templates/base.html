@@ -6,9 +6,7 @@
             {% block title %}{% endblock title %}
         </title>
     <style>
-        body, html {
-  height: 100%;
-}
+        body, html {height: 100%;}
     </style>
     <script>
         $(document).ready(function(){
@@ -19,16 +17,17 @@
           });
             $(".rating").rating();
         });
-        </script>
+    </script>
         
     </head>
 
     <body>
         {% include "navbar.html" %}
+
         {% block room_detail %}{% endblock room_detail %}
         {% block room_auth_pass %}{% endblock room_auth_pass %}
         {% block header_teacher %}{% endblock header_teacher %}
-
+        {% block course_header %}{% endblock course_header %}
         <div class="ui container" >
             {% block content %}{% endblock content %}
             {% block profile %}{% endblock profile %}
