@@ -23,7 +23,7 @@ class Course(models.Model):
     image = models.ImageField(upload_to='courses/course_images',blank=True,null=True , default='courses/image.png')
     cover = models.ImageField(upload_to='courses/course_covers',blank=True,null=True)
     tutor = models.ForeignKey(User,related_name='tutor_courses',on_delete=models.CASCADE)
-    students = models.ForeignKey(User,related_name='course_students',blank=True,on_delete=models.CASCADE,null=True)
+    students = models.ForeignKey(User,related_name='course_students',blank=True,null=True,on_delete=models.CASCADE)
     created = models.DateTimeField(default=timezone.now)
     updated = models.DateTimeField(auto_now=True)
     category = models.ForeignKey(CourseCategories,on_delete=models.CASCADE)
@@ -33,6 +33,7 @@ class Course(models.Model):
     price = models.FloatField(default=0.0)
     discount_price = models.FloatField(blank=True, null=True)
     preview_video = models.FileField(upload_to='courses/course_preview_videos',max_length=100,null=True)
+    poster_preview_video = models.ImageField(upload_to='courses/course_poster_preview', null=True)
     
 
     def save(self, *args, **kwargs):

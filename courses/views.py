@@ -23,6 +23,7 @@ from .filters import CourseFilter
 from django.db.models import Count
 import os
 
+
 # Create your views here.
 
 def CourseView(request,slug):
@@ -77,12 +78,12 @@ class CartView(LoginRequiredMixin,View):
             return render(self.request,'courses/cart.html',context)
         except ObjectDoesNotExist:
             messages.error(self.request,"You do not have an active order")
-            return render(self.request,'courses/cart.html')
+            return redirect("/")
 
 @login_required
 def add_to_cart(request,pk):
     course = get_object_or_404(Course,pk=pk)
-    order_course = OrderCourse.objects.get_or_create(
+    order_course,created = OrderCourse.objects.get_or_create(
         course=course,
         user=request.user,
         ordered = False,
