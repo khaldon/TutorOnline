@@ -253,7 +253,7 @@ def course_filter(request):
 def add_to_wishlist(request,slug):
     course = get_object_or_404(Course,slug=slug)
     wished_course,created = Wishlist.objects.get_or_create(wished_course=course,slug=course.slug,user=request.user,)
-    return redirect('courses:course',slug=slug)
+    return redirect('courses:courses')
 
 @login_required
 def delete_from_wishlist(request,slug):
@@ -266,6 +266,7 @@ class WishListView(ListView):
     model = Wishlist
     template_name = 'courses/wishlist.html'
     paginate_by = 10
+    context_object_name = 'wishlist'
 
     def get_queryset(self):
         return Wishlist.objects.filter(user=self.request.user)

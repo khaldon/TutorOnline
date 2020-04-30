@@ -47,7 +47,6 @@
   </div>
       <div class="ui modal">
         <i class="close icon"></i>
-  
         {% if course.preview_video and course.poster_preview_video   %}
         <div style="width:910px; height:510px;">
           {% include "courses/media_player.html" with video=course.preview_video.url poster=course.image.url    %}
@@ -56,12 +55,19 @@
           <img src="{% static 'img/image.png' %}" width='290' height='200' alt="">
         {% endif %}
       </div>
-      <div class="ui styled accordion">
+      {% if sections %}
+      <div class="ui styled accordion" style="margin-top: 22px;">
+        <div class="blue ui mini buttons right floated">
+          <a href="{% url 'courses:add_section_to_course' %}" class="ui button right floated">Add section</a>
+          <a href="{% url 'courses:add_video_to_section' %}" class="ui button right floated">Add video</a>
+        </div>
+
         {% for section in sections %} 
         <div class="title">
           <i class="dropdown icon"></i>
           {{ section.title }}
         </div>
+        
         <div class="content">
           <div class="ui divided list">
             {% for video in videos %}
@@ -78,6 +84,15 @@
         </div>
         {% endfor %}
       </div>
+      {% else %}
+      
+      {% if request.is_teacher %}
+      <div class="ui segment" style="margin: 22px;">You don't have any section. Create first one <a href="{% url 'courses:add_section_to_course' %}" class="ui violet button">create section</a></div>
+
+      {% endif %}
+        
+      {% endif %}
+
     </div>
 
   </div>
@@ -89,7 +104,6 @@
         trigger: '.title'
       }
     });
-// $(".prev_image")
  
   </script>
   
