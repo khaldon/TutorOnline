@@ -23,7 +23,7 @@ class Course(models.Model):
     image = models.ImageField(upload_to='courses/course_images',blank=True,null=True , default='courses/image.png')
     cover = models.ImageField(upload_to='courses/course_covers',blank=True,null=True)
     tutor = models.ForeignKey(User,related_name='tutor_courses',on_delete=models.CASCADE)
-    students = models.ForeignKey(User,related_name='course_students',blank=True,on_delete=models.CASCADE,null=True)
+    students = models.ForeignKey(User,related_name='course_students',blank=True,null=True,on_delete=models.CASCADE)
     created = models.DateTimeField(default=timezone.now)
     updated = models.DateTimeField(auto_now=True)
     category = models.ForeignKey(CourseCategories,on_delete=models.CASCADE)
@@ -70,6 +70,8 @@ class SectionVideos(models.Model):
     section = models.ForeignKey(CourseSections,on_delete=models.CASCADE,null=True)
     preview_image = models.ImageField(upload_to='courses/course_videos_preview_images',null=True)
     short_description = models.CharField(max_length=50,null=True)
+    watched = models.BooleanField(default=False)
+    created = models.DateTimeField(auto_now_add=True,null=True)
 
     def get_absolute_url(self):
         return reverse('courses:course_detail',args=[self.section.course.slug])

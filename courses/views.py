@@ -3,8 +3,6 @@ from .models import Course,OrderCourse,Order,Payment,PaymentInfo,Wishlist,Course
 from .forms import (CheckoutForm,CourseForm1,CourseForm2,CourseForm3,
                    CourseForm4,SectionForm,SectionVideoForm, 
                    SearchStudentForm)
-
-
 from users.decorators import teacher_required
 from django.contrib.auth.decorators import login_required
 from .decorators import course_tutor
@@ -22,7 +20,7 @@ from django.core.files.storage import FileSystemStorage
 from django.conf import settings
 from .documents import CourseDocument
 from .filters import CourseFilter 
-
+from django.db.models import Count
 import os
 
 
@@ -32,7 +30,11 @@ def CourseView(request,slug):
     course = get_object_or_404(Course,slug=slug)
     sections = CourseSections.objects.filter(course__title=course.title)
     videos = SectionVideos.objects.filter(section__course__title=course.title)
-    return render(request,'courses/course_detail.html',{'course':course,'sections':sections,'videos':videos})
+    result = Course.objects.values('title').annotate(
+    no_of_section=Count('coursesections'),
+    no_of_videos=Count('coursesections__sectionvideos', distinct=True)
+    ).order_by('title')
+    return render(request,'courses/course_detail.html',{'course':course,'sections':sections,'videos':videos,'result':result})
 
 @login_required
 @course_tutor
@@ -76,12 +78,12 @@ class CartView(LoginRequiredMixin,View):
             return render(self.request,'courses/cart.html',context)
         except ObjectDoesNotExist:
             messages.error(self.request,"You do not have an active order")
-            return render(self.request,'courses/cart.html')
+            return redirect("/")
 
 @login_required
 def add_to_cart(request,pk):
     course = get_object_or_404(Course,pk=pk)
-    order_course = OrderCourse.objects.get_or_create(
+    order_course,created = OrderCourse.objects.get_or_create(
         course=course,
         user=request.user,
         ordered = False,
@@ -326,6 +328,11 @@ def add_video_to_section(request):
 
 @login_required
 def VideoView(request,pk,slug):
-    video = get_object_or_404(SectionVideos,pk=pk)
     course = get_object_or_404(Course,slug=slug)
-    return render(request,'courses/video_detail.html',{'video':video,'course':course})
+    sections = CourseSections.objects.filter(course__title=course.title)
+    videos = SectionVideos.objects.filter(section__course__title=course.title).order_by('created')
+    video = get_object_or_404(SectionVideos,pk=pk)
+    if video.watched == False:
+        video.watched = True
+        video.save()
+    return render(request,'courses/video_detail.html',{'video':video,'course':course,'sections':sections,'videos':videos})

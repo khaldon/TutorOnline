@@ -1,6 +1,52 @@
 {% extends "base.html" %}
 
 {% block student %}
+<h1>Cart</h1>
+<table class="ui celled table">
+    <thead>
+      <tr><th>Course title</th>
+      <th>Total course price</th>
+      <th></th>
+    </tr></thead>
+    <tbody>
+        {% for order_course in object.courses.all %}
+      <tr>
+        <th scope="row">{{ forloop.counter }}</th>
+        <td>{{ order_course.course.title }}</td>
+        <td>{{ order_course.course.price }}</td>
+        <td>
+            {% if order_course.course.discount_price %}
+            {{ order_course.get_total_discount_course_price }}
+           <span class="ui disabled button">Saving ${{ order_item.get_amount_saved }}</span>
+         {% else %}
+            {{ order_course.get_total_course_price }}
+         {% endif %}
+        </td>
+      </tr>
+      {% empty %}
+      <tr>
+      <td>Your cart is empty</td>
+      </tr>
+      <tr>
+        <td>
+          <a class="ui primary button" href="{% url 'core:dashboard' %}">Continue shopping</a>
+        </td>
+      </tr>
+      {% endfor %}
+      {% if object.get_total %}
+      <tr>
+        <td><b>Order Total</b></td>
+        <td><b>${{ object.get_total }}</b></td>
+      </tr>
+      <tr>
+        <td>
+          <a cclass="ui red button" href="{% url 'courses:checkout' %}">Proceed to checkout</a>
+          <a class="ui primary button" href="{% url 'core:dashboard' %}">Continue shopping</a>
+        </td>
+      </tr>
+      {% endif %}
+    </tbody>
+  </table>
     {% if messages %}
         {% for message  in messages %}
              <div class="ui message"><h4 class="ui header">{{message}}</h4></div>
