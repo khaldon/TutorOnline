@@ -2,14 +2,16 @@ from django.shortcuts import render,redirect
 from django.urls import  reverse_lazy
 from django.views import generic
 from django.contrib.auth import authenticate
-from .models import CustomUser
+from .models import CustomUser, Profile
 from django.views.generic import CreateView,TemplateView
 from .forms import StudentSignUpForm,TeacherSignUpForm, CustomUserCreationForm,UserEditForm,StudentProfileForm,TeacherProfileForm
 from django.contrib.auth import login as auth_login
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages 
 from django.conf import settings
-
+from django.views.generic import ListView
+from courses.models import Course
+from django.shortcuts import get_object_or_404
 # Create your views here.
 
 User = settings.AUTH_USER_MODEL
@@ -71,6 +73,26 @@ def profile(request):
         'user_form':user_form,
         'profile_form':profile_form
     })
+
+
+
+class ProfileViewUser(ListView):
+    model = Course
+    template_name= 'users/tutor_profile.html'
+    context_object_name = 'tutor_profile'
+    paginate_by = 10
+
+    def get_queryset(self,*args, **kwargs):
+        username = get_object_or_404(CustomUser, username=self.kwargs['user'])
+        return username.tutor_courses.all()
+    
+    def get_context_data(self, **kwargs):
+        data = super().get_context_data(**kwargs)
+        username = get_object_or_404(CustomUser, username=self.kwargs['user'])
+        data['username'] = get_object_or_404(Profile, user=username)
+
+        return data
+
 
 def delete_user(request, username):
     u = CustomUser.objects.get(username=username)

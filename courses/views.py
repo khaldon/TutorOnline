@@ -225,8 +225,6 @@ class MyCourses(LoginRequiredMixin,ListView):
     template_name = 'courses/my_courses.html'
     context_object_name = 'mygroups'
 
-    ordering = ['created']
-
     def get_queryset(self,**kwargs):
         user = get_object_or_404(CustomUser,username=self.request.user.username)
         return user.tutor_courses.all()

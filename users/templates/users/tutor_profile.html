@@ -1,0 +1,34 @@
+{% extends 'base.html' %}
+
+{% block title %}{{username.user.username}}{% endblock title %}
+
+{% block teacher %}
+
+
+<div class="ui center aligned grid" style="margin-bottom: 10px;">
+    <div class="eight wide column">
+        <div class="ui huge header ">{{username.user.username}}</div>
+        <div class="ui small violet header">Total students
+            <div class="ui Medium header">{{username.students.all.count}}</div>
+        </div>
+        <div class="ui small violet header">Reviews<div class="ui Medium header"></div></div>
+
+    {{username.bio}}
+    </div>
+    <div class="eight wide column">
+        <img class="ui avatar small image" src="{{username.user.profile.get_picture}}">
+    </div>
+  
+    {% if object_list %}
+        {% for course in object_list  %}
+            {% url 'courses:add_to_wishlist' course as add_wishlist %}
+            {% include "courses/course_base.html" with course=course path=add_wishlist %}
+        {% endfor %}
+        {% else %}
+        <div class="ui segment">
+            <h4 class="ui header centered">he doesn't have any courses right now</h4>
+        </div>
+    {% endif %}
+</div>
+
+{% endblock teacher %}
