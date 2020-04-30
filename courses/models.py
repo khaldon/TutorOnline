@@ -148,6 +148,9 @@ class Wishlist(models.Model):
     slug = models.CharField(max_length=30,null=True,blank=True)
     added_date = models.DateTimeField(auto_now_add=True)
 
+    def __str__(self):
+        return "{0}__{1}".format(self.user, self.wished_course)
+
 course_slugify = UniqueSlugify(
                     to_lower=True,
                     max_length=80,

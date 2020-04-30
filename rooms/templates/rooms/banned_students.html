@@ -11,13 +11,6 @@
           <div class="ui special primary cards">
               <div class="card">
               <div class="blurring dimmable image">
-                  <div class="ui dimmer">
-                  <div class="content">
-                      <div class="center">
-                        <a href="{% url 'rooms:auth_join' room=room uuid=room.invite_url  %}" class="ui inverted button">Join Room</a>
-                      </div>
-                  </div>
-                  </div>
                   <img src="{% static 'img/tom.jpg' %}">
               </div>
               <div class="content">
@@ -42,7 +35,12 @@
             <div class="item">
               <img class="ui avatar image" src="{{student.profile.get_picture }}">
               <div class="content">
-                <div class="header">{{student}}</div>
+                <div class="header">
+                  {{student}}
+                  <a href="{% url 'rooms:ban_student' uuid=room.invite_url user_id=student.id %}" class="ui green mini button" style="position: absolute; right: 20px; top: 20px;">Unban</a>
+
+                </div>
+
               </div>
             </div>
             {% endfor %}
@@ -68,7 +66,8 @@
       </div>
     {% endif %}
   </div>
-
+<script>
+</script>
    
 
 {% endblock teacher %}

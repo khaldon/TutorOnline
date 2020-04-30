@@ -10,7 +10,11 @@
         <h4 class="ui dividing teal header">Add new video to the section</h4>
         <div class="field">
             <label>Select your section</label>
-            {{video_form.section}}
+            <select name="section" class="ui dropdown">
+                {% for section in video_form.section  %}
+                    <option value="{{section.pk}}">{{section}}</option>
+                {% endfor %}
+            </select>
         </div>
         <div class="field">
             <label>Choose your video</label>
@@ -20,8 +24,34 @@
             <label>Video title</label>
             {{video_form.title}}
         </div>
-        <input type="submit" value="submit" class="ui violet button" style="margin-top: 15px;"/>    
+        <input type="submit" value="submit" class="ui teal button" style="margin-top: 15px;"/>    
     </div>
     </div>
 </form>
+<script>
+    $('.ui.dropdown').dropdown();
+    $('.ui.form').form({
+    on: 'blur',
+    fields: {
+      section: {
+        identifier  : 'section',
+        rules: [
+          {
+            type   : 'empty',
+            prompt : 'Please select a dropdown value'
+          }
+        ]
+      },
+      title: {
+        identifier  : 'title',
+        rules: [
+          {
+            type   : 'empty',
+            prompt : 'Please select a dropdown value'
+          }
+        ]
+      }
+    }
+  });
+</script>
 {% endblock content %}

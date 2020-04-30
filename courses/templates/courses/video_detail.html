@@ -4,15 +4,9 @@
 
 {% block content %}
 <h1>{{ video.title }}</h1>
-<video id="plyr-video" poster="/path/to/video-poster.png" controls>
-    <source src="{{ video.video.url }}" type="video/mp4">
-    <source src="/path/to/video.webm" type="video/webm">
-    <!-- Captions are optional -->
-    <track kind="captions" label="English captions" src="/path/to/video-caption.vtt" srclang="en" default>
-  </video>
+<div style="width:910px; height:510px;">
+    {% include "courses/media_player.html" with video=video.video.url %}
+</div>
 
-  <script>
-    plyr.setup("#plyr-video");
-  </script>
 
 {% endblock content %}

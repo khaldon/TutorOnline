@@ -1,0 +1,38 @@
+{% load static %}
+<div class="three wide column" style="margin: 5px;">            
+    <div class="ui special cards">
+        <div class="card">
+          <a href="{% url 'courses:course_detail' course %}">
+            <div class="blurring dimmable image">
+                {% if course.image %}
+                <img src="{{course.image.url}}" style="height: 200px; width: 100%;">
+                {% else %}
+                <img src="{% static 'img/image.png' %}" style="height: 200px; width: 100%;">
+                {% endif %}
+            </div>
+          </a>
+          <div class="content">
+            <a class="header" href="{% url 'courses:course_detail' course %}">{{course.title}}</a>
+            <a class="header right floated">${{course.price}}</a>
+          </div>
+          <div class="extra content">
+            <span class="right floated like">
+              <a href="{{path}}"><i class="{{color}} like icon"></i></a>
+            </span>
+            <div class="ui star rating left floated"></div>
+          </div>
+          <div class="extra content">
+              <div class="right floated author">
+                <img class="ui avatar image" src="{{course.tutor.profile.get_picture}}">
+                {{course.tutor.username}}
+
+              </div>
+          </div>
+            {{course_url}}
+        </div>
+    </div>
+</div>
+<script>
+  $('.ui.dropdown').dropdown();
+  $('.blurring.dimmable.image').dimmer({on: 'hover'});
+</script>

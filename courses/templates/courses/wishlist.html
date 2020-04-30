@@ -1,12 +1,15 @@
 {% extends 'base.html' %}
 {% block student %}
-  
-  {% if wishlist %}
-        {% for list in wishlist  %}
-              {{list}}
-        {% endfor %}
-  {% else %}
-  <div class="ui message"><h4 class="ui header">You don't have any wishlist.</h4></div>
-  {% endif %}
-      
+<div class="ui center aligned grid" style="margin-bottom: 10px;">
+      {% if wishlist %}
+            {% for course in wishlist  %}
+                  {% url 'courses:delete_wishlist' course.wished_course as remove_wishlist %}
+                  {% include "courses/course_base.html" with path=remove_wishlist course=course.wished_course color='red' %}
+            {% endfor %}
+      {% else %}
+        <div class="ui segment" style="margin: 20px;">
+            <h4 class="ui header centered" >You don't have any wishlist </h4>
+        </div>
+      {% endif %}
+</div>
 {% endblock student %}
