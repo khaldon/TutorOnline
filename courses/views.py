@@ -67,11 +67,11 @@ def enroll_to_free_course(request,course):
 @login_required
 def enroll_to_paid_course(request,course):
     course = get_object_or_404(Course,slug=course)
-
 class CartView(LoginRequiredMixin,View):
     def get(self,*args,**kwargs):
         try:
             order = Order.objects.filter(user=self.request.user,ordered=False)
+            print(order)
             context = {
                 'object':order
             }
