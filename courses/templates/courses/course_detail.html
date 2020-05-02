@@ -35,12 +35,8 @@
           </div>
         </div>
         <div class="ui two bottom attached buttons">
-          <div class="ui button">
-            <a href="{% url 'courses:add_to_cart' course.pk %}">Add to Cart</a>
-          </div>
-          <div class="ui green button">
-            Buy Now
-          </div>
+            <a class="ui button" href="{% url 'courses:add_to_cart' course.pk %}">Add to Cart</a>
+          <a class="ui green button" href="">Buy Now</a>
         </div>
       </div>
     </div>
