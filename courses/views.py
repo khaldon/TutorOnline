@@ -71,7 +71,7 @@ def enroll_to_paid_course(request,course):
 class CartView(LoginRequiredMixin,View):
     def get(self,*args,**kwargs):
         try:
-            order = Order.objects.get(user=self.request.user,ordered=False)
+            order = Order.objects.filter(user=self.request.user,ordered=False)
             context = {
                 'object':order
             }
@@ -236,8 +236,6 @@ class MyCourses(LoginRequiredMixin,ListView):
     paginate_by = 10
     template_name = 'courses/my_courses.html'
     context_object_name = 'mygroups'
-
-    ordering = ['created']
 
     def get_queryset(self,**kwargs):
         user = get_object_or_404(CustomUser,username=self.request.user.username)

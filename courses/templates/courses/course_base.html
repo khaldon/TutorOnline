@@ -25,8 +25,10 @@
           </div>
           <div class="extra content">
               <div class="right floated author">
-                <img class="ui avatar image" src="{{course.tutor.profile.get_picture}}">
-                {{course.tutor.username}}
+                <a href="{% url 'users:tutor_profile_view' course.tutor.username %}">
+                  <img class="ui avatar image" src="{{course.tutor.profile.get_picture}}">  
+                  {{course.tutor.username}}
+                </a>
               </div>
           </div>
             {{course_url}}

@@ -6,8 +6,8 @@
   </div>
   {% if courses %}
   {% for course in courses  %}
-      {% url 'courses:add_to_wishlist' course as remove_wishlist %}
-      {% include "courses/course_base.html" with course=course path=remove_wishlist %}
+      {% url 'courses:add_to_wishlist' course as add_wishlist %}
+      {% include "courses/course_base.html" with course=course path=add_wishlist %}
   {% endfor %}
 
   {% else %}

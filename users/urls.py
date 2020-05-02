@@ -1,7 +1,7 @@
 from django.urls import path,include,reverse_lazy
 from django.contrib.auth import views as auth_views
 from django.contrib.auth.decorators import login_required
-from .views import SignUpView,StudentSignUpView,TeacherSignUpView,profile,delete_user
+from .views import SignUpView,StudentSignUpView,TeacherSignUpView,profile,delete_user,ProfileViewUser
 from .forms import CustomAuthForm
 
 app_name = 'users'
@@ -20,4 +20,5 @@ urlpatterns = [
     path('reset/done/',auth_views.PasswordResetCompleteView.as_view(),name='password_reset_complete'),
     path('profile/', profile, name='profile'),
     path('delete/<username>/',delete_user,name='delete_user'),
+    path('user/<user>/',ProfileViewUser.as_view(),name='tutor_profile_view')
 ]
