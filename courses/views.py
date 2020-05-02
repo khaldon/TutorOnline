@@ -83,15 +83,25 @@ class CartView(LoginRequiredMixin,View):
 @login_required
 def add_to_cart(request,pk):
     course = get_object_or_404(Course,pk=pk)
-    order_course,created = OrderCourse.objects.get_or_create(
+    order_course, created = OrderCourse.objects.get_or_create(
         course=course,
         user=request.user,
         ordered = False,
     )
-    ordered_date = timezone.now()
-    order = Order.objects.create(user=request.user,ordered_date=ordered_date)
-    order.courses.add(order_course)
-    messages.info(request,"This course was added to your cart.")
+    order_qs = Order.objects.filter(user=request.user,ordered=False)
+    if order_qs.exists():
+        order = order_qs[0]
+        if order.courses.filter(course__pk=course.pk).exists():
+            messages.info(request, "You already have this course in the cart")
+            return redirect("courses:cart")
+        else:
+            order.courses.add(order_course)
+            messages.info(request, "This course was added to your cart.")
+            return redirect("courses:cart")
+    else:
+        ordered_date = timezone.now()
+        order = Order.objects.create(user=request.user,ordered_date=ordered_date)
+        messages.info(request, "You already have this course in the cart")
     return redirect("courses:cart")
 
 @login_required
@@ -134,7 +144,7 @@ class CheckoutView(View):
                 'form':form,
                 'order':order,
             }
-            return render(self.request,"checkout.html",context)
+            return render(self.request,"courses/checkout.html",context)
         except ObjectDoesNotExist:
             messages.info(self.request,"You do not have an active order")
             return redirect("core:checkout")
@@ -157,7 +167,7 @@ class CheckoutView(View):
                 else:
                     messages.info(
                         self.request, "Please fill in the required fields")
-                return redirect('courses:payment',payment_option='stripe')
+                return redirect('courses:payment')
         except ObjectDoesNotExist:
             messages.warning(self.request,"You do not have an active order")
             return redirect("courses:cart")
@@ -331,8 +341,12 @@ def VideoView(request,pk,slug):
     course = get_object_or_404(Course,slug=slug)
     sections = CourseSections.objects.filter(course__title=course.title)
     videos = SectionVideos.objects.filter(section__course__title=course.title).order_by('created')
+    wishlist = Wishlist.objects.all()
     video = get_object_or_404(SectionVideos,pk=pk)
     if video.watched == False:
         video.watched = True
         video.save()
-    return render(request,'courses/video_detail.html',{'video':video,'course':course,'sections':sections,'videos':videos})
+    return render(request,'courses/video_detail.html',{'video':video,'course':course,'sections':sections,'videos':videos,'wishlist':wishlist})
+
+# @login_required
+# def buy_now(request):

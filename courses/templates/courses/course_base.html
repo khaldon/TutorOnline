@@ -2,7 +2,7 @@
 <div class="three wide column" style="margin: 5px;">            
     <div class="ui special cards">
         <div class="card">
-          <a href="{% url 'courses:course_detail' course %}">
+          <a href="{% url 'courses:course_detail' course.slug %}">
             <div class="blurring dimmable image">
                 {% if course.image %}
                 <img src="{{course.image.url}}" style="height: 200px; width: 100%;">
@@ -17,7 +17,9 @@
           </div>
           <div class="extra content">
             <span class="right floated like">
+              {% if course in wishlist.wished_course.all %}
               <a href="{{path}}"><i class="{{color}} like icon"></i></a>
+              {% endif %}
             </span>
             <div class="ui star rating left floated"></div>
           </div>
