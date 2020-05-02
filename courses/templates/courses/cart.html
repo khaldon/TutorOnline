@@ -6,7 +6,6 @@
     <thead>
       <tr><th>Course title</th>
       <th>Total course price</th>
-      <th></th>
     </tr></thead>
     <tbody>
         {% for order_course in object.courses.all %}
@@ -33,7 +32,6 @@
         </td>
       </tr>
       {% endfor %}
-      {% if object.get_total %}
       <tr>
         <td><b>Order Total</b></td>
         <td><b>${{ object.get_total }}</b></td>
@@ -44,7 +42,6 @@
           <a class="ui primary button" href="{% url 'core:dashboard' %}">Continue shopping</a>
         </td>
       </tr>
-      {% endif %}
     </tbody>
   </table>
     {% if messages %}
