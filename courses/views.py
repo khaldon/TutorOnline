@@ -71,7 +71,6 @@ class CartView(LoginRequiredMixin,View):
     def get(self,*args,**kwargs):
         try:
             order = Order.objects.get(user=self.request.user,ordered=False)
-            print(order)
             context = {
                 'object':order
             }
