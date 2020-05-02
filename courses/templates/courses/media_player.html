@@ -9,38 +9,21 @@
     $("#sprite-plyr").remove()
 
   window.player = player;
-//   function on(selector, type, callback) {
-//     document.querySelector(selector).addEventListener(type, callback, false);
-//     alert("hello world")
+  function on(selector, type, callback) {
+    document.querySelector(selector).addEventListener(type, callback, false);
+    alert("hello world")
 
-//   }
-//   // Play
-//   on('.js-play', 'click', () => { 
-    
-//     $('.ui.modal').modal('show');
+  }
 
-//     player.play();
+  // // Rewind
+  // on('.js-rewind', 'click', () => { 
+  //   player.rewind();
+  // });
 
-//   });
-
-//   // Pause
-//   on('.js-pause', 'click', () => { 
-//     player.pause();
-//   });
-
-//   // Stop
-//   on('.js-stop', 'click', () => { 
-//   });
-
-//   // Rewind
-//   on('.js-rewind', 'click', () => { 
-//     player.rewind();
-//   });
-
-//   // Forward
-//   on('.js-forward', 'click', () => { 
-//     player.forward();
-//   });
+  // // Forward
+  // on('.js-forward', 'click', () => { 
+  //   player.forward();
+  // });
 
 });
     $(".click_prev_image").on('click', function(){

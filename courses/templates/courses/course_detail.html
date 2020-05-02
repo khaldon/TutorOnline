@@ -36,7 +36,7 @@
         </div>
         <div class="ui two bottom attached buttons">
             <a class="ui button" href="{% url 'courses:add_to_cart' course.pk %}">Add to Cart</a>
-          <a class="ui green button" href="">Buy Now</a>
+          <a class="ui green button" href="{% url 'courses:payment' %}">Buy Now</a>
         </div>
       </div>
     </div>
