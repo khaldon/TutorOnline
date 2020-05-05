@@ -1,10 +1,15 @@
 {% extends 'base.html' %}
+
+{% load static %}
 {% block student %}
+
+
+
 <div class="ui center aligned grid" style="margin-bottom: 10px;">
       {% if wishlist %}
             {% for course in wishlist  %}
-                  {% url 'courses:delete_wishlist' course.wished_course as remove_wishlist %}
-                  {% include "courses/course_base.html" with path=remove_wishlist course=course.wished_course color='red' %}
+                  {% url 'courses:add_to_wishlist' course.slug as wish_url %}
+                  {% include "courses/course_base.html" with path=wish_url %}
             {% endfor %}
       {% else %}
         <div class="ui segment" style="margin: 20px;">
@@ -12,4 +17,9 @@
         </div>
       {% endif %}
 </div>
+<script>
+        $('.blurring.dimmable.image').dimmer({on: 'hover'});
+
+</script>
 {% endblock student %}
+

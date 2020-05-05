@@ -3,10 +3,12 @@ from .models import Course,OrderCourse,Order,Payment,PaymentInfo,Wishlist,Course
 from .forms import (CheckoutForm,CourseForm1,CourseForm2,CourseForm3,
                    CourseForm4,SectionForm,SectionVideoForm, 
                    SearchStudentForm)
+
+from notifications.signals import notify
 from users.decorators import teacher_required
 from django.contrib.auth.decorators import login_required
 from .decorators import course_tutor
-from django.http import HttpResponseRedirect
+from django.http import HttpResponseRedirect, JsonResponse
 from django.views.generic import View,ListView,RedirectView,DetailView
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib import messages
@@ -258,25 +260,38 @@ def course_filter(request):
 
 @login_required
 def add_to_wishlist(request,slug):
+    data = dict()
+    user = request.user
     course = get_object_or_404(Course,slug=slug)
-    wished_course,created = Wishlist.objects.get_or_create(wished_course=course,slug=course.slug,user=request.user,)
-    return redirect('courses:courses')
+    # wished_course,created = Wishlist.objects.get_or_create(wished_course=course,slug=course.slug,user=request.user,)
+    if course in user.wish_courses.all():
+        course.wish_course.remove(user)
+        data['is_wished'] = False
+    else:
+        course.wish_course.add(user)
+        data['is_wished'] = True
+    data['total_points'] = course.wish_course.count()
+    return JsonResponse(data)
+    
+    # return redirect('courses:courses')
 
-@login_required
-def delete_from_wishlist(request,slug):
-    course = get_object_or_404(Course,slug=slug)
-    wished_course = Wishlist.objects.filter(wished_course=course,slug=course.slug,user=request.user,)
-    wished_course.delete()
-    return redirect('courses:wishlist')
+# @login_required
+# def delete_from_wishlist(request,slug):
+#     course = get_object_or_404(Course,slug=slug)
+#     wished_course = Wishlist.objects.filter(wished_course=course,slug=course.slug,user=request.user,)
+#     wished_course.delete()
+#     return redirect('courses:wishlist')
 
 class WishListView(ListView):
-    model = Wishlist
+    model = Course
     template_name = 'courses/wishlist.html'
     paginate_by = 10
     context_object_name = 'wishlist'
 
     def get_queryset(self):
-        return Wishlist.objects.filter(user=self.request.user)
+        # return Wishlist.objects.filter(user=self.request.user)
+        user = self.request.user 
+        return user.wish_courses.all() 
         
 class FormWizardView(SessionWizardView):
     template_name = 'courses/create_course.html'
@@ -346,6 +361,3 @@ def VideoView(request,pk,slug):
         video.watched = True
         video.save()
     return render(request,'courses/video_detail.html',{'video':video,'course':course,'sections':sections,'videos':videos,'wishlist':wishlist})
-
-# @login_required
-# def buy_now(request):

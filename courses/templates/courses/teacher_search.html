@@ -7,37 +7,8 @@
       {% include "courses/dropdown_order_search_teacher.html" %}
     </div>
     {% for course in  filter.qs   %}
-    <div class="three wide column" style="margin: 5px;">            
-    <div class="ui special cards">
-        <div class="card">
-          <div class="blurring dimmable image">
-            <a href="{% url 'courses:course_detail' course %}">
-              {% if course.image %}
-              <img src="{{course.image.url}}" style="height: 200px; width: 100%;">
-              {% else %}
-              <img src="{% static 'img/image.png' %}" style="height: 200px; width: 100%;">
-              {% endif %}
-            </a>
-          </div>
-          <div class="content">
-            <a class="header" href="">{{course.title}}</a>
-            <a class="header right floated">${{course.price}}</a>
-          </div>
-            <div class="extra content">
-              <span class="right floated like">
-                <i class="like icon"></i>
-              </span>
-              <div class="ui star rating left floated"></div>
-            </div>
-            <div class="extra content">
-                <div class="right floated author">
-                  <img class="ui avatar image" src="{{course.tutor.profile.get_picture}}">
-                  {{course.tutor.username}}
-                </div>
-            </div>
-        </div>
-    </div>
-    </div>
+    {% url 'courses:add_to_wishlist' course as add_wishlist %}
+    {% include "courses/course_base.html" with course=course path=add_wishlist %}   
     {% endfor %}
     </div>
     <script>

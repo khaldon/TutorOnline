@@ -5,13 +5,20 @@
 <h1>Cart</h1>
 <table class="ui celled table">
     <thead>
-      <tr><th>Course title</th>
-      <th>Total course price</th>
-    </tr></thead>
+      <tr>
+        <th></th>
+        <th>Course title</th>
+        <th>Total course price</th>
+        <th>Discount price</th>
+
+      </tr>
+    </thead>
     <tbody>
         {% for order_course in object.courses.all %}
       <tr>
-        <th scope="row">{{ forloop.counter }}</th>
+        <td class="collapsing">
+          {{ forloop.counter }}
+        </td>
         <td>{{ order_course.course.title }}</td>
         <td>{{ order_course.course.price }}</td>
         <td>
@@ -25,7 +32,7 @@
       </tr>
       {% empty %}
       <tr>
-      <td>Your cart is empty</td>
+        <td>Your cart is empty</td>
       </tr>
       <tr>
         <td>
@@ -33,22 +40,28 @@
         </td>
       </tr>
       {% endfor %}
+    
+    </tbody>
+    <tfoot class='full-width'>
       <tr>
-        <td><b>Order Total</b></td>
-        <td><b>${{ object.get_total }}</b></td>
-      </tr>
-      <tr>
-        <td>
-          <a cclass="ui red button" href="{% url 'courses:checkout' %}">Proceed to checkout</a>
+        <td colspan="3">
+          <a class="ui red button" href="{% url 'courses:checkout' %}">Proceed to checkout</a>
           <a class="ui primary button" href="{% url 'core:dashboard' %}">Continue shopping</a>
         </td>
+          <td class="right floated ">
+            <b>Orders Total</b> 
+            <b class="ui label green icon">${{ object.get_total }}</b>
+          </td>
       </tr>
-    </tbody>
+    </tfoot> 
   </table>
-    {% if messages %}
-        {% for message  in messages %}
-             <div class="ui message"><h4 class="ui header">{{message}}</h4></div>
-        {% endfor %}        
-    {% endif %}
+  {% if messages %}
+  {% for message  in messages %}
+      <div class="ui green message msg"><h4 class="ui header">{{message}}</h4></div>
+  {% endfor %}        
+  {% endif %}
+  <script>
+    $( ".msg" ).fadeOut( "slow" );
+  </script>
 {% endblock student %}
 
