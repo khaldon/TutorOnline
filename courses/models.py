@@ -145,8 +145,8 @@ class Review(models.Model):
         return self.reviewer + ' ' + self.body
 
 class Wishlist(models.Model):
-    user = models.ForeignKey(User,on_delete=models.CASCADE)
-    wished_course = models.ForeignKey(Course,on_delete=models.CASCADE)
+    user = models.ForeignKey(User,related_name='wishlist_user',on_delete=models.CASCADE)
+    wished_course = models.ForeignKey(Course,related_name='wishlist_course',on_delete=models.CASCADE)
     slug = models.CharField(max_length=30,null=True,blank=True)
     added_date = models.DateTimeField(auto_now_add=True)
 

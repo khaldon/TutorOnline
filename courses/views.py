@@ -236,6 +236,12 @@ class MyCourses(LoginRequiredMixin,ListView):
     paginate_by = 10
     template_name = 'courses/my_courses.html'
     context_object_name = 'mygroups'
+    
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['wishlist'] = Wishlist.objects.all()
+        context['wuser'] = Wishlist.objects.filter(user=self.request.user)
+        return context
 
     def get_queryset(self,**kwargs):
         user = get_object_or_404(CustomUser,username=self.request.user.username)
