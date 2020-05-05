@@ -3,23 +3,39 @@
 {% block title %}{{username.user.username}}{% endblock title %}
 
 {% block teacher %}
-
-
 <div class="ui center aligned grid" style="margin-bottom: 10px;">
     <div class="eight wide column">
-        <div class="ui huge header ">{{username.user.username}}</div>
-        <div class="ui small violet header">Total students
-            <div class="ui Medium header">{{username.students.all.count}}</div>
+        <div class="ui statistic" style="width: 100%; text-align: center;">
+            <div class="label">instructor</div>
+            <div class="value">{{username.user.username}}</div>
         </div>
-        <div class="ui small violet header">Reviews<div class="ui Medium header"></div></div>
-
-    {{username.bio}}
+        <div class="ui mini statistic" style="margin-top: 20px;">
+            <div class="label">Total students</div>
+            <div class="value">{{username.students.all.count}}</div>
+        </div>
+    <div class="ui header" style="margin-top:60px;">
+        <div class="label">ABOUT ME</div>
+        <div class="ui Medium header">{{username.bio}}</div>
+    </div>
     </div>
     <div class="eight wide column">
         <img class="ui avatar small image" src="{{username.user.profile.get_picture}}">
     </div>
   
     {% if object_list %}
+    <div class="sixteen wide column">
+        <div class="ui horizontal statistics centered middle floated"  >
+            <div class="statistic ">
+                <div class="label ">
+                    My courses 
+                  </div>
+              <div class="label">
+                ({{object_list.all.count}})      
+              </div>
+              
+            </div>
+        </div>  
+    </div>
         {% for course in object_list  %}
             {% url 'courses:add_to_wishlist' course as add_wishlist %}
             {% include "courses/course_base.html" with course=course path=add_wishlist %}

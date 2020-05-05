@@ -33,8 +33,9 @@ class Course(models.Model):
     price = models.FloatField(default=0.0)
     discount_price = models.FloatField(blank=True, null=True)
     preview_video = models.FileField(upload_to='courses/course_preview_videos',max_length=100,null=True)
-    poster_preview_video = models.ImageField(upload_to='courses/course_poster_preview', null=True)
-    
+    poster_preview_video = models.ImageField(upload_to='courses/course_poster_preview', null=True)    
+    wish_course = models.ManyToManyField(settings.AUTH_USER_MODEL, related_name='wish_courses',blank=True)
+
 
     def save(self, *args, **kwargs):
         if not self.slug:
@@ -110,10 +111,9 @@ class Order(models.Model):
         for order_course in self.courses.all():
             total += order_course.get_final_price()
         return total
-
     def __str__(self):
         return self.user.username
-
+    
 class Payment(models.Model):
     stripe_charge_id = models.CharField(max_length=50)
     user = models.ForeignKey(User,on_delete=models.SET_NULL,blank=True,null=True)

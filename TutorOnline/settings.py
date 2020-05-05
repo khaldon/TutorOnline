@@ -56,6 +56,9 @@ INSTALLED_APPS = [
     'allauth.account',
     #filter 
     'django_filters',
+    
+    'notifications',
+
 
     # auth and premission app 
     'guardian',
@@ -207,3 +210,4 @@ EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 # EMAIL_HOST_PASSWORD = 'djangoecommerce'
 
 GUARDIAN_MONKEY_PATCH = False
+DJANGO_NOTIFICATIONS_CONFIG = { 'SOFT_DELETE': True}

@@ -17,7 +17,7 @@
           });
             $(".rating").rating();
         });
-    </script>
+      </script>
         
     </head>
 
@@ -39,4 +39,34 @@
         </div>
         {% include "footer.html" %}
     </body>
+    <script>
+        $('.wish_icon').on('click', function(e){
+          var url_path = $(this).attr('href');
+          var icon = $(this).find('i');
+          console.log(icon)
+          e.preventDefault();
+          $.ajax({
+          url:url_path,
+          dataType:'html',
+          success:function(data){
+            // console.log(data);
+            data = JSON.parse(data)
+            if (data.is_wished){
+              icon.addClass('red');
+            }else{
+              icon.removeClass('red');
+      
+            }
+      
+          },
+          error: function(r){
+            console.log("error");
+          }
+        
+          });
+        });
+       
+        $('.ui.dropdown').dropdown();
+        $('.blurring.dimmable.image').dimmer({on: 'hover'});
+    </script>
 </html>

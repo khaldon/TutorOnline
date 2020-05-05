@@ -4,10 +4,14 @@
   <div class="sixteen wide column">
     {% include "courses/dropdown_order_search.html" %}
   </div>
+
+  
+
   {% if courses %}
+
   {% for course in courses  %}
-      {% url 'courses:add_to_wishlist' course as add_wishlist %}
-      {% include "courses/course_base.html" with course=course path=add_wishlist %}
+       {% url 'courses:add_to_wishlist' course as wish_course %}
+      {% include "courses/course_base.html" with course=course path=wish_course %}   
   {% endfor %}
 
   {% else %}
@@ -16,8 +20,6 @@
     </div>
   {% endif %}
 </div>
-<script>
-    $('.ui.dropdown').dropdown();
-</script>
+
 {% endblock student %}
 

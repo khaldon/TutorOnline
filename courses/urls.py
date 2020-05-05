@@ -3,12 +3,12 @@ from .views import (FormWizardView,edit_course,CartView,
                     add_to_cart,remove_from_cart,CheckoutView,PaymentView,
                     MyCourses,CoursesList, WishListView, CourseView, add_to_wishlist,
                     add_section_to_course,add_video_to_section,course_search,course_filter,
-                    course_search_teacher,VideoView,delete_from_wishlist)
+                    course_search_teacher,VideoView)
 
 app_name = 'courses'
 
 urlpatterns = [
-    path('delete_course_wishlist/<slug>/', delete_from_wishlist, name='delete_wishlist'),
+    # path('delete_course_wishlist/<slug>/', delete_from_wishlist, name='delete_wishlist'),
     path('add_course_to_wishlist/<slug>/',add_to_wishlist,name='add_to_wishlist'),
     path('search/t/',course_search_teacher,name='teacher_search_course'),
     path('create_course/',FormWizardView.as_view(),name='create_course'),
@@ -27,5 +27,6 @@ urlpatterns = [
     path('section/add/',add_section_to_course,name='add_section_to_course'),
     path('video/add/',add_video_to_section,name='add_video_to_section'),
     path('filter/', course_filter, name='course_filter'),
-    path('<slug>/lecture/<pk>/',VideoView,name='video_detail')
+    path('<slug>/lecture/<pk>/',VideoView,name='video_detail'),
+    # path('notifi/',course_notification, name='course_noti' )
 ]

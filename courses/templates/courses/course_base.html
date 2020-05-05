@@ -1,11 +1,12 @@
 {% load static %}
-<div class="three wide column" style="margin: 5px;">            
+<div class="four wide column" style="margin: 5px;">     
+     
     <div class="ui special cards">
         <div class="card">
           <a href="{% url 'courses:course_detail' course.slug %}">
-            <div class="blurring dimmable image">
+            <div class="blurring dimmable image" style="background-color: #f7f7f7;" >
                 {% if course.image %}
-                <img src="{{course.image.url}}" style="height: 200px; width: 100%;">
+                <img src="{{course.image.url}}" style="height: 200px; width: 100%; object-fit: contain">
                 {% else %}
                 <img src="{% static 'img/image.png' %}" style="height: 200px; width: 100%;">
                 {% endif %}
@@ -17,11 +18,13 @@
           </div>
           <div class="extra content">
             <span class="right floated like">
-              {% if course.wishlist_course.all %}
-              {% if wuser %}
-              <a href="{{path}}"><i class="red like icon"></i></a>
-              {% endif %}
-              {% endif %}
+              <a href="{{path}}" class="wish_icon">
+                {% if course.wish_course.count == 0  %}
+                <i class="like icon icon-color"></i>
+                {% elif course.wish_course.count == 1 %} 
+                <i class="red like icon icon-color"></i>
+                {% endif %}  
+              </a>
             </span>
             <div class="ui star rating left floated"></div>
           </div>
@@ -37,7 +40,3 @@
         </div>
     </div>
 </div>
-<script>
-  $('.ui.dropdown').dropdown();
-  $('.blurring.dimmable.image').dimmer({on: 'hover'});
-</script>

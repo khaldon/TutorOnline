@@ -1,6 +1,7 @@
 {% load static %}
+
 <div class="ui top menu" style="border: 0px; margin-top: 0px;">
-    <a class="item" href="{% url 'core:dashboard' %}">Dashboard</a>
+    <a class="item" href="{% url 'core:dashboard' %}"><div class="ui small header">Dashboard</div></a>
     {% if user.is_authenticated %}
     <div class="right menu">
         {% if user.is_teacher %}
@@ -25,8 +26,9 @@
               <i class="search link icon"></i>
             <div class="results"></div>
           </div>
-            <a href="{% url 'courses:wishlist' %}" class="ui item"><i class="icon large red heart outline"></i></a>
-            <a href="{% url 'courses:cart' %}" class="ui item"><i class="icon large green shopping cart"></i></a>
+            <a href="{% url 'courses:wishlist' %}" class="ui item"><i class="icon large red heart outline" style="margin: 0px;"></i></a>
+            <!-- <a href="{% url 'notifications:all' %}" class="ui item"><i class="bell large outline icon" style="margin: 0px;" ></i></i></a> -->
+            <a href="{% url 'courses:cart'  %}" class="ui item"><i class="large green shopping cart icon" style="margin: 0px;"></i></a>
          <div class="right item">
             <a href="{% url 'courses:courses' %}" class="ui green button">Browse All courses</a>
          </div>
