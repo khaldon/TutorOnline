@@ -17,6 +17,7 @@
           });
             $(".rating").rating();
         });
+
       </script>
         
     </head>
@@ -43,13 +44,11 @@
         $('.wish_icon').on('click', function(e){
           var url_path = $(this).attr('href');
           var icon = $(this).find('i');
-          console.log(icon)
           e.preventDefault();
           $.ajax({
           url:url_path,
           dataType:'html',
           success:function(data){
-            // console.log(data);
             data = JSON.parse(data)
             if (data.is_wished){
               icon.addClass('red');

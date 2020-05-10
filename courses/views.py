@@ -28,6 +28,40 @@ import os
 
 # Create your views here.
 
+
+def section_delete_course(request, slug, id):
+    course  = get_object_or_404(Course,slug=slug)
+    course_section = CourseSections.objects.get(course=course, id=id)
+    course_section.delete()
+    return HttpResponseRedirect("/courses/creation_content/")
+    
+
+
+
+def creation_course_content(request):
+    section_form = SectionForm(**{'user': request.user})
+    video_form = SectionVideoForm(**{'user': request.user})
+    if request.method == 'POST':
+        section_form = SectionForm(request.POST,request.FILES,user=request.user)
+        video_form = SectionVideoForm(request.POST,request.FILES,user=request.user)
+
+        if section_form.is_valid():
+            new_section = section_form.save()
+            new_section.creator = request.user
+            new_section.save()
+            return redirect(new_section.get_absolute_url())
+
+        if video_form.is_valid():
+            new_video = video_form.save()
+            new_video.save()
+            return redirect(new_video.get_absolute_url())
+    else:
+        section_form = SectionForm(user=request.user)
+        video_form = SectionVideoForm(user=request.user)
+
+    return render(request, 'courses/creation_course_content.html',{'section_form':section_form,'video_form':video_form})
+
+
 def CourseView(request,slug):
     course = get_object_or_404(Course,slug=slug)
     sections = CourseSections.objects.filter(course__title=course.title)
@@ -52,8 +86,6 @@ def edit_course(request,course):
     else:
         course_form = CourseForm(instance=course)
     return render(request,'courses/edit_course.html',{'course_form':course_form})
-
-
 class CoursesList(ListView):
     model = Course
     template_name='courses/courses.html'
@@ -242,18 +274,6 @@ class MyCourses(LoginRequiredMixin,ListView):
         user = get_object_or_404(CustomUser,username=self.request.user.username)
         return user.tutor_courses.all()
 
-    # def get_ordering(self):
-    #     self.order = self.request.GET.get('order','asc')
-    #     selected_ordering = self.request.GET.get('ordering', 'created')
-    #     if self.order == 'desc':
-    #         selected_ordering = "-" + selected_ordering
-    #     return selected_ordering
-    
-    # def get_context_data(self, *args, **kwargs):
-    #     context = super().get_context_data(*args, **kwargs)
-    #     context['current_order'] = self.get_ordering()
-    #     context['order'] = self.order
-    #     return context
 def course_filter(request):
     f = CourseFilter(request.GET, queryset=Course.objects.all())
     return render(request, 'courses/course_filter.html',{'filter':f})
@@ -272,15 +292,6 @@ def add_to_wishlist(request,slug):
         data['is_wished'] = True
     data['total_points'] = course.wish_course.count()
     return JsonResponse(data)
-    
-    # return redirect('courses:courses')
-
-# @login_required
-# def delete_from_wishlist(request,slug):
-#     course = get_object_or_404(Course,slug=slug)
-#     wished_course = Wishlist.objects.filter(wished_course=course,slug=course.slug,user=request.user,)
-#     wished_course.delete()
-#     return redirect('courses:wishlist')
 
 class WishListView(ListView):
     model = Course
@@ -331,10 +342,6 @@ def course_search_teacher(request):
     user = get_object_or_404(CustomUser,username=request.user.username)
     f = CourseFilter(request.GET, queryset=user.tutor_courses.all())
     return render(request,'courses/teacher_search.html', {'filter':f})
-
-
-
-
 
 
 @login_required

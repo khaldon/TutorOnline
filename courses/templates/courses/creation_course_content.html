@@ -1,0 +1,136 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    <div class="ui grid">
+
+            <div class="eight wide column">
+                <div id="hello">
+
+                </div>
+            </div>
+            <div class="eight wide column">
+                <form method="POST" class="ui form" id="section_form">
+                    {% csrf_token %}
+                    <h4 class="ui dividing violet header">Create new section</h4>
+                    <div class="field">
+                        <label>Select your course</label>
+                        <select name="course" id="course" class="ui dropdown">
+                        {% for option in section_form.course  %}
+                            <option value="{{option.pk}}">{{option}}</option>
+                        {% endfor %}
+                        </select>
+                    </div>
+                    <div class="field">
+                        <label>Section title</label>
+                        {{section_form.title}}
+                    </div>
+                    <button class="ui violet button" type="submit" style="margin-top: 15px;" id="create_section_btn">Create section</button>
+                   
+                </form>
+                <form method="POST" class="ui form" enctype="multipart/form-data" id="video_form">
+                    {% csrf_token %}
+                <h4 class="ui dividing violet header">Add new video to the section</h4>
+                <div class="field">
+                    <label>Select your section</label>
+                    <select name="section" class="ui dropdown">
+                        {% for section in video_form.section  %}
+                            <option value="{{section.pk}}">{{section}}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div class="field">
+                    <label>Choose your video</label>
+                    {{video_form.video}}
+                </div>
+                <div class="field">
+                    <label>Video title</label>
+                    {{video_form.title}}
+                </div>
+                <button class="ui violet button" type="submit" style="margin-top: 15px;">Add video</button>
+                </form>
+            </div>
+    </div>
+<script>
+$('#hello').accordion({
+      selector: {
+        trigger: '.title'
+      }
+    });
+
+
+function delete_section_course(){
+    $('.style-minus').on('click', function(e){
+    $.ajax({
+        url:$(this).attr('href'),
+        success: function(data){
+            $("#hello").load(path+' #hello', delete_section_course)
+        }
+    });
+    return false;
+
+    });
+}
+
+
+$('#section_form').submit(function(e){
+    e.preventDefault();
+    var dataForm = $(this).serialize();
+    var path =  window.location.href;
+
+    $.ajax({
+        url:path,
+        contentType:'application/x-www-form-urlencoded',
+        type:'post',
+        data:dataForm,
+        success: function(data){
+            var option = $("#course option:selected").text();
+            var path = '{% url "courses:course_detail" "course1" %}';
+            $("#hello").load(path+' #hello', delete_section_course)            
+
+        }, 
+        error: function(jqXhr){
+            console.log("error message"+jqXhr)
+        }
+    });
+
+
+
+});
+
+
+$('#video_form').submit(function(e){
+    e.preventDefault();
+    var dataForm = $(this).serialize();
+    var dataNew = new FormData(this);
+    var path = window.location.href;
+    console.log(dataForm);
+    $.ajax({
+        url:path,
+        type:'post',
+        data:dataForm,
+    success: function(data){
+        console.log(data);
+            var option = $("#section option:selected").text();
+            console.log(option);
+            var path = '{% url "courses:course_detail" "course1" %}';
+            $("#hello").load(path+' #hello');
+        }, 
+    error: function(jqXhr){
+            console.log("error message"+jqXhr)
+        }
+    })
+
+})
+
+
+var path = '{% url "courses:course_detail" "course1" %}';
+$("#hello").load(path+' #hello', delete_section_course)
+
+
+</script>
+
+
+{% endblock content %}
+
+
+

@@ -58,6 +58,7 @@ class SectionForm(forms.ModelForm):
         if user is not None:
             tutor_courses = user.tutor_courses.all()
             self.fields['course'].queryset = tutor_courses
+            self.fields['title'].widget.attrs.update({'id':'title_section'})
             if not tutor_courses:
                 self.fields['course'].help_text = "You need to <b>create</b> a course to create sections in it"
 
@@ -71,9 +72,12 @@ class SectionVideoForm(forms.ModelForm):
     def __init__(self, *args, **kwargs):
         user = kwargs.pop('user', None)
         super(SectionVideoForm, self).__init__(*args, **kwargs)
+        self.fields['title'].widget.attrs.update({'id':'title_video'})
+
         if user is not None:
             creator_sections = user.creator_sections.all()
             self.fields['section'].queryset = creator_sections
+
 
             if not creator_sections:
                 self.fields['section'].help_text = "You need to <b>create</b> a section to add videos in it"
