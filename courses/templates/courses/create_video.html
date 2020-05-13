@@ -3,30 +3,28 @@
 {% block title %}Add new video to the section{% endblock title %}
 
 {% block content %}
-<form method="POST" class="ui form" enctype="multipart/form-data">
+<form method="POST" class="ui form video_section video_form" enctype="multipart/form-data" >
     {% csrf_token %}
-    <div class="ui centered grid">
-    <div class="eight wide column">
-        <h4 class="ui dividing teal header">Add new video to the section</h4>
+        <h4 class="ui dividing violet header">Add new video to the section</h4>
         <div class="field">
             <label>Select your section</label>
-            <select name="section" class="ui dropdown">
-                {% for section in video_form.section  %}
-                    <option value="{{section.pk}}">{{section}}</option>
-                {% endfor %}
-            </select>
+            {{video_form.section}}
         </div>
         <div class="field">
-            <label>Choose your video</label>
-            {{video_form.video}}
-        </div>
-        <div class="field">
-            <label>Video title</label>
-            {{video_form.title}}
-        </div>
-        <input type="submit" value="submit" class="ui teal button" style="margin-top: 15px;"/>    
-    </div>
-    </div>
+          <label>Choose your video</label>
+          {{video_form.video}}
+          <div class="ui indicating progress" data-value="1" data-total="200" id="progress-indicate" style="display:none;">
+              <div class="bar">
+                <div class="progress"></div>
+              </div>
+          </div>
+                <div class="field">
+                    <label>Video title</label>
+                    {{video_form.title}}
+                </div>
+                       <button class="ui violet button" type="submit" style="margin-top: 15px;">Add video</button>
+
+  
 </form>
 <script>
     $('.ui.dropdown').dropdown();

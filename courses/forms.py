@@ -77,6 +77,7 @@ class SectionVideoForm(forms.ModelForm):
         if user is not None:
             creator_sections = user.creator_sections.all()
             self.fields['section'].queryset = creator_sections
+            self.fields['section'].widget.attrs.update({'class':'noselection'})
 
 
             if not creator_sections:
