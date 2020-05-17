@@ -1,5 +1,5 @@
 from django import forms
-from .models import Course,CourseSections,SectionVideos
+from .models import Course,CourseSections,SectionVideos,Review
 import subprocess
 
 class SearchStudentForm(forms.Form):
@@ -82,3 +82,7 @@ class SectionVideoForm(forms.ModelForm):
         model = SectionVideos
         fields = ('title','section','video')
 
+class ReviewForm(forms.ModelForm):
+    class Meta:
+        model = Review
+        fields = ('body',)

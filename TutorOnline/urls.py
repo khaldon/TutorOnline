@@ -17,7 +17,7 @@ from django.contrib import admin
 from django.urls import path,include
 from rooms.views import show_chat_page
 from django.conf import settings 
-import notifications.urls
+# import notifications.urls
 from django.conf.urls.static import static 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -26,7 +26,6 @@ urlpatterns = [
     path('',include('core.urls')),
     path('courses/',include('courses.urls')),
     path('oauth/', include('social_django.urls', namespace='social')),
-    path('inbox/notifications/', include(notifications.urls, namespace='notifications')),
 
     # path('<str:room_name>/<str:person_name>/', show_chat_page, name='showchat'),
 

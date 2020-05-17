@@ -1,6 +1,6 @@
 {% extends 'base.html' %}
 {% load static  %}
-
+{% load humanize %}
 {% block course_header %}
 
 <div class="ui grid">
@@ -88,9 +88,8 @@
       {% endif %}
         
       {% endif %}
-
     </div>
-
+    
   </div>
   
   <script>
@@ -102,5 +101,29 @@
     });
  
   </script>
-  
+    <div class="ui comments">
+      <h3 class="ui dividing header">Comments</h3>
+      {% for review in reviews %}
+      <div class="comment">
+        <a class="avatar">
+        </a>
+        <div class="content">
+          <a class="author">{{ review.reviewer.username }}</a>
+          <div class="metadata">
+            <span class="date">{{ review.created|naturaltime }}</span>
+          </div>
+          <div class="text">
+            {{ review.body }}
+          </div>
+        </div>
+      </div>
+      {% endfor %}
+      <form class="ui reply form" method="POST">
+        {% csrf_token %}
+        <div class="field">
+          <textarea name="body"></textarea>
+        </div>
+       <button class="ui primary button">Add Review</button>
+      </form>
+    </div>
 {% endblock teacher %}
