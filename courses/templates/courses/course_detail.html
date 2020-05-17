@@ -52,16 +52,17 @@
         {% endif %}
       </div>
       {% if sections %}
-      <div class="ui styled accordion" style="margin-top: 22px;">
-        <div class="blue ui mini buttons right floated">
+      <div class="ui styled accordion" style="margin-top: 22px; width: 500px;  " id="hello" >
+        <!-- <div class="blue ui mini buttons right floated">
           <a href="{% url 'courses:add_section_to_course' %}" class="ui button right floated">Add section</a>
           <a href="{% url 'courses:add_video_to_section' %}" class="ui button right floated">Add video</a>
-        </div>
+        </div> -->
 
         {% for section in sections %} 
         <div class="title">
           <i class="dropdown icon"></i>
           {{ section.title }}
+          
         </div>
         
         <div class="content">
@@ -78,6 +79,7 @@
             {% endfor %}
           </div>
         </div>
+        <a href="{% url 'courses:delete_course_section' course section.id %}" style="float: right; margin-top: -30px;" class="style-minus" ><i class="ui minus icon red"></i></a>
         {% endfor %}
       </div>
       {% else %}
@@ -91,10 +93,9 @@
     </div>
     
   </div>
-  
+
   <script>
-    $('.ui.styled.accordion')
-    .accordion({
+    $('#hello').accordion({
       selector: {
         trigger: '.title'
       }

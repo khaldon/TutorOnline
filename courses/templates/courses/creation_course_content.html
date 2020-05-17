@@ -1,0 +1,161 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    <div class="ui grid">
+            <div class="eight wide column">
+                <div id="hello">
+
+                </div>
+            </div>
+            <div class="eight wide column">
+                <form method="POST" class="ui form" id="section_form">
+                    {% csrf_token %}
+                    <h4 class="ui dividing violet header">Create new section</h4>
+                    <div class="field">
+                        <label>Select your course</label>
+                        <select name="course" id="course" class="ui dropdown">
+                        {% for option in section_form.course  %}
+                            <option value="{{option.pk}}">{{option}}</option>
+                        {% endfor %}
+                        </select>
+                    </div>
+                    <div class="field">
+                        <label>Section title</label>
+                        {{section_form.title}}
+                    </div>
+                    <button class="ui violet button" type="submit" style="margin-top: 15px;" id="create_section_btn">Create section</button>
+                   
+                </form>
+                <div  id="video_user_form">
+                <!-- <h4 class="ui dividing violet header">Add new video to the section</h4> -->
+                <!-- <div class="field">
+                    <label>Select your section</label>
+                    <select name="section" class="ui dropdown">
+                        {% for section in video_form.section  %}
+                            <option value="{{section.pk}}">{{section}}</option>
+                        {% endfor %}
+                    </select>
+                </div> -->
+                <!-- <div class="field">
+                    <label>Choose your video</label>
+                    {{video_form.video}}
+                    <div class="ui indicating progress" data-value="1" data-total="200" id="progress-indicate" style="display:none;">
+                        <div class="bar">
+                          <div class="progress"></div>
+                        </div>
+                    </div>
+                </div> -->
+                <!-- <div class="field">
+                    <label>Video title</label>
+                    {{video_form.title}}
+                </div> -->
+                <!-- <button class="ui violet button" type="submit" style="margin-top: 15px;">Add video</button> -->
+            </div>
+            </div>
+    </div>
+<script>
+var path = '{% url "courses:course_detail" "course1" %}';
+$("#hello").load(path+' #hello', delete_section_course)
+$('#video_user_form').load('{% url "courses:add_video_to_section" %}'+" .ui.form.video_section")  
+$('.ui.dropdown').dropdown();
+
+$('#hello').accordion({
+      selector: {
+        trigger: '.title'
+      }
+    });
+
+function delete_section_course(){
+    $('.style-minus').on('click', function(e){
+    $.ajax({
+        url:$(this).attr('href'),
+        success: function(data){
+            $("#hello").load(path+' #hello', delete_section_course)
+            $('#video_user_form').load('{% url "courses:add_video_to_section"  %}'+" .ui.form.video_section")  
+
+        }
+    });
+    return false;
+
+    });
+}
+
+$('#section_form').submit(function(e){
+    e.preventDefault();
+    var dataForm = $(this).serialize();
+    var path =  window.location.href;
+    $.ajax({
+        url:path,
+        contentType:'application/x-www-form-urlencoded',
+        type:'post',
+        data:dataForm,
+        success: function(data){
+            var option = $("#course option:selected").text();
+            var path = '{% url "courses:course_detail" "course1" %}';
+            $("#hello").load(path+' #hello', delete_section_course)     
+            $('#video_user_form').load('{% url "courses:add_video_to_section" %}'+" .ui.form.video_section")  
+
+
+        }, 
+        error: function(jqXhr){
+            console.log("error message"+jqXhr)
+        }
+    });
+});
+
+
+window.onload = function (){
+    $(document).ready(function(){
+ $('.video_form').submit(function(event){
+     console.log($(this).html());
+  if($('#id_video').val())
+  {
+   event.preventDefault();
+   $(this).ajaxSubmit({
+    beforeSubmit:function(){
+    $('#progress-indicate').css('display','block');
+
+    },
+    uploadProgress: function(event, position, total, percentageComplete)
+    {
+        var $progress = $('.ui.progress')
+        clearInterval(window.fakeProgress)
+        $progress.progress('reset');
+        window.fakeProgress = setInterval(function() {
+        $progress.progress('increment');
+        if($progress.progress('is success')) {
+            clearInterval(window.fakeProgress)
+            $progress.progress('reset');
+
+            }}, 10);
+        $('.ui.progress').progress({
+            duration : 100,
+            total    : percentageComplete,
+        });
+   
+    },
+    success:function(){
+        $("#hello").load(path+' #hello', delete_section_course)
+        $('#progress-indicate').css('display','none');
+        var $progress = $('.ui.progress');
+        $progress.progress('reset');
+    },
+    error:function(jqXHR){
+        console.log('error'+error);
+
+    },
+    resetForm: true
+   });
+  }
+  return false;
+ });
+});
+}
+
+</script>
+
+
+{% endblock content %}
+
+
+
