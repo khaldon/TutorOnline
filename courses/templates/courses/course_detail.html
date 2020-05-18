@@ -10,6 +10,7 @@
 {% endblock course_header %}
 {% block teacher %}
 <div class="ui grid">
+
   <div class="four wide column" style="position: absolute; right: 50px; top: 120px;">
     <div class="ui cards" >
       <div class="card">
@@ -40,7 +41,9 @@
         </div>
       </div>
     </div>
+    
   </div>
+
       <div class="ui modal">
         <i class="close icon"></i>
         {% if course.preview_video and course.poster_preview_video   %}
@@ -51,20 +54,15 @@
           <img src="{% static 'img/image.png' %}" width='290' height='200' alt="">
         {% endif %}
       </div>
-      {% if sections %}
-      <div class="ui styled accordion" style="margin-top: 22px; width: 500px;  " id="hello" >
-        <!-- <div class="blue ui mini buttons right floated">
-          <a href="{% url 'courses:add_section_to_course' %}" class="ui button right floated">Add section</a>
-          <a href="{% url 'courses:add_video_to_section' %}" class="ui button right floated">Add video</a>
-        </div> -->
 
+   
+      {% if sections %}
+      <div class="ui styled accordion " style="margin-top: 22px; width: 500px;" id="hello" >
         {% for section in sections %} 
         <div class="title">
           <i class="dropdown icon"></i>
           {{ section.title }}
-          
         </div>
-        
         <div class="content">
           <div class="ui divided list">
             {% for video in videos %}
@@ -72,28 +70,34 @@
             <div class="item">
               <i class="map video icon"></i>
               <div class="content">
-                <a class="header" href="{% url 'courses:video_detail' course.slug video.pk %}">{{ video.title }}</a>
+                <a class="header" href="{% url 'courses:video_detail' course.slug video.pk %}" disabled>{{ video.title }}</a>
               </div>
             </div>
             {% endif %}
             {% endfor %}
           </div>
         </div>
+
+        {% if request.user.is_teacher %}
         <a href="{% url 'courses:delete_course_section' course section.id %}" style="float: right; margin-top: -30px;" class="style-minus" ><i class="ui minus icon red"></i></a>
+
+        {% endif %}
+          
         {% endfor %}
       </div>
-      {% else %}
+      {% if request.user.is_teacher %}
+      <div class="four wide column">
+        <a class="ui inverted violet button" style="margin-top: 30px;" href="{% url 'courses:creation_course_content' course.slug %}">Edit Course</a>
       
-      {% if request.is_teacher %}
-      <div class="ui segment" style="margin: 22px;">You don't have any section. Create first one <a href="{% url 'courses:add_section_to_course' %}" class="ui violet button">create section</a></div>
-
-      {% endif %}
+      </div>
+      {% endif %}   
         
       {% endif %}
 
     </div>
 
   </div>
+
 
   <script>
     $('#hello').accordion({
