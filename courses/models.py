@@ -10,6 +10,14 @@ from users.models import UserManager
 
 User = settings.AUTH_USER_MODEL
 
+Rating_CHOICES = (
+    (1, 'Poor'),
+    (2, 'Average'),
+    (3, 'Good'),
+    (4, 'Very Good'),
+    (5, 'Excellent')
+)
+
 class CourseCategories(models.Model):
     title = models.CharField(max_length=50)
 
@@ -35,6 +43,7 @@ class Course(models.Model):
     preview_video = models.FileField(upload_to='courses/course_preview_videos',max_length=100,null=True)
     poster_preview_video = models.ImageField(upload_to='courses/course_poster_preview', null=True)    
     wish_course = models.ManyToManyField(settings.AUTH_USER_MODEL, related_name='wish_courses',blank=True)
+    votes = models.IntegerField(choices=Rating_CHOICES, default=1)
 
 
     def save(self, *args, **kwargs):
