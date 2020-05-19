@@ -5,6 +5,9 @@ from languages.fields import LanguageField
 from slugify import UniqueSlugify
 from django.urls import reverse
 from users.models import UserManager
+from django.db.models.signals import post_save
+from django.dispatch import receiver
+
 
 # Create your models here.
 
@@ -23,6 +26,10 @@ class CourseCategories(models.Model):
 
     def __str__(self):
         return self.title
+
+
+
+
 
 class Course(models.Model):
     title = models.CharField(max_length=255)
@@ -66,10 +73,10 @@ class Course(models.Model):
 class CourseSections(models.Model):
     creator = models.ForeignKey(User,related_name='creator_sections',on_delete=models.CASCADE,null=True)
     title = models.CharField(max_length=50)
-    course = models.ForeignKey(Course,on_delete=models.CASCADE,null=True)
+    course = models.ForeignKey(Course, related_name='course_section', on_delete=models.CASCADE,null=True)
 
-    def get_absolute_url(self):
-        return reverse('courses:course_detail',args=[self.course.slug])
+    # def get_absolute_url(self):
+    #     return reverse('courses:course_detail',args=[self.course.slug])
 
     def __str__(self):
         return self.title
@@ -85,6 +92,18 @@ class SectionVideos(models.Model):
 
     def get_absolute_url(self):
         return reverse('courses:course_detail',args=[self.section.course.slug])
+
+
+@receiver(post_save, sender=Course)
+def create_section_course(sender, instance, created, **kwargs):
+    if created:
+        CourseSections.objects.create(course=instance)
+
+@receiver(post_save, sender=Course)
+def save_section_course(sender, instance, **kwargs):
+    instance.course_section.save()
+
+
 
 class OrderCourse(models.Model):
     user = models.ForeignKey(User,on_delete=models.CASCADE)
@@ -107,6 +126,9 @@ class OrderCourse(models.Model):
 
     def __str__(self):
         return self.course.title
+
+
+
 
 class Order(models.Model):
     user = models.ForeignKey(User,on_delete=models.CASCADE)

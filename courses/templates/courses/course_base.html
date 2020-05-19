@@ -29,11 +29,23 @@
             <div class="ui star rating left floated"></div>
           </div>
           <div class="extra content">
+            {% if request.user.is_teacher %}
+            <div class="ui icon top left pointing dropdown left floated">
+              <div >
+                <i class="ellipsis horizontal icon"></i>
+              </div>             
+               <div class="menu">
+                <a class="item" href="{% url 'courses:creation_course_content' course.slug %}">Edit</a>
+                <a class="item" href="{% url 'courses:delete_course' course.slug %}" style="color: red;">Delete course</a>
+              </div>
+            </div>
+            {% endif %}
               <div class="right floated author">
                 <a href="{% url 'users:tutor_profile_view' course.tutor.username %}">
                   <img class="ui avatar image" src="{{course.tutor.profile.get_picture}}">  
                   {{course.tutor.username}}
                 </a>
+
               </div>
           </div>
             {{course_url}}

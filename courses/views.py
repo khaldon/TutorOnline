@@ -36,9 +36,15 @@ def section_delete_course(request, slug, id):
     return HttpResponseRedirect("/courses/creation_content/")
     
 
+def delete_course(request, slug):
+    course  = get_object_or_404(Course, slug=slug)
+    course.delete()
+    return HttpResponseRedirect("/")
 
 
-def creation_course_content(request):
+
+def creation_course_content(request, slug):
+    course = get_object_or_404(Course, slug=slug)
     section_form = SectionForm(**{'user': request.user})
     video_form = SectionVideoForm(**{'user': request.user})
     if request.method == 'POST':
@@ -48,8 +54,9 @@ def creation_course_content(request):
         if section_form.is_valid():
             new_section = section_form.save()
             new_section.creator = request.user
+            new_section.course = course
             new_section.save()
-            return redirect(new_section.get_absolute_url())
+            return redirect('/')
 
         if video_form.is_valid():
             new_video = video_form.save()
@@ -65,6 +72,7 @@ def creation_course_content(request):
 def CourseView(request,slug):
     course = get_object_or_404(Course,slug=slug)
     sections = CourseSections.objects.filter(course__title=course.title)
+<<<<<<< HEAD
     videos = SectionVideos.objects.filter(section__course__title=course.title)
     result = Course.objects.values('title').annotate(
     no_of_section=Count('coursesections'),
@@ -98,6 +106,8 @@ def edit_course(request,course):
     else:
         course_form = CourseForm(instance=course)
     return render(request,'courses/edit_course.html',{'course_form':course_form})
+
+
 class CoursesList(ListView):
     model = Course
     template_name='courses/courses.html'
@@ -113,6 +123,7 @@ def enroll_to_free_course(request,course):
 @login_required
 def enroll_to_paid_course(request,course):
     course = get_object_or_404(Course,slug=course)
+
 class CartView(LoginRequiredMixin,View):
     def get(self,*args,**kwargs):
         try:
@@ -338,13 +349,15 @@ class FormWizardView(SessionWizardView):
 
 
 @login_required
-def add_section_to_course(request):
+def add_section_to_course(request, slug):
+    course  = get_object_or_404(Course, slug=slug)
     section_form = SectionForm(**{'user': request.user})
     if request.method == 'POST':
         section_form = SectionForm(request.POST,request.FILES,user=request.user)
         if section_form.is_valid():
             new_section = section_form.save()
             new_section.creator = request.user
+            new_section.course = course
             new_section.save()
             return redirect(new_section.get_absolute_url())
     else:
@@ -363,7 +376,8 @@ def course_search_teacher(request):
 
 
 @login_required
-def add_video_to_section(request):
+def add_video_to_section(request, slug):
+    course  = get_object_or_404(Course, slug=slug)
     video_form = SectionVideoForm(**{'user': request.user})
     if request.method == 'POST':
         video_form = SectionVideoForm(request.POST,request.FILES,user=request.user)
@@ -385,4 +399,4 @@ def VideoView(request,pk,slug):
     if video.watched == False:
         video.watched = True
         video.save()
-    return render(request,'courses/video_detail.html',{'video':video,'course':course,'sections':sections,'videos':videos,'wishlist':wishlist})
+    return render(request,'courses/video_detail.html',{'video':video,'course':course,'wishlist':wishlist})

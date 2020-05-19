@@ -1,6 +1,7 @@
 from django import forms
 from .models import Course,CourseSections,SectionVideos,Review
 import subprocess
+from django.shortcuts import get_object_or_404
 
 class SearchStudentForm(forms.Form):
     query = forms.CharField(max_length=200)
@@ -50,34 +51,34 @@ class SectionForm(forms.ModelForm):
     def get_tutor_courses(self):
         return self.user.tutor_courses
 
-    course = forms.ModelChoiceField(queryset=Course.objects.all())
+    # course = forms.ModelChoiceField(queryset=Course.objects.all())
 
     def __init__(self, *args, **kwargs):
         user = kwargs.pop('user', None)
         super(SectionForm, self).__init__(*args, **kwargs)
         if user is not None:
             tutor_courses = user.tutor_courses.all()
-            self.fields['course'].queryset = tutor_courses
+            # self.fields['course'].queryset = tutor_courses
             self.fields['title'].widget.attrs.update({'id':'title_section'})
             if not tutor_courses:
                 self.fields['course'].help_text = "You need to <b>create</b> a course to create sections in it"
 
     class Meta:
         model = CourseSections
-        fields = ('title','course')
+        fields = ('title',)
 
 class SectionVideoForm(forms.ModelForm):
-    section = forms.ModelChoiceField(queryset=CourseSections.objects.all())
+
+    section = forms.ModelChoiceField(queryset=None)
 
     def __init__(self, *args, **kwargs):
         user = kwargs.pop('user', None)
         super(SectionVideoForm, self).__init__(*args, **kwargs)
         self.fields['title'].widget.attrs.update({'id':'title_video'})
-
         if user is not None:
             creator_sections = user.creator_sections.all()
             self.fields['section'].queryset = creator_sections
-            self.fields['section'].widget.attrs.update({'class':'noselection'})
+            # self.fields['section'].widget.attrs.update({'class':'noselection'})
 
 
             if not creator_sections:
