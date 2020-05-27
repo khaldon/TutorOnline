@@ -45,8 +45,12 @@
     <tfoot class='full-width'>
       <tr>
         <td colspan="3">
-          <a class="ui red button" href="{% url 'courses:checkout' %}">Proceed to checkout</a>
-          <a class="ui primary button" href="{% url 'core:dashboard' %}">Continue shopping</a>
+          
+          {% if object.courses.all.count == 0 %}
+          <a class="ui red button disabled" href="{% url 'courses:checkout' %}" disabled>Proceed to checkout</a>
+          <a class="ui primary button disabled" href="{% url 'core:dashboard' %}">Continue shopping</a>
+          {% endif %}
+        
         </td>
           <td class="right floated ">
             <b>Orders Total</b> 
