@@ -72,10 +72,14 @@
             {% get_obj_perms request.user for course as "perm" %}
                 {% if 'perm_payment' not in perm %}
                   style="pointer-events: none; opacity: 0.6;"
-
                 {% endif %}
+
+             
           {% endif %}
           >
+          {% if  'perm_payment' in perm %}
+          sdfsdfsdf
+        {% endif %}
             <i class="dropdown icon"></i>
             {{ section.title }}
           </div>

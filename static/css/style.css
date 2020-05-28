@@ -8,7 +8,7 @@ html, body {
     border: 0px;
 }
     .masthead.segment {
-      min-height: 650px;
+      min-height: 350px;
       padding: 1em 0em;
     }
     .masthead .logo.item img {
@@ -53,6 +53,7 @@ html, body {
         font-size: 30px;
         color: white;
         text-align: center;
+        font-family: 'Pragati Narrow', sans-serif;      
     }
 
     .title_header{
@@ -60,9 +61,7 @@ html, body {
         color:white;
 
     }
-    .ui.container{
-        height: 100%;;
-    }
+
     .dashboard-block-student{
         height: 300px;
 
@@ -82,5 +81,12 @@ html, body {
     .title-header{
         font-family: 'Pragati Narrow', sans-serif;      
         margin-bottom: 70px;
+
+    }
+    .inverted.white{
+      font-family: 'Pragati Narrow', sans-serif;      
+    }
+    h2{
+      font-family: 'Pragati Narrow', sans-serif;      
 
     }

@@ -59,6 +59,7 @@ class Course(models.Model):
         return reverse('courses:course_detail',args=[self.slug])
     
     class Meta:
+        default_permissions = ('add', 'change', 'delete')
         permissions = (
             ('perm_payment', 'Payment permission'),
         )

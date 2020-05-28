@@ -117,14 +117,12 @@ class CartView(LoginRequiredMixin,View):
     def get(self,*args,**kwargs):
         try:
             order = Order.objects.get(user=self.request.user,ordered=False)
-            context = {
-                'object':order
-            }
-            return render(self.request,'courses/cart.html',context)
-        except ObjectDoesNotExist:
-            messages.error(self.request,"You do not have an active order")
-            return redirect("/")
 
+            return render(self.request,'courses/cart.html',{'object':order})
+
+        except ObjectDoesNotExist:
+            # messages.error(self.request,"You do not have an active order")
+            return render(self.request,'courses/cart.html')
 @login_required
 def add_to_cart(request,pk):
     course = get_object_or_404(Course,pk=pk)
@@ -244,7 +242,9 @@ class PaymentView(View):
             order.ordered = True
             order.payment = payment
             order.save()
-            user =  self.request.user.username
+            # user =  self.request.user.username
+            print("user", payment.user)
+            print("order", order)
             assign_perm('perm_payment', payment.user, order)
 
             
