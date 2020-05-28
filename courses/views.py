@@ -72,7 +72,6 @@ def creation_course_content(request, slug):
 def CourseView(request,slug):
     course = get_object_or_404(Course,slug=slug)
     sections = CourseSections.objects.filter(course__title=course.title)
-<<<<<<< HEAD
     videos = SectionVideos.objects.filter(section__course__title=course.title)
     result = Course.objects.values('title').annotate(
     no_of_section=Count('coursesections'),
