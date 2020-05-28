@@ -1,8 +1,14 @@
+html, body {
+    height: 100%;
+    margin: 0;
+
+  }
+ 
 .ui.large.secondary.inverted.pointing.menu{
     border: 0px;
 }
     .masthead.segment {
-      min-height: 700px;
+      min-height: 650px;
       padding: 1em 0em;
     }
     .masthead .logo.item img {
@@ -38,7 +44,10 @@
     }
 
     .footer.segment {
-      padding: 2.5em 0em;
+        /* margin-bottom: -50px; */
+        line-height: 50px;
+  padding: 0 20px;
+
     }
     .body{
         font-size: 30px;
@@ -49,4 +58,29 @@
     .title_header{
         background-color: #1B1C1D;
         color:white;
+
+    }
+    .ui.container{
+        height: 100%;;
+    }
+    .dashboard-block-student{
+        height: 300px;
+
+        }
+    .text-block-student{
+        color: white;
+        font-size: 30px;
+        line-height: 40px;
+        font-family: 'Pragati Narrow', sans-serif;      
+      }
+    .button-student{
+        position: absolute;
+        bottom: 10px;
+        margin: auto;
+        width: 90%;
+    }
+    .title-header{
+        font-family: 'Pragati Narrow', sans-serif;      
+        margin-bottom: 70px;
+
     }
