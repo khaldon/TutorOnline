@@ -2,9 +2,9 @@ from django.shortcuts import render,redirect,get_object_or_404
 from .models import Course,OrderCourse,Order,Payment,PaymentInfo,Wishlist,CourseSections,SectionVideos
 from .forms import (CheckoutForm,CourseForm1,CourseForm2,CourseForm3,
                    CourseForm4,SectionForm,SectionVideoForm, 
-                   SearchStudentForm)
+                   SearchStudentForm,ReviewForm)
 
-from notifications.signals import notify
+# from notifications.signals import notify
 from users.decorators import teacher_required
 from django.contrib.auth.decorators import login_required
 from .decorators import course_tutor
@@ -74,12 +74,20 @@ def creation_course_content(request, slug):
 def CourseView(request,slug):
     course = get_object_or_404(Course,slug=slug)
     sections = CourseSections.objects.filter(course__title=course.title)
-
-
-    # videos = SectionVideos.objects.filter(section__course__title=course.title)
-    # result = Course.objects.values('title').annotate(
-    # no_of_section=Count('coursesections'),no_of_videos=Count('coursesections__sectionvideos', distinct=True)).order_by('title')
-    return render(request,'courses/course_detail.html',{'course':course, 'sections':sections})
+    videos = SectionVideos.objects.filter(section__course__title=course.title)
+    reviews = course.reviews.filter(active=True)
+    new_review = None
+    if request.method == 'POST':
+        review_form = ReviewForm(data=request.POST)
+        if review_form.is_valid():
+            new_review = review_form.save(commit=False)
+            new_review.course = course
+            new_review.reviewer = request.user
+            new_review.save()    
+            return HttpResponseRedirect(course.get_absolute_url())
+    else:
+        review_form = ReviewForm()
+    return render(request,'courses/course_detail.html',{'course':course,'sections':sections,'videos':videos,'reviews':reviews,'new_review':new_review,'review_form':review_form})
 
 @login_required
 @course_tutor
@@ -285,6 +293,12 @@ class MyCourses(LoginRequiredMixin,ListView):
     paginate_by = 10
     template_name = 'courses/my_courses.html'
     context_object_name = 'mygroups'
+    
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['wishlist'] = Wishlist.objects.all()
+        context['wuser'] = Wishlist.objects.filter(user=self.request.user)
+        return context
 
     def get_queryset(self,**kwargs):
         user = get_object_or_404(CustomUser,username=self.request.user.username)

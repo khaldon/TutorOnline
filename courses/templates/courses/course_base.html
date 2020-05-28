@@ -13,7 +13,7 @@
             </div>
           </a>
           <div class="content">
-            <a class="header" href="{% url 'courses:course_detail' course %}">{{course.title}}</a>
+            <a class="header" href="{% url 'courses:course_detail' course %}">{{course.title}}{{ wuser }}</a>
             <a class="header right floated">${{course.price}}</a>
           </div>
           <div class="extra content">

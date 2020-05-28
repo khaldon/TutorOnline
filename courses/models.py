@@ -13,6 +13,14 @@ from django.dispatch import receiver
 
 User = settings.AUTH_USER_MODEL
 
+Rating_CHOICES = (
+    (1, 'Poor'),
+    (2, 'Average'),
+    (3, 'Good'),
+    (4, 'Very Good'),
+    (5, 'Excellent')
+)
+
 class CourseCategories(models.Model):
     title = models.CharField(max_length=50)
 
@@ -42,6 +50,7 @@ class Course(models.Model):
     preview_video = models.FileField(upload_to='courses/course_preview_videos',max_length=100,null=True)
     poster_preview_video = models.ImageField(upload_to='courses/course_poster_preview', null=True)    
     wish_course = models.ManyToManyField(settings.AUTH_USER_MODEL, related_name='wish_courses',blank=True)
+    votes = models.IntegerField(choices=Rating_CHOICES, default=1)
 
 
     def save(self, *args, **kwargs):
@@ -173,8 +182,8 @@ class Review(models.Model):
         return self.reviewer + ' ' + self.body
 
 class Wishlist(models.Model):
-    user = models.ForeignKey(User,on_delete=models.CASCADE)
-    wished_course = models.ForeignKey(Course,on_delete=models.CASCADE)
+    user = models.ForeignKey(User,related_name='wishlist_user',on_delete=models.CASCADE)
+    wished_course = models.ForeignKey(Course,related_name='wishlist_course',on_delete=models.CASCADE)
     slug = models.CharField(max_length=30,null=True,blank=True)
     added_date = models.DateTimeField(auto_now_add=True)
 

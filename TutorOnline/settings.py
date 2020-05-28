@@ -51,21 +51,16 @@ INSTALLED_APPS = [
     'languages',
     'stripe',
     'formtools',
+    'django.contrib.humanize',
     # all auth apps
     'allauth',
     'allauth.account',
     #filter 
     'django_filters',
-    
-    'notifications',
-
-
     # auth and premission app 
     'guardian',
-    
     # elasticsearch for searching using index 
     # 'django_elasticsearch_dsl'
-
 ]
 
 # ELASTICSEARCH_DSL={

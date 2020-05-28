@@ -1,5 +1,5 @@
 from django import forms
-from .models import Course,CourseSections,SectionVideos
+from .models import Course,CourseSections,SectionVideos,Review
 import subprocess
 from django.shortcuts import get_object_or_404
 
@@ -88,3 +88,7 @@ class SectionVideoForm(forms.ModelForm):
         model = SectionVideos
         fields = ('title','section','video')
 
+class ReviewForm(forms.ModelForm):
+    class Meta:
+        model = Review
+        fields = ('body',)
