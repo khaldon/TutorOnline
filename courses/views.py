@@ -75,10 +75,6 @@ def CourseView(request,slug):
     course = get_object_or_404(Course,slug=slug)
     sections = CourseSections.objects.filter(course__title=course.title)
     videos = SectionVideos.objects.filter(section__course__title=course.title)
-    result = Course.objects.values('title').annotate(
-    no_of_section=Count('coursesections'),
-    no_of_videos=Count('coursesections__sectionvideos', distinct=True)
-    ).order_by('title')
     reviews = course.reviews.filter(active=True)
     new_review = None
     if request.method == 'POST':
@@ -91,7 +87,7 @@ def CourseView(request,slug):
             return HttpResponseRedirect(course.get_absolute_url())
     else:
         review_form = ReviewForm()
-    return render(request,'courses/course_detail.html',{'course':course,'sections':sections,'videos':videos,'result':result,'reviews':reviews,'new_review':new_review,'review_form':review_form})
+    return render(request,'courses/course_detail.html',{'course':course,'sections':sections,'videos':videos,'reviews':reviews,'new_review':new_review,'review_form':review_form})
 
 @login_required
 @course_tutor
