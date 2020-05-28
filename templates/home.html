@@ -2,65 +2,13 @@
 <a href="{% url 'users:signup' %}">signup</a> -->
 
 {% include "css.html" %}
-
-<style type="text/css">
-    .hidden.menu {
-      display: none;
-    }
-
-    .masthead.segment {
-      min-height: 700px;
-      padding: 1em 0em;
-    }
-    .masthead .logo.item img {
-      margin-right: 1em;
-    }
-    .masthead .ui.menu .ui.button {
-      margin-left: 0.5em;
-    }
-    .masthead h1.ui.header {
-      margin-top: 3em;
-      margin-bottom: 0em;
-      font-size: 4em;
-      font-weight: normal;
-    }
-    .masthead h2 {
-      font-size: 1.7em;
-      font-weight: normal;
-    }
-
-    .ui.vertical.stripe {
-      padding: 8em 0em;
-    }
-    .ui.vertical.stripe h3 {
-      font-size: 2em;
-    }
-    .ui.vertical.stripe .button + h3,
-    .ui.vertical.stripe p + h3 {
-      margin-top: 3em;
-    }
-
-    .ui.vertical.stripe p {
-      font-size: 1.33em;
-    }
-
-    .footer.segment {
-      padding: 3em 0em;
-    }
-
-    .secondary.pointing.menu .toc.item {
-      display: none;
-    }
-
-  </style>
+{% load static %}
 <!-- Page Contents -->
 <div class="pusher">
   <div class="ui inverted vertical masthead center aligned segment">
     <div class="ui container">
       <div class="ui large secondary inverted pointing menu">
-        <a class="toc item">
-          <i class="sidebar icon"></i>
-        </a>
+
         <div class="right item">
           <a class="ui inverted button" href="{% url 'users:login' %}">Log in</a>
         </div>
@@ -88,13 +36,38 @@
 
     </div>
   </div>
-  <div class="ui vertical stripe segment">
-    <div class="ui middle aligned stackable grid container">
-      <div class="row">
-        <div class="eight wide column">
-        </div>
+    <div class="ui grid">
+      <div class="eight wide column title_header" >
+        <h2 style="font-size: 45px; text-align: center; padding: 15px;">As Student <i class="graduation cap icon"></i></h2>
       </div>
+      <div class="eight wide column title_header">
+        <h2 style="font-size: 45px; text-align: center; padding: 15px;">As Tutor <i class="chalkboard teacher icon"></i>
+      </div>
+
+      <div class="eight wide column body centered" style="background-color: #16a085; padding:70px;">
+        Chat with mentor and classmates <i class="users icon big"></i>
+      </div>
+      <div class="eight wide column body centered" style="background-color: #2c3e50;padding: 70px;">
+        Create course   <i class="ui big fa-folder-plus icon"></i>
+
+       </div>
+
+      <div class="eight wide column body " style="background-color: #e74c3c;padding: 70px;">
+        Search for your courses <i class="file alternate big icon"></i>
+      </div>
+      <div class="eight wide column body " style="background-color: #f1c40f;padding: 70px;">
+        Create room <i class="ui big fa-folder-plus icon"></i>
+       </div>
+      <div class="eight wide column body " style="background-color: #f39c12;padding: 70px;">
+        Video streaming <i class="video big icon"></i>  
+      </div>    
+      <div class="eight wide column body  " style="background-color:#8e44ad;padding: 70px;">
+        Manage your students <i class="ui big fa-user-shield icon"></i>
+       </div>
+     
+    
     </div>
-  </div>
+
+  
   {% include "footer.html" %}
 </div>

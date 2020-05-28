@@ -153,16 +153,3 @@ def room_search_teacher(request):
     user = get_object_or_404(CustomUser, username=request.user.username)
     f = RoomFilter(request.GET, queryset=user.teacher_rooms.all())
     return render(request,'rooms/teacher_search.html', {'filter':f})
-
-# def room_search_teacher(request):
-#     form = SearchTeacherForm(request.GET)
-#     query = None 
-#     results = None 
-#     if form.is_valid():
-#         query = form.cleaned_data['teacher_query']
-#         print(RoomDocument.search())
-#         results = RoomDocument.search().query("term",title=query)
-#         results = results.to_queryset()
-
-#     return render(request,'rooms/teacher_search.html', {'form_teacher':form,'query_teacher':query,'result_teachers':results})
-

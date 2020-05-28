@@ -14,7 +14,7 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib import messages
 from django.core.exceptions import ObjectDoesNotExist
 from django.utils import timezone
-import stripe
+from guardian.shortcuts import assign_perm
 from users.models import CustomUser
 from django.contrib.postgres.search import SearchVector
 from formtools.wizard.views import SessionWizardView
@@ -24,6 +24,8 @@ from .documents import CourseDocument
 from .filters import CourseFilter 
 from django.db.models import Count
 import os
+import stripe
+
 
 
 # Create your views here.
@@ -138,6 +140,7 @@ class CartView(LoginRequiredMixin,View):
 @login_required
 def add_to_cart(request,pk):
     course = get_object_or_404(Course,pk=pk)
+
     order_course, created = OrderCourse.objects.get_or_create(
         course=course,
         user=request.user,
@@ -246,7 +249,6 @@ class PaymentView(View):
             payment.user = self.request.user
             payment.amount = order.get_total()
             payment.save()
-
             order_courses = order.courses.all()
             order_courses.update(ordered=True)
             for course in order_courses:
@@ -254,6 +256,10 @@ class PaymentView(View):
             order.ordered = True
             order.payment = payment
             order.save()
+            user =  self.request.user.username
+            assign_perm('perm_payment', payment.user, order)
+
+            
             messages.success(self.request,"Your order was successful!")
             return redirect("/")
 
@@ -283,7 +289,7 @@ class PaymentView(View):
             return redirect("/")
 
         except Exception as e:
-            messages.warning    (self.request,"A serious error occurred. We have been notifed.")
+            messages.warning(self.request,"A serious error occurred. We have been notifed.")
             return redirect("/")
 
 class MyCourses(LoginRequiredMixin,ListView):
@@ -375,8 +381,7 @@ def course_search_teacher(request):
 
 
 @login_required
-def add_video_to_section(request, slug):
-    course  = get_object_or_404(Course, slug=slug)
+def add_video_to_section(request):
     video_form = SectionVideoForm(**{'user': request.user})
     if request.method == 'POST':
         video_form = SectionVideoForm(request.POST,request.FILES,user=request.user)
