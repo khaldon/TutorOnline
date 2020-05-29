@@ -1,5 +1,5 @@
 from django.shortcuts import render,redirect,get_object_or_404
-from .models import Course,OrderCourse,Order,Payment,PaymentInfo,Wishlist,CourseSections,SectionVideos
+from .models import Course,OrderCourse,Order,Payment,PaymentInfo,Wishlist,CourseSections,SectionVideos,Review
 from .forms import (CheckoutForm,CourseForm1,CourseForm2,CourseForm3,
                    CourseForm4,SectionForm,SectionVideoForm, 
                    SearchStudentForm,ReviewForm)
@@ -8,7 +8,7 @@ from .forms import (CheckoutForm,CourseForm1,CourseForm2,CourseForm3,
 from users.decorators import teacher_required
 from django.contrib.auth.decorators import login_required
 from .decorators import course_tutor
-from django.http import HttpResponseRedirect, JsonResponse
+from django.http import HttpResponseRedirect, JsonResponse, HttpResponse
 from django.views.generic import View,ListView,RedirectView,DetailView
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib import messages
@@ -400,3 +400,9 @@ def VideoView(request,pk,slug):
         video.watched = True
         video.save()
     return render(request,'courses/video_detail.html',{'video':video,'course':course,'wishlist':wishlist})
+
+@login_required
+def delete_review(reuqest,pk):
+    review = get_object_or_404(Review,pk=pk)
+    review.delete()
+    return HttpResponse('This review has been deleted.')

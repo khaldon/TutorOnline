@@ -51,6 +51,7 @@ class Course(models.Model):
     poster_preview_video = models.ImageField(upload_to='courses/course_poster_preview', null=True)    
     wish_course = models.ManyToManyField(settings.AUTH_USER_MODEL, related_name='wish_courses',blank=True)
     votes = models.IntegerField(choices=Rating_CHOICES, default=1)
+    owned = models.BooleanField(default=False)
 
 
     def save(self, *args, **kwargs):

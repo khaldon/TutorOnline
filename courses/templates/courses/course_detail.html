@@ -135,10 +135,14 @@
     <div class="ui comments">
       <h3 class="ui dividing header">Comments</h3>
       {% for review in reviews %}
+      <div id="reviews_container">
       <div class="comment">
         <a class="avatar">
         </a>
         <div class="content">
+          {% ifequal user review.reviewer %}
+          <a href="{% url 'courses:delete_review' review.id %}" title="delete this review" id="delete_review" class="float-right" style="color:red;"><i class="fas fa-trash"></i></a>
+          {% endifequal %}
           <a class="author">{{ review.reviewer.username }}</a>
           <div class="metadata">
             <span class="date">{{ review.created|naturaltime }}</span>
@@ -147,6 +151,7 @@
             {{ review.body }}
           </div>
         </div>
+      </div>
       </div>
       {% endfor %}
       <form class="ui reply form" method="POST">
@@ -157,4 +162,31 @@
        <button class="ui primary button">Add Review</button>
       </form>
     </div>
+
+    <script>
+      $(document).on("click", "a#delete_review",function () {
+       {% if not request.user.is_authenticated %}
+       window.location.href = "{% url 'users:login' %}";
+       {% else %}
+       var $element = $(this);
+       var $delete_url = $(this).attr("href");
+       var $delete_trash = $(this).find('i.fas');
+       $.ajax({
+         url: $delete_url,
+         type: 'GET',
+         success: function (data) {
+           if ($delete_trash.hasClass('fa-trash')) {
+             $delete_trash.removeClass('fa-trash').addClass('fa-trash');
+             $element.closest("div#reviews_container").fadeOut();
+           }
+           else {
+             console.log('Unexpected error!');
+           }
+         }
+       });
+       {% endif %}
+       return false;
+     });
+   </script>
+
 {% endblock teacher %}
