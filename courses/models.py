@@ -165,7 +165,7 @@ class PaymentInfo(models.Model):
     last_name = models.CharField(max_length=100,default=False)
 
     def __str__(self):
-        return '{} {} {}'.format(self.user.username,self.first_name,self.last_name)
+        return '{} {} {}'.format(self.user.username, self.first_name,self.last_name)
 
 class Review(models.Model):
     course = models.ForeignKey(Course,related_name='reviews',on_delete=models.CASCADE)
@@ -179,7 +179,7 @@ class Review(models.Model):
         ordering = ('created',)
 
     def __str__(self):
-        return self.reviewer + ' ' + self.body
+        return str(self.reviewer)
 
 class Wishlist(models.Model):
     user = models.ForeignKey(User,related_name='wishlist_user',on_delete=models.CASCADE)

@@ -59,18 +59,19 @@ html, body {
     .title_header{
         background-color: #1B1C1D;
         color:white;
-
     }
 
     .dashboard-block-student{
         height: 300px;
-
         }
     .text-block-student{
         color: white;
         font-size: 30px;
         line-height: 40px;
         font-family: 'Pragati Narrow', sans-serif;      
+      }
+      .ui.container{
+        height: 100%;
       }
     .button-student{
         position: absolute;

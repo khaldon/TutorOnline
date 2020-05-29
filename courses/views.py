@@ -1,5 +1,5 @@
 from django.shortcuts import render,redirect,get_object_or_404
-from .models import Course,OrderCourse,Order,Payment,PaymentInfo,Wishlist,CourseSections,SectionVideos
+from .models import Course,OrderCourse,Order,Payment,PaymentInfo,Wishlist,CourseSections,SectionVideos, Review
 from .forms import (CheckoutForm,CourseForm1,CourseForm2,CourseForm3,
                    CourseForm4,SectionForm,SectionVideoForm, 
                    SearchStudentForm,ReviewForm)
@@ -76,6 +76,8 @@ def CourseView(request,slug):
     sections = CourseSections.objects.filter(course__title=course.title)
     videos = SectionVideos.objects.filter(section__course__title=course.title)
     reviews = course.reviews.filter(active=True)
+    user = request.user
+    post_commented = user.posted_comments.all()
     new_review = None
     if request.method == 'POST':
         review_form = ReviewForm(data=request.POST)
@@ -87,7 +89,20 @@ def CourseView(request,slug):
             return HttpResponseRedirect(course.get_absolute_url())
     else:
         review_form = ReviewForm()
-    return render(request,'courses/course_detail.html',{'course':course,'sections':sections,'videos':videos,'reviews':reviews,'new_review':new_review,'review_form':review_form})
+    context = {'course':course,'sections':sections,'videos':videos,
+                               'reviews':reviews,'new_review':new_review,
+                               'review_form':review_form,
+                               'post_commented':post_commented,
+              }
+    return render(request,'courses/course_detail.html', context)
+
+# def delete_comment(request, slug):
+#     course = get_object_or_404(Course,slug=slug)
+    
+
+
+
+
 
 @login_required
 @course_tutor

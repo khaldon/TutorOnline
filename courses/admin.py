@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Course,CourseSections,CourseCategories,SectionVideos,Order,OrderCourse,Wishlist, Payment
+from .models import Course,CourseSections,CourseCategories,SectionVideos,Order,OrderCourse,Wishlist, Payment, Review
 
 # Register your models here.
 
@@ -11,3 +11,4 @@ admin.site.register(Order)
 admin.site.register(OrderCourse)
 admin.site.register(Wishlist)
 admin.site.register(Payment)
+admin.site.register(Review)
