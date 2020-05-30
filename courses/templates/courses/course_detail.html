@@ -118,8 +118,9 @@
     </div>
   
   </div>
-  <div class="ui comments" style="margin-left: 30px;">
+  <div class="ui comments" style="margin-left: 30px; margin-bottom: 50px;">
     <h3 class="ui dividing teal header">Reviews</h3>
+
     {% for review in reviews %}
     <div class="comment">
       <a class="avatar">
@@ -136,8 +137,11 @@
               <i class="ellipsis horizontal grey icon"></i>
             </div>             
              <div class="menu">
-              <a class="item" href="{% url 'courses:creation_course_content' course.slug %}">Edit</a>
-              <a class="item" href="{% url 'courses:delete_course' course.slug %}" style="color: red;">Delete comment</a>
+              {% ifequal user review.reviewer %}
+              <a href="{% url 'courses:delete_review' review.id %}" title="delete this review" class="item href" style="color: red;" >Delete comment</a>
+              <a class="item" href="{% url 'courses:delete_course' course.slug %}" >Edit</a>
+
+              {% endifequal %}
             </div>
           </div>
         </div>
@@ -145,28 +149,46 @@
     </div>
     {% endfor %}
   </div>
+    
   <form class="ui reply form" method="POST"  style="margin-left: 30px; width: 650px; margin-bottom: 100px;">
     {% csrf_token %}
     <div class="field">
       <textarea name="body"></textarea>
     </div>
-    
-{{post_commented}}
-
-{% if request.user in post_commented.reviewer %}
-  hello
-  {% else %}
-  sldjflkj
-{% endif %}
-  
-
-
-      
-   <button class="ui primary button">Add Review</button>
+    <button class="ui primary button">Add Review</button>
+    <div id="success"></div>
   </form>
 
-  <script>
 
+  {% if request.user.posted_comments.count > 0 %}
+    <script>$('form').remove().fadeOut(1000)</script>
+  
+  {% endif %}
+  <script>
+    function deleteAjaxLink(){
+      $('.item.href').on('click', function(e){
+      e.preventDefault();
+      var path = $(this).attr('href')
+      var $remove_comment = $(this)
+
+      $.ajax({
+        url:path,
+        success:function(data){
+          $remove_comment.parent().closest('.comment').remove().fadeOut(1000)
+          // console.log($('.item.href').parent('.comment').css('background-color','red'))
+          // $(this).remove();
+          // $('#success').addClass('ui green message');
+          // $('#success').text(data);
+          // $('#success').fadeOut(5000);
+        },
+        error:function(jqXhr){
+          console.log(jqXhr)
+        }
+      })
+    })
+    }
+    deleteAjaxLink()
+  
     $('.ui.reply.form').submit(function(e){
       e.preventDefault();
       var path =  window.location.href;
@@ -176,9 +198,11 @@
       type:'post',
       data:dataForm,
       success:function(data){
-        // console.log("ye",$(data).find(".comment"))
-        // console.log($(data).find(".comment").last())
+        $('form').remove().fadeOut(1000)
         $(".ui.comments").append($(data).find(".comment").last()).fadeIn(1000)
+        $('.ui.dropdown').dropdown();
+        deleteAjaxLink()
+
       },
       error:function(jqXhr){
         console.log(jqXhr)
@@ -186,6 +210,7 @@
     })
 
     })
+
   
     $('#hello').accordion({
       selector: {
@@ -196,65 +221,8 @@
 
  
   </script>
-<<<<<<< HEAD
  
-=======
-    <div class="ui comments">
-      <h3 class="ui dividing header">Comments</h3>
-      {% for review in reviews %}
-      <div id="reviews_container">
-      <div class="comment">
-        <a class="avatar">
-        </a>
-        <div class="content">
-          {% ifequal user review.reviewer %}
-          <a href="{% url 'courses:delete_review' review.id %}" title="delete this review" id="delete_review" class="float-right" style="color:red;"><i class="fas fa-trash"></i></a>
-          {% endifequal %}
-          <a class="author">{{ review.reviewer.username }}</a>
-          <div class="metadata">
-            <span class="date">{{ review.created|naturaltime }}</span>
-          </div>
-          <div class="text">
-            {{ review.body }}
-          </div>
-        </div>
-      </div>
-      </div>
-      {% endfor %}
-      <form class="ui reply form" method="POST">
-        {% csrf_token %}
-        <div class="field">
-          <textarea name="body"></textarea>
-        </div>
-       <button class="ui primary button">Add Review</button>
-      </form>
-    </div>
 
-    <script>
-      $(document).on("click", "a#delete_review",function () {
-       {% if not request.user.is_authenticated %}
-       window.location.href = "{% url 'users:login' %}";
-       {% else %}
-       var $element = $(this);
-       var $delete_url = $(this).attr("href");
-       var $delete_trash = $(this).find('i.fas');
-       $.ajax({
-         url: $delete_url,
-         type: 'GET',
-         success: function (data) {
-           if ($delete_trash.hasClass('fa-trash')) {
-             $delete_trash.removeClass('fa-trash').addClass('fa-trash');
-             $element.closest("div#reviews_container").fadeOut();
-           }
-           else {
-             console.log('Unexpected error!');
-           }
-         }
-       });
-       {% endif %}
-       return false;
-     });
-   </script>
+  
 
->>>>>>> 6d0e7c1a91e080aaa953be5f04a49717185e0c4f
 {% endblock teacher %}

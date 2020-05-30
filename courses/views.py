@@ -1,9 +1,6 @@
 from django.shortcuts import render,redirect,get_object_or_404
-<<<<<<< HEAD
 from .models import Course,OrderCourse,Order,Payment,PaymentInfo,Wishlist,CourseSections,SectionVideos, Review
-=======
 from .models import Course,OrderCourse,Order,Payment,PaymentInfo,Wishlist,CourseSections,SectionVideos,Review
->>>>>>> 6d0e7c1a91e080aaa953be5f04a49717185e0c4f
 from .forms import (CheckoutForm,CourseForm1,CourseForm2,CourseForm3,
                    CourseForm4,SectionForm,SectionVideoForm, 
                    SearchStudentForm,ReviewForm)
@@ -80,10 +77,10 @@ def CourseView(request,slug):
     sections = CourseSections.objects.filter(course__title=course.title)
     videos = SectionVideos.objects.filter(section__course__title=course.title)
     reviews = course.reviews.filter(active=True)
-    user = request.user
-    post_commented = user.posted_comments.all()
+    post_commented =  Review.objects.filter(reviewer=request.user)
+
     new_review = None
-    if request.method == 'POST':
+    if request.method == 'POST':    
         review_form = ReviewForm(data=request.POST)
         if review_form.is_valid():
             new_review = review_form.save(commit=False)

@@ -180,7 +180,7 @@ class Review(models.Model):
         ordering = ('created',)
 
     def __str__(self):
-        return str(self.reviewer)
+        return self.reviewer.username
 
 class Wishlist(models.Model):
     user = models.ForeignKey(User,related_name='wishlist_user',on_delete=models.CASCADE)
